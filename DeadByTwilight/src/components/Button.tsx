@@ -1,10 +1,4 @@
-import React, {PropsWithChildren} from 'react';
-import {Button as RNButton} from 'react-native';
+import React from 'react';
+import {ButtonProps, Button as RNButton} from 'react-native';
 
-interface ButtonProps extends PropsWithChildren {
-  title: string;
-}
-
-export const Button: React.FC<ButtonProps> = props => (
-  <RNButton {...props}>{props.children}</RNButton>
-);
+export const Button: React.FC<ButtonProps> = props => <RNButton {...props} />;

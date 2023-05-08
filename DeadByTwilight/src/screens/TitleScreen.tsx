@@ -6,23 +6,33 @@ import {TitleGradient} from '../assests';
 export const TitleScreen: React.FC<{}> = () => (
   <View style={styles.wrapper}>
     <TitleGradient />
-    <Text style={styles.header}> Dead by Twilight</Text>
-    <Button title={'Start'} />
+    <View style={styles.header}>
+      <Text style={styles.text}> Dead by Twilight</Text>
+    </View>
+    <View style={{backgroundColor: '#841584', width: '50%'}}>
+      <Button color="#fff" title="get started" />
+    </View>
   </View>
 );
 
 const styles = StyleSheet.create({
   wrapper: {
     height: '100%',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignContent: 'center',
     alignItems: 'center',
-    background:
-      'linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(156,118,76,1) 31%, rgba(0,212,255,1) 100%)',
   },
   header: {
+    height: '30%',
+    justifyContent: 'flex-start',
+    textAlign: 'center',
+  },
+  button: {
+    justifyContent: 'flex-end',
+  },
+  text: {
     fontWeight: 'bold',
     fontSize: 40,
-    textAlign: 'center',
   },
 });
