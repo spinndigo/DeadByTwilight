@@ -10,9 +10,12 @@
     "test": "jest"
   },
   "dependencies": {
+    "@pusher/pusher-websocket-react-native": "^1.2.1",
     "react": "18.2.0",
     "react-native": "0.71.6",
-    "react-native-svg": "^13.9.0"
+    "react-native-prompt": "^1.0.0",
+    "react-native-svg": "^13.9.0",
+    "shortid": "^2.2.16"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
