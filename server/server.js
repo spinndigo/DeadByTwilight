@@ -22,7 +22,7 @@ app.get('/', function(req, res){ // for testing if the server is running
 app.post('/pusher/auth', function(req, res) { // authenticate user's who's trying to connect
   var socketId = req.body.socket_id;
   var channel = req.body.channel_name;
-  var auth = pusher.authenticate(socketId, channel);
+  var auth = pusher.authorizeChannel(socketId, channel);
   res.send(auth);
 });
 

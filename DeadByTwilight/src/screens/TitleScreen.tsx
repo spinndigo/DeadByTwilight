@@ -1,18 +1,24 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
 import {Button} from '../components';
 import {TitleGradient} from '../assests';
 
-export const TitleScreen: React.FC<{}> = () => (
-  <View style={styles.wrapper}>
-    <TitleGradient />
-    <View style={styles.header}>
-      <Text style={styles.text}> Dead by Twilight</Text>
+export const TitleScreen: React.FC<{}> = ({navigation}) => (
+  <SafeAreaView>
+    <View style={styles.wrapper}>
+      <TitleGradient />
+      <View style={styles.header}>
+        <Text style={styles.text}> Dead by Twilight</Text>
+      </View>
+      <View style={{backgroundColor: '#841584', width: '50%'}}>
+        <Button
+          onPress={() => navigation.navigate('CreateOrJoin')}
+          color="#fff"
+          title="get started"
+        />
+      </View>
     </View>
-    <View style={{backgroundColor: '#841584', width: '50%'}}>
-      <Button color="#fff" title="get started" />
-    </View>
-  </View>
+  </SafeAreaView>
 );
 
 const styles = StyleSheet.create({

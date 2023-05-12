@@ -9,9 +9,9 @@ import React, {useEffect} from 'react';
 import {SafeAreaView, StatusBar, useColorScheme} from 'react-native';
 
 import {Pusher} from '@pusher/pusher-websocket-react-native';
-
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {TitleScreen} from './src/screens';
+import {DefaultStack} from './src/navigators';
+import {NavigationContainer} from '@react-navigation/native';
 
 const pusher = Pusher.getInstance();
 
@@ -33,13 +33,13 @@ function App(): JSX.Element {
   }, []);
 
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <NavigationContainer>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <TitleScreen />
-    </SafeAreaView>
+      <DefaultStack />
+    </NavigationContainer>
   );
 }
 
