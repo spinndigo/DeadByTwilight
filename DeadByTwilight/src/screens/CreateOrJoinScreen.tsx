@@ -4,11 +4,11 @@ import {Button} from '../components';
 
 export const CreateOrJoinScreen: React.FC<{}> = () => (
   <View style={styles.wrapper}>
-    <View style={{backgroundColor: '#841584', width: '50%'}}>
-      <Button color="orange" title="Create Game" />
+    <View style={{margin: 40, backgroundColor: '#841584', width: '50%'}}>
+      <Button color="white" title="Create Game" />
     </View>
-    <View style={{backgroundColor: '#841584', width: '50%'}}>
-      <Button color="orange" title="Join Game" />
+    <View style={{margin: 40, backgroundColor: '#841584', width: '50%'}}>
+      <Button color="white" title="Join Game" />
     </View>
   </View>
 );
