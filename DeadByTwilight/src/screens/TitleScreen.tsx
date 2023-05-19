@@ -1,6 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
-import {Button} from '../components';
+import {View, Button, Text, StyleSheet, SafeAreaView} from 'react-native';
 import {TitleGradient} from '../assests';
 import {DefaultStackParamList} from '../navigators';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';

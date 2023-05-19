@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
-import {Button} from '../components';
+import {View, Text, StyleSheet, SafeAreaView, Button} from 'react-native';
 import {DefaultStackParamList} from '../navigators';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
@@ -24,7 +23,12 @@ export const LobbyScreen: React.FC<
         <View>
           <Text> {`Game Id : ${id}`} </Text>
         </View>
-        <View style={{backgroundColor: '#841584', width: '50%'}}>
+        <View
+          style={{
+            justifyContent: 'flex-end',
+            backgroundColor: '#841584',
+            width: '50%',
+          }}>
           <Button
             disabled={isReady}
             onPress={onStartGame}
@@ -39,21 +43,23 @@ export const LobbyScreen: React.FC<
 
 const styles = StyleSheet.create({
   wrapper: {
+    display: 'flex',
     height: '100%',
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignContent: 'center',
     alignItems: 'center',
+    justifyContent: 'space-around',
   },
   header: {
-    height: '30%',
-    justifyContent: 'flex-start',
+    height: '20%',
+    width: '100%',
+    justifyContent: 'center',
     textAlign: 'center',
   },
   button: {
     justifyContent: 'flex-end',
   },
   text: {
+    textAlign: 'center',
     fontWeight: 'bold',
     fontSize: 40,
   },

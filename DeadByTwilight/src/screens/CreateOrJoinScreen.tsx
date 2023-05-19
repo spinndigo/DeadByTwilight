@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
-import {View, StyleSheet, TextInput, Alert} from 'react-native';
-import {Button} from '../components';
+import {View, StyleSheet, TextInput, Alert, Button} from 'react-native';
+
 import shortid from 'shortid';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {DefaultStackParamList} from '../navigators';
