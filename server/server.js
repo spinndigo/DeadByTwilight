@@ -13,18 +13,27 @@ var pusher = new Pusher({ // connect to pusher
   key: process.env.APP_KEY, 
   secret:  process.env.APP_SECRET,
   cluster: process.env.APP_CLUSTER, 
+  useTLS: true,
+  channelAuthorization: {
+    endpoint: "http://localhost:5001/pusher/auth",
+  }
 });
 
-app.get('/', function(req, res){ // for testing if the server is running
+app.get('/', function(_req, res){ // for testing if the server is running
   res.send('everything is good...');
 });
 
 app.post('/pusher/auth', function(req, res) { // authenticate user's who's trying to connect
+  console.log('someone is connecting: ' , req.body.channel_name);
   var socketId = req.body.socket_id;
   var channel = req.body.channel_name;
-  var auth = pusher.authorizeChannel(socketId, channel);
+
+  const user_id = req.cookies.user_id;
+  const presenceData = { user_id };
+
+  var auth = pusher.authorizeChannel(socketId, channel, presenceData);
   res.send(auth);
 });
 
-var port = process.env.PORT || 5000;
+var port = process.env.PORT || 5001;
 app.listen(port);

@@ -2,12 +2,16 @@ import React, {useState} from 'react';
 import {View, Text, StyleSheet, SafeAreaView, Button} from 'react-native';
 import {DefaultStackParamList} from '../navigators';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {usePresenceChannel} from '../hooks';
 
 export const LobbyScreen: React.FC<
   NativeStackScreenProps<DefaultStackParamList, 'Lobby'>
 > = ({route}) => {
   const [isReady, setIsReady] = useState(false);
   const {id, name} = route.params;
+  const {presenceChannel} = usePresenceChannel(id);
+
+  console.log(presenceChannel?.me);
 
   const onStartGame = () => undefined;
 
@@ -19,6 +23,12 @@ export const LobbyScreen: React.FC<
         </View>
         <View>
           <Text> {`Player : ${name}`} </Text>
+        </View>
+        <View>
+          <Text>
+            {' '}
+            {`Number of Players : ${presenceChannel?.members.size}`}{' '}
+          </Text>
         </View>
         <View>
           <Text> {`Game Id : ${id}`} </Text>
