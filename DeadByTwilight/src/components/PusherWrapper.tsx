@@ -16,11 +16,30 @@ export const PusherWrapper: React.FC<PropsWithChildren> = ({children}) => {
         apiKey: 'b16adf11ba39c8f28218',
         cluster: 'mt1',
         authEndpoint: 'http://localhost:5001/pusher/auth',
+        onConnectionStateChange(currentState, previousState) {
+          console.log(
+            `old connection state: ${previousState} \n new connection state: ${currentState}`,
+          );
+        },
+        onSubscriptionSucceeded(channelName, data) {
+          console.log(
+            `channel connection: ${channelName} with data ${JSON.stringify(
+              data,
+            )} `,
+          );
+        },
+        onSubscriptionError(channelName, message, _e) {
+          console.log(`${channelName} had this error : ${message}`);
+        },
       });
       await pusher.connect();
       setPusherInstance(pusher);
     }
-    initPusher();
+    try {
+      initPusher();
+    } catch (e) {
+      console.log('error: ', e);
+    }
   }, []);
 
   return (

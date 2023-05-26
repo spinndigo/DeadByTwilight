@@ -8,10 +8,8 @@ export const LobbyScreen: React.FC<
   NativeStackScreenProps<DefaultStackParamList, 'Lobby'>
 > = ({route}) => {
   const [isReady, setIsReady] = useState(false);
-  const {id, name} = route.params;
-  const {presenceChannel} = usePresenceChannel(id);
-
-  console.log(presenceChannel?.me);
+  const {id} = route.params;
+  const {channelMembers, playerCount} = usePresenceChannel(id);
 
   const onStartGame = () => undefined;
 
@@ -22,13 +20,13 @@ export const LobbyScreen: React.FC<
           <Text style={styles.text}> Lobby </Text>
         </View>
         <View>
-          <Text> {`Player : ${name}`} </Text>
-        </View>
-        <View>
           <Text>
             {' '}
-            {`Number of Players : ${presenceChannel?.members.size}`}{' '}
+            {`Players : ${channelMembers.map(m => m.userInfo?.name)}`}{' '}
           </Text>
+        </View>
+        <View>
+          <Text> {`Number of Players : ${playerCount}`} </Text>
         </View>
         <View>
           <Text> {`Game Id : ${id}`} </Text>

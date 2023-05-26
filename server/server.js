@@ -28,10 +28,15 @@ app.post('/pusher/auth', function(req, res) { // authenticate user's who's tryin
   var socketId = req.body.socket_id;
   var channel = req.body.channel_name;
 
-  const user_id = req.cookies.user_id;
-  const presenceData = { user_id };
+  const user = {
+    user_id: "some_id",
+    user_info: {
+      name: "Joe Smith",
+    }
+  };
 
-  var auth = pusher.authorizeChannel(socketId, channel, presenceData);
+  var auth = pusher.authorizeChannel(socketId, channel, user );
+  console.log('auth : ' , auth);
   res.send(auth);
 });
 
