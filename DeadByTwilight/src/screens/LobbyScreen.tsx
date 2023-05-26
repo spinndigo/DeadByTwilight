@@ -3,13 +3,31 @@ import {View, Text, StyleSheet, SafeAreaView, Button} from 'react-native';
 import {DefaultStackParamList} from '../navigators';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {usePresenceChannel} from '../hooks';
+import {PusherMember} from '@pusher/pusher-websocket-react-native';
 
 export const LobbyScreen: React.FC<
   NativeStackScreenProps<DefaultStackParamList, 'Lobby'>
 > = ({route}) => {
-  const [isReady, setIsReady] = useState(false);
+  const [survivors, setSurvivors] = useState<Array<PusherMember>>([]);
+  const [killer, setKiller] = useState<PusherMember | undefined>(undefined);
   const {id} = route.params;
-  const {channelMembers, playerCount} = usePresenceChannel(id);
+  const {channelMembers, playerCount, me} = usePresenceChannel(id);
+
+  const onPressSurvivor = () => {
+    if (survivors.length <= 4 && me) {
+      setSurvivors(prev => {
+        const newSurvivors = prev.slice();
+        newSurvivors.push(me);
+        return newSurvivors;
+      });
+    }
+  };
+
+  const onPressKiller = () => {
+    if (!killer && me) {
+      setKiller(me);
+    }
+  };
 
   const onStartGame = () => undefined;
 
@@ -18,6 +36,21 @@ export const LobbyScreen: React.FC<
       <View style={styles.wrapper}>
         <View style={styles.header}>
           <Text style={styles.text}> Lobby </Text>
+        </View>
+        <View>
+          <Text> {'Choose your role: '} </Text>
+          <Button
+            color={styles.survivorButton.backgroundColor}
+            disabled={survivors.length >= 4}
+            onPress={onPressSurvivor}
+            title="Survivor"
+          />
+          <Button
+            color={styles.killerButton.backgroundColor}
+            disabled={!!killer}
+            onPress={onPressKiller}
+            title="Killer"
+          />
         </View>
         <View>
           <Text>
@@ -31,6 +64,12 @@ export const LobbyScreen: React.FC<
         <View>
           <Text> {`Game Id : ${id}`} </Text>
         </View>
+        <View>
+          <Text>
+            {' '}
+            {`survivor count: ${survivors.length} -- killer: ${killer?.userInfo.name}`}{' '}
+          </Text>
+        </View>
         <View
           style={{
             justifyContent: 'flex-end',
@@ -38,7 +77,9 @@ export const LobbyScreen: React.FC<
             width: '50%',
           }}>
           <Button
-            disabled={isReady}
+            disabled={
+              !(survivors.length >= 2 && survivors.length < 5 && !!killer)
+            }
             onPress={onStartGame}
             color="#fff"
             title="Start Game"
@@ -65,6 +106,12 @@ const styles = StyleSheet.create({
   },
   button: {
     justifyContent: 'flex-end',
+  },
+  survivorButton: {
+    backgroundColor: 'blue',
+  },
+  killerButton: {
+    backgroundColor: 'red',
   },
   text: {
     textAlign: 'center',
