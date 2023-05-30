@@ -5,27 +5,32 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {usePresenceChannel} from '../hooks';
 import {PusherMember} from '@pusher/pusher-websocket-react-native';
 
+export type Role = 'SURVIVOR' | 'KILLER' | undefined;
+
 export const LobbyScreen: React.FC<
   NativeStackScreenProps<DefaultStackParamList, 'Lobby'>
 > = ({route}) => {
   const [survivors, setSurvivors] = useState<Array<PusherMember>>([]);
   const [killer, setKiller] = useState<PusherMember | undefined>(undefined);
+  const [role, setRole] = useState<Role>(undefined);
   const {id} = route.params;
   const {channelMembers, playerCount, me} = usePresenceChannel(id);
 
   const onPressSurvivor = () => {
-    if (survivors.length <= 4 && me) {
+    if (survivors.length <= 4 && me && !role) {
       setSurvivors(prev => {
         const newSurvivors = prev.slice();
         newSurvivors.push(me);
         return newSurvivors;
       });
+      setRole('SURVIVOR');
     }
   };
 
   const onPressKiller = () => {
-    if (!killer && me) {
+    if (!killer && me && !role) {
       setKiller(me);
+      setRole('KILLER');
     }
   };
 
@@ -34,32 +39,37 @@ export const LobbyScreen: React.FC<
   return (
     <SafeAreaView>
       <View style={styles.wrapper}>
-        <View style={styles.header}>
-          <Text style={styles.text}> Lobby </Text>
-        </View>
-        <View>
-          <Text> {'Choose your role: '} </Text>
-          <Button
-            color={styles.survivorButton.backgroundColor}
-            disabled={survivors.length >= 4}
-            onPress={onPressSurvivor}
-            title="Survivor"
-          />
-          <Button
-            color={styles.killerButton.backgroundColor}
-            disabled={!!killer}
-            onPress={onPressKiller}
-            title="Killer"
-          />
+        <View
+          style={{
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+          }}>
+          <Text style={{width: '100%', textAlign: 'center'}}>
+            {' '}
+            {'Choose your role: '}{' '}
+          </Text>
+          <View style={{flexDirection: 'row'}}>
+            <Button
+              color={styles.survivorButton.backgroundColor}
+              disabled={survivors.length >= 4 || !!role}
+              onPress={onPressSurvivor}
+              title="Survivor"
+            />
+            <Button
+              color={styles.killerButton.backgroundColor}
+              disabled={!!killer || !!role}
+              onPress={onPressKiller}
+              title="Killer"
+            />
+          </View>
         </View>
         <View>
           <Text>
             {' '}
-            {`Players : ${channelMembers.map(m => m.userInfo?.name)}`}{' '}
+            {`Players(${playerCount}) : ${channelMembers.map(
+              m => m.userInfo?.name,
+            )}`}{' '}
           </Text>
-        </View>
-        <View>
-          <Text> {`Number of Players : ${playerCount}`} </Text>
         </View>
         <View>
           <Text> {`Game Id : ${id}`} </Text>
@@ -67,7 +77,9 @@ export const LobbyScreen: React.FC<
         <View>
           <Text>
             {' '}
-            {`survivor count: ${survivors.length} -- killer: ${killer?.userInfo.name}`}{' '}
+            {`survivor count: ${survivors.length} -- killer: ${
+              killer?.userInfo.name || 'unclaimed'
+            }`}{' '}
           </Text>
         </View>
         <View
