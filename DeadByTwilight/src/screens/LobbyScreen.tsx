@@ -13,8 +13,12 @@ export const LobbyScreen: React.FC<
   const [survivors, setSurvivors] = useState<Array<PusherMember>>([]);
   const [killer, setKiller] = useState<PusherMember | undefined>(undefined);
   const [role, setRole] = useState<Role>(undefined);
+  const [ready, setReady] = useState(false);
   const {id} = route.params;
   const {channelMembers, playerCount, me} = usePresenceChannel(id);
+
+  const survivorDisabled = survivors.length >= 4 || !!role;
+  const killerDisabled = !!killer || !!role;
 
   const onPressSurvivor = () => {
     if (survivors.length <= 4 && me && !role) {
@@ -34,6 +38,8 @@ export const LobbyScreen: React.FC<
     }
   };
 
+  const gameReady = survivors.length >= 2 && survivors.length < 5 && !!killer;
+
   const onStartGame = () => undefined;
 
   return (
@@ -50,16 +56,30 @@ export const LobbyScreen: React.FC<
           </Text>
           <View style={{flexDirection: 'row'}}>
             <Button
-              color={styles.survivorButton.backgroundColor}
-              disabled={survivors.length >= 4 || !!role}
+              color={
+                survivorDisabled
+                  ? 'grey'
+                  : styles.survivorButton.backgroundColor
+              }
+              disabled={survivorDisabled}
               onPress={onPressSurvivor}
               title="Survivor"
             />
             <Button
-              color={styles.killerButton.backgroundColor}
-              disabled={!!killer || !!role}
+              color={
+                killerDisabled ? 'grey' : styles.killerButton.backgroundColor
+              }
+              disabled={killerDisabled}
               onPress={onPressKiller}
               title="Killer"
+            />
+          </View>
+          <View>
+            <Text> {'Indicate readiness:'} </Text>
+            <Button
+              color={ready ? 'green' : 'red'}
+              title={ready ? 'Ready :)' : 'Not Ready :('}
+              onPress={() => setReady(r => !r)}
             />
           </View>
         </View>
@@ -89,9 +109,7 @@ export const LobbyScreen: React.FC<
             width: '50%',
           }}>
           <Button
-            disabled={
-              !(survivors.length >= 2 && survivors.length < 5 && !!killer)
-            }
+            disabled={!gameReady}
             onPress={onStartGame}
             color="#fff"
             title="Start Game"
