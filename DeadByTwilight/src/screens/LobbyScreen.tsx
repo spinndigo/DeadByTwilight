@@ -100,9 +100,10 @@ export const LobbyScreen: React.FC<
           <View>
             <Text style={{textAlign: 'center'}}>
               {' '}
-              {`Player count: ${playerCount} ${channelMembers.map(
+              {`Player count: (${playerCount}) -- ${channelMembers.map(
                 m => m.userInfo?.name,
-              )}`}{' '}
+              )}`}
+              {', '}
             </Text>
           </View>
           <Text>
