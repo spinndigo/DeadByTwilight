@@ -7,7 +7,6 @@ export type DefaultStackParamList = {
   Title: undefined;
   CreateOrJoin: undefined;
   Lobby: {id: string; name: string};
-  Survivor: undefined;
 };
 
 const Stack = createNativeStackNavigator<DefaultStackParamList>();

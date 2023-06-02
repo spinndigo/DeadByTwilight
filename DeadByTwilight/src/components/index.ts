@@ -4,3 +4,4 @@ export * from './JoinRoomDialog';
 export * from './CreateRoomDialog';
 export * from './Survivor';
 export * from './Killer';
+export * from './GenCountSlider';

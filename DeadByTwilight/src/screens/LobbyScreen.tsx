@@ -4,6 +4,7 @@ import {DefaultStackParamList} from '../navigators';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {usePresenceChannel} from '../hooks';
 import {PusherMember} from '@pusher/pusher-websocket-react-native';
+import {GenCountSlider} from '../components';
 
 export type Role = 'SURVIVOR' | 'KILLER' | undefined;
 
@@ -14,6 +15,7 @@ export const LobbyScreen: React.FC<
   const [killer, setKiller] = useState<PusherMember | undefined>(undefined);
   const [role, setRole] = useState<Role>(undefined);
   const [ready, setReady] = useState(false);
+  const [genCount, setGenCount] = useState(3);
   const {id} = route.params;
   const {channelMembers, playerCount, me} = usePresenceChannel(id);
 
@@ -45,6 +47,9 @@ export const LobbyScreen: React.FC<
   return (
     <SafeAreaView>
       <View style={styles.wrapper}>
+        <View>
+          <Text> {`Game Id : ${id}`} </Text>
+        </View>
         <View
           style={{
             flexWrap: 'wrap',
@@ -83,18 +88,23 @@ export const LobbyScreen: React.FC<
             />
           </View>
         </View>
+
+        <Text> {`generator count: ${genCount} `} </Text>
+
+        <GenCountSlider
+          initialCount={genCount}
+          onValueChange={v => setGenCount(v)}
+        />
+
         <View>
-          <Text>
-            {' '}
-            {`Players(${playerCount}) : ${channelMembers.map(
-              m => m.userInfo?.name,
-            )}`}{' '}
-          </Text>
-        </View>
-        <View>
-          <Text> {`Game Id : ${id}`} </Text>
-        </View>
-        <View>
+          <View>
+            <Text style={{textAlign: 'center'}}>
+              {' '}
+              {`Player count: ${playerCount} ${channelMembers.map(
+                m => m.userInfo?.name,
+              )}`}{' '}
+            </Text>
+          </View>
           <Text>
             {' '}
             {`survivor count: ${survivors.length} -- killer: ${
