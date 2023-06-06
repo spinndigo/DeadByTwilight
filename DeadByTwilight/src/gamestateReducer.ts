@@ -26,7 +26,7 @@ type UpdateSurvivorHealthAction = {
   payload: UpdateHealthPayload;
 };
 
-type GameAction = UpdateProgressAction | UpdateSurvivorHealthAction;
+export type GameAction = UpdateProgressAction | UpdateSurvivorHealthAction;
 
 type GamestateReducer = (state: GameState, action: GameAction) => GameState;
 
