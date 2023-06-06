@@ -1,5 +1,5 @@
-import {applyGenDelta} from './utils/helpers';
-import {GameState, Health} from './utils/types';
+import {applyGenDelta, applySurvivorHealthDelta} from './utils/helpers';
+import {GameState, HealthChange} from './utils/types';
 
 enum Action {
   UPDATE_PROGRESS = 'UPDATE_PROGRESS',
@@ -16,9 +16,9 @@ type UpdateProgressAction = {
   payload: UpdateProgressPayload;
 };
 
-type UpdateHealthPayload = {
+export type UpdateHealthPayload = {
   survivor_id: string;
-  health: Health;
+  healthChange: HealthChange;
 };
 
 type UpdateSurvivorHealthAction = {
@@ -36,6 +36,12 @@ export const gamestateReducer: GamestateReducer = (state, action) => {
       return {
         ...state,
         generators: applyGenDelta(state.generators, action.payload),
+      };
+
+    case Action.UPDATE_SURVIVOR_HEALTH:
+      return {
+        ...state,
+        survivors: applySurvivorHealthDelta(state.survivors, action.payload),
       };
 
     default:

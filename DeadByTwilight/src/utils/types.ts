@@ -1,6 +1,7 @@
 export type Health = 'HEALTHY' | 'INJURED' | 'DYING' | 'DEAD';
+export type HealthChange = 'HEALED' | 'HURT';
 
-interface Survivor {
+export interface Survivor {
   id: string;
   name: string;
   health: Health;
