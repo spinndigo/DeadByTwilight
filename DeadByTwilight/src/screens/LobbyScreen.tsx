@@ -10,7 +10,7 @@ export type Role = 'SURVIVOR' | 'KILLER' | undefined;
 
 export const LobbyScreen: React.FC<
   NativeStackScreenProps<DefaultStackParamList, 'Lobby'>
-> = ({route}) => {
+> = ({navigation, route}) => {
   const [survivors, setSurvivors] = useState<Array<PusherMember>>([]);
   const [killer, setKiller] = useState<PusherMember | undefined>(undefined);
   const [role, setRole] = useState<Role>(undefined);
@@ -18,6 +18,8 @@ export const LobbyScreen: React.FC<
   const [genCount, setGenCount] = useState(3);
   const {id} = route.params;
   const {channelMembers, playerCount, me} = usePresenceChannel(id);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const {navigate} = navigation; // todo
 
   const survivorDisabled = survivors.length >= 4 || !!role;
   const killerDisabled = !!killer || !!role;
@@ -42,7 +44,9 @@ export const LobbyScreen: React.FC<
 
   const gameReady = survivors.length >= 2 && survivors.length < 5 && !!killer;
 
-  const onStartGame = () => undefined;
+  const onStartGame = () => {
+    return null; // todo
+  };
 
   return (
     <SafeAreaView>
