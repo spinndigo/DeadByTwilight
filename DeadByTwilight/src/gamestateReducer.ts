@@ -32,7 +32,7 @@ type UpdateSurvivorHealthAction = {
 
 type AddSurvivor = {
   type: Action.ADD_SURVIVOR;
-  payload: Survivor;
+  payload: Array<Survivor>;
 };
 
 type RemoveSurvivorPayload = {id: string};
@@ -69,7 +69,7 @@ export const gamestateReducer: GamestateReducer = (state, action) => {
     case Action.ADD_SURVIVOR:
       return {
         ...state,
-        survivors: [...state.survivors, action.payload],
+        survivors: [...state.survivors, ...action.payload],
       };
 
     case Action.REMOVE_SURVIVOR:
