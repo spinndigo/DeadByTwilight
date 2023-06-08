@@ -7,7 +7,7 @@ export interface Survivor {
   health: Health;
 }
 
-interface Killer {
+export interface Killer {
   id: string;
   name: string;
 }
@@ -20,6 +20,6 @@ export interface Generator {
 
 export interface GameState {
   survivors: Array<Survivor>;
-  killer: Killer;
+  killer: Killer | undefined;
   generators: Array<Generator>;
 }
