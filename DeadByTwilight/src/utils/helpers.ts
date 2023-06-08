@@ -1,9 +1,18 @@
-import {UpdateHealthPayload, UpdateProgressPayload} from '../gamestateReducer';
+import {
+  UpdateGenRegressionPayload,
+  UpdateHealthPayload,
+  UpdateProgressPayload,
+} from '../gamestateReducer';
 import {Generator, Health, HealthChange, Survivor} from './types';
 
-type UpdateGenHelper = (
+type UpdateGenProgressHelper = (
   gens: Array<Generator>,
   updatedGen: UpdateProgressPayload,
+) => Array<Generator>;
+
+type UpdateGenRegressionHelper = (
+  gens: Array<Generator>,
+  updatedGen: UpdateGenRegressionPayload,
 ) => Array<Generator>;
 
 type UpdateSurvivorhealth = (
@@ -11,7 +20,7 @@ type UpdateSurvivorhealth = (
   updatedSurvivor: UpdateHealthPayload,
 ) => Array<Survivor>;
 
-export const applyGenDelta: UpdateGenHelper = (gens, updatedGen) => {
+export const applyGenDelta: UpdateGenProgressHelper = (gens, updatedGen) => {
   const newGens = gens.slice();
   const genIndex = newGens.findIndex(g => g.id === updatedGen.gen_id);
   const newProgress = Math.max(
@@ -20,6 +29,16 @@ export const applyGenDelta: UpdateGenHelper = (gens, updatedGen) => {
   ); // prevent negative progress
   newGens[genIndex] = {...newGens[genIndex], progress: newProgress};
 
+  return newGens;
+};
+
+export const applyGenRegression: UpdateGenRegressionHelper = (
+  gens,
+  updatedGen,
+) => {
+  const newGens = gens.slice();
+  const genIndex = newGens.findIndex(g => g.id === updatedGen.id);
+  newGens[genIndex].isRegressing = updatedGen.isRegressing;
   return newGens;
 };
 

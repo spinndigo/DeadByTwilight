@@ -1,4 +1,8 @@
-import {applyGenDelta, applySurvivorHealthDelta} from './utils/helpers';
+import {
+  applyGenDelta,
+  applyGenRegression,
+  applySurvivorHealthDelta,
+} from './utils/helpers';
 import {GameState, HealthChange, Killer, Survivor} from './utils/types';
 
 enum Action {
@@ -7,6 +11,7 @@ enum Action {
   ADD_KILLER = 'ADD_KILLER',
   REMOVE_KILLER = 'REMOVE_KILLER',
   UPDATE_PROGRESS = 'UPDATE_PROGRESS',
+  UPDATE_GEN_REGRESSION = 'UPDATE_GEN_REGRESSION',
   UPDATE_SURVIVOR_HEALTH = 'UPDATE_SURVIVOR_HEALTH',
 }
 
@@ -18,6 +23,16 @@ export type UpdateProgressPayload = {
 type UpdateProgressAction = {
   type: Action.UPDATE_PROGRESS;
   payload: UpdateProgressPayload;
+};
+
+export type UpdateGenRegressionPayload = {
+  id: string;
+  isRegressing: boolean;
+};
+
+type UpdateGenRegression = {
+  type: Action.UPDATE_GEN_REGRESSION;
+  payload: UpdateGenRegressionPayload;
 };
 
 export type UpdateHealthPayload = {
@@ -57,6 +72,7 @@ type RemoveKiller = {
 export type GameAction =
   | UpdateProgressAction
   | UpdateSurvivorHealthAction
+  | UpdateGenRegression
   | AddSurvivors
   | RemoveSurvivor
   | AddKiller
@@ -96,6 +112,12 @@ export const gamestateReducer: GamestateReducer = (state, action) => {
       return {
         ...state,
         generators: applyGenDelta(state.generators, action.payload),
+      };
+
+    case Action.UPDATE_GEN_REGRESSION:
+      return {
+        ...state,
+        generators: applyGenRegression(state.generators, action.payload),
       };
 
     case Action.UPDATE_SURVIVOR_HEALTH:
