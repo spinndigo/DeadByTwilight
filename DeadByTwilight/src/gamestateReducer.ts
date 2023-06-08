@@ -2,7 +2,7 @@ import {applyGenDelta, applySurvivorHealthDelta} from './utils/helpers';
 import {GameState, HealthChange, Killer, Survivor} from './utils/types';
 
 enum Action {
-  ADD_SURVIVOR = 'ADD_SURVIVOR',
+  ADD_SURVIVORS = 'ADD_SURVIVORS',
   REMOVE_SURVIVOR = 'REMOVE_SURVIVOR',
   ADD_KILLER = 'ADD_KILLER',
   REMOVE_KILLER = 'REMOVE_KILLER',
@@ -30,8 +30,8 @@ type UpdateSurvivorHealthAction = {
   payload: UpdateHealthPayload;
 };
 
-type AddSurvivor = {
-  type: Action.ADD_SURVIVOR;
+type AddSurvivors = {
+  type: Action.ADD_SURVIVORS;
   payload: Array<Survivor>;
 };
 
@@ -57,7 +57,7 @@ type RemoveKiller = {
 export type GameAction =
   | UpdateProgressAction
   | UpdateSurvivorHealthAction
-  | AddSurvivor
+  | AddSurvivors
   | RemoveSurvivor
   | AddKiller
   | RemoveKiller;
@@ -66,7 +66,7 @@ type GamestateReducer = (state: GameState, action: GameAction) => GameState;
 
 export const gamestateReducer: GamestateReducer = (state, action) => {
   switch (action.type) {
-    case Action.ADD_SURVIVOR:
+    case Action.ADD_SURVIVORS:
       return {
         ...state,
         survivors: [...state.survivors, ...action.payload],
