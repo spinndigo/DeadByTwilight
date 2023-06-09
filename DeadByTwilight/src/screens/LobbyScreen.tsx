@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, SafeAreaView, Button} from 'react-native';
-import {DefaultStackParamList} from '../navigators';
+import {GameStackParamList} from '../navigators';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {usePresenceChannel} from '../hooks';
 import {PusherMember} from '@pusher/pusher-websocket-react-native';
@@ -9,7 +9,7 @@ import {GenCountSlider} from '../components';
 export type Role = 'SURVIVOR' | 'KILLER' | undefined;
 
 export const LobbyScreen: React.FC<
-  NativeStackScreenProps<DefaultStackParamList, 'Lobby'>
+  NativeStackScreenProps<GameStackParamList, 'Lobby'>
 > = ({navigation, route}) => {
   const [survivors, setSurvivors] = useState<Array<PusherMember>>([]);
   const [killer, setKiller] = useState<PusherMember | undefined>(undefined);

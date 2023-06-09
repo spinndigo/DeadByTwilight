@@ -34,6 +34,16 @@ export const usePresenceChannel = (id: string) => {
               return newMembers;
             });
           },
+          onEvent(event) {
+            switch (event.eventName) {
+              case 'Survivor Selected':
+                console.log('todo');
+                break;
+
+              default:
+                console.warn('received unexpected event');
+            }
+          },
         });
         setPresenceChannel(subbedChannel);
       }

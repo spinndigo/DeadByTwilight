@@ -23,12 +23,12 @@ export const CreateOrJoinScreen: React.FC<
 
   const onPressCreateSubmit = (id: string) => {
     setShowCreateRoom(false);
-    navigation.navigate({name: 'Lobby', params: {id, name}});
+    navigation.navigate({name: 'GameStack', params: {id, name}});
   };
 
   const onPressJoinSubmit = (id: string) => {
     setShowJoinAlert(false);
-    navigation.navigate({name: 'Lobby', params: {id, name}});
+    navigation.navigate({name: 'GameStack', params: {id, name}});
   };
 
   return (
