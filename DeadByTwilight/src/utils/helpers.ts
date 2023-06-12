@@ -79,3 +79,14 @@ export const applySurvivorHealthDelta: UpdateSurvivorhealth = (
   newSurvivors[survivorIndex].health = newHealth;
   return newSurvivors;
 };
+
+export const addSurvivor = (
+  survivors: Array<Survivor>,
+  newSurvivor: Survivor,
+) => {
+  if (survivors.length < 4) {
+    return [...survivors, newSurvivor];
+  } else {
+    return survivors;
+  }
+};

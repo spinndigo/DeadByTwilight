@@ -6,7 +6,8 @@ import {GameStackParamList} from '../navigators';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useGameChannel} from '../hooks';
 import {GenCountSlider} from '../components';
-import {GameContext} from '../GameContext';
+import {GameContext, GameDispatchContext} from '../GameContext';
+import {Action} from '../gamestateReducer';
 
 export type Role = 'SURVIVOR' | 'KILLER' | undefined;
 
@@ -14,7 +15,9 @@ export const LobbyScreen: React.FC<
   NativeStackScreenProps<GameStackParamList, 'Lobby'>
 > = ({navigation}) => {
   const game = useContext(GameContext);
+  const dispatch = useContext(GameDispatchContext);
   const [ready, setReady] = useState(false);
+  const [hasSelectedRole, setHasSelectedRole] = useState(false);
   const [genCount, setGenCount] = useState(3);
   const {gameChannel} = useGameChannel();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -22,23 +25,42 @@ export const LobbyScreen: React.FC<
 
   if (!game) throw new Error('No game state found');
 
-  const survivorDisabled = game.survivors.length >= 4;
-  const killerDisabled = !!game.killer;
+  const survivorDisabled = game.survivors.length >= 4 || hasSelectedRole;
+  const killerDisabled = !!game.killer || hasSelectedRole;
 
-  const onPressSurvivor = () => {
-    gameChannel?.trigger({
+  const onPressSurvivor = async () => {
+    await gameChannel?.trigger({
       channelName: gameChannel.channelName,
-      eventName: 'survivorSelected',
+      eventName: 'client-survivor_selected',
       data: {survivor: gameChannel.me},
     });
+    if (dispatch)
+      dispatch({
+        type: Action.ADD_SURVIVOR,
+        payload: {
+          id: gameChannel?.me?.userId || '345',
+          name: gameChannel?.me?.userInfo.name || 'Anon',
+          health: 'HEALTHY',
+        },
+      });
+    setHasSelectedRole(true);
   };
 
   const onPressKiller = () => {
     gameChannel?.trigger({
       channelName: gameChannel.channelName,
-      eventName: 'killerSelected',
+      eventName: 'client-killer_selected',
       data: {killer: gameChannel.me},
     });
+    if (dispatch)
+      dispatch({
+        type: Action.ADD_KILLER,
+        payload: {
+          id: gameChannel?.me?.userId || '345',
+          name: gameChannel?.me?.userInfo.name || 'Anon_killer',
+        },
+      });
+    setHasSelectedRole(true);
   };
 
   const gameReady =

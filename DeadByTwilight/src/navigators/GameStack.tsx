@@ -24,7 +24,7 @@ const Stack = createNativeStackNavigator<GameStackParamList>();
 export const GameStack = () => {
   const initialGame: GameState = {
     survivors: [],
-    killer: {id: 'killer', name: 'blah'},
+    killer: undefined,
     generators: [],
   };
 

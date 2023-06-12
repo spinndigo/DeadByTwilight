@@ -1,11 +1,12 @@
 import {
+  addSurvivor,
   applyGenDelta,
   applyGenRegression,
   applySurvivorHealthDelta,
 } from './utils/helpers';
 import {GameState, HealthChange, Killer, Survivor} from './utils/types';
 
-enum Action {
+export enum Action {
   ADD_SURVIVOR = 'ADD_SURVIVOR',
   REMOVE_SURVIVOR = 'REMOVE_SURVIVOR',
   ADD_KILLER = 'ADD_KILLER',
@@ -85,7 +86,7 @@ export const gamestateReducer: GamestateReducer = (state, action) => {
     case Action.ADD_SURVIVOR:
       return {
         ...state,
-        survivors: [...state.survivors, action.payload],
+        survivors: addSurvivor(state.survivors, action.payload),
       };
 
     case Action.REMOVE_SURVIVOR:

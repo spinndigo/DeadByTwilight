@@ -8,7 +8,7 @@ interface Props {
   show: boolean;
 }
 
-export const CreateRoomDialog: React.FC<Props> = ({ id, show, onPress}) => {
+export const CreateRoomDialog: React.FC<Props> = ({id, show, onPress}) => {
   return (
     <View>
       <Dialog.Container visible={show}>

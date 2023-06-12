@@ -40,7 +40,7 @@ export const useGameChannel = (id?: string) => {
           },
           onEvent(event) {
             switch (event.eventName) {
-              case 'Survivor Selected':
+              case 'client-survivor_selected':
                 console.log('todo');
                 break;
 
