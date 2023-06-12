@@ -1,16 +1,14 @@
 import {View} from 'react-native';
 import React from 'react';
 import Dialog from 'react-native-dialog';
-import shortid from 'shortid';
 
 interface Props {
+  id: string;
   onPress(): void;
   show: boolean;
 }
 
-export const CreateRoomDialog: React.FC<Props> = ({show, onPress}) => {
-  const id = shortid.generate();
-
+export const CreateRoomDialog: React.FC<Props> = ({ id, show, onPress}) => {
   return (
     <View>
       <Dialog.Container visible={show}>

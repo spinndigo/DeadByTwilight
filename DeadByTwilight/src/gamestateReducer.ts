@@ -6,7 +6,7 @@ import {
 import {GameState, HealthChange, Killer, Survivor} from './utils/types';
 
 enum Action {
-  ADD_SURVIVORS = 'ADD_SURVIVORS',
+  ADD_SURVIVOR = 'ADD_SURVIVOR',
   REMOVE_SURVIVOR = 'REMOVE_SURVIVOR',
   ADD_KILLER = 'ADD_KILLER',
   REMOVE_KILLER = 'REMOVE_KILLER',
@@ -45,9 +45,9 @@ type UpdateSurvivorHealthAction = {
   payload: UpdateHealthPayload;
 };
 
-type AddSurvivors = {
-  type: Action.ADD_SURVIVORS;
-  payload: Array<Survivor>;
+type AddSurvivor = {
+  type: Action.ADD_SURVIVOR;
+  payload: Survivor;
 };
 
 type RemoveSurvivorPayload = {id: string};
@@ -73,7 +73,7 @@ export type GameAction =
   | UpdateProgressAction
   | UpdateSurvivorHealthAction
   | UpdateGenRegression
-  | AddSurvivors
+  | AddSurvivor
   | RemoveSurvivor
   | AddKiller
   | RemoveKiller;
@@ -82,10 +82,10 @@ type GamestateReducer = (state: GameState, action: GameAction) => GameState;
 
 export const gamestateReducer: GamestateReducer = (state, action) => {
   switch (action.type) {
-    case Action.ADD_SURVIVORS:
+    case Action.ADD_SURVIVOR:
       return {
         ...state,
-        survivors: [...state.survivors, ...action.payload],
+        survivors: [...state.survivors, action.payload],
       };
 
     case Action.REMOVE_SURVIVOR:

@@ -1,15 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
 import {View, StyleSheet, TextInput, Button} from 'react-native';
-
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {GameStackParamList} from '../navigators';
 import {CreateRoomDialog, JoinRoomDialog} from '../components';
+import shortid from 'shortid';
+import {useGameChannel} from '../hooks';
 
 export const CreateOrJoinScreen: React.FC<
   NativeStackScreenProps<GameStackParamList, 'CreateOrJoin'>
 > = ({navigation}) => {
   const [name, setName] = useState('');
+  const [id, setId] = useState<string | undefined>(shortid.generate());
+  useGameChannel(id);
   const [showJoinAlert, setShowJoinAlert] = useState(false);
   const [showCreateRoom, setShowCreateRoom] = useState(false);
 
@@ -26,8 +29,9 @@ export const CreateOrJoinScreen: React.FC<
     navigation.navigate('Lobby');
   };
 
-  const onPressJoinSubmit = () => {
+  const onPressJoinSubmit = (joinId: string) => {
     setShowJoinAlert(false);
+    setId(joinId);
     navigation.navigate('Lobby');
   };
 
@@ -64,7 +68,11 @@ export const CreateOrJoinScreen: React.FC<
           />
         </View>
       </View>
-      <CreateRoomDialog onPress={onPressCreateSubmit} show={showCreateRoom} />
+      <CreateRoomDialog
+        id={id || ''}
+        onPress={onPressCreateSubmit}
+        show={showCreateRoom}
+      />
       <JoinRoomDialog
         onPress={onPressJoinSubmit}
         show={showJoinAlert}

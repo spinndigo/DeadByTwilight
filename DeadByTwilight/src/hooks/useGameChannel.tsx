@@ -36,7 +36,7 @@ export const useGameChannel = (id?: string) => {
             console.log(`${channelName} had the following error: ${message}`);
           },
           onSubscriptionSucceeded: _data => {
-            console.log(_data);
+            console.log('subscription success: ', _data);
           },
           onEvent(event) {
             switch (event.eventName) {
@@ -45,7 +45,7 @@ export const useGameChannel = (id?: string) => {
                 break;
 
               default:
-                console.warn('received unexpected event');
+                console.warn('received unexpected event: ', event.eventName);
             }
           },
         });
