@@ -46,8 +46,8 @@ export const LobbyScreen: React.FC<
     setHasSelectedRole(true);
   };
 
-  const onPressKiller = () => {
-    gameChannel?.trigger({
+  const onPressKiller = async () => {
+    await gameChannel?.trigger({
       channelName: gameChannel.channelName,
       eventName: 'client-killer_selected',
       data: {killer: gameChannel.me},
