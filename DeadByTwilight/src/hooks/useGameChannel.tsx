@@ -1,3 +1,4 @@
+/* eslint-disable curly */
 import {PusherChannel} from '@pusher/pusher-websocket-react-native';
 import React, {
   Dispatch,
@@ -9,6 +10,8 @@ import React, {
   useState,
 } from 'react';
 import {PusherContext} from '../components';
+import {GameDispatchContext} from '../GameContext';
+import {Action} from '../gamestateReducer';
 
 type ChannelContextValue = [
   PusherChannel | null,
@@ -25,6 +28,7 @@ export const GameChannelProvider: React.FC<PropsWithChildren> = ({
 
 export const useGameChannel = (id?: string) => {
   const [gameChannel, setGameChannel] = useContext(GameChannelContext);
+  const dispatch = useContext(GameDispatchContext);
   const pusher = useContext(PusherContext);
   useEffect(() => {
     const connectPresenceChannel = async () => {
@@ -41,7 +45,9 @@ export const useGameChannel = (id?: string) => {
           onEvent(event) {
             switch (event.eventName) {
               case 'client-survivor_selected':
-                console.log('todo');
+                if (dispatch)
+                  dispatch({type: Action.ADD_SURVIVOR, payload: event.data});
+                console.log('received event: ', event.eventName);
                 break;
 
               default:
@@ -55,7 +61,7 @@ export const useGameChannel = (id?: string) => {
       }
     };
     connectPresenceChannel();
-  }, [id, pusher, setGameChannel]);
+  }, [dispatch, id, pusher, setGameChannel]);
 
   return {
     gameChannel,
