@@ -1,48 +1,48 @@
-import React, {useState} from 'react';
+/* eslint-disable curly */
+/* eslint-disable react-native/no-inline-styles */
+import React, {useContext, useState} from 'react';
 import {View, Text, StyleSheet, SafeAreaView, Button} from 'react-native';
 import {GameStackParamList} from '../navigators';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {usePresenceChannel} from '../hooks';
-import {PusherMember} from '@pusher/pusher-websocket-react-native';
+import {useGameChannel} from '../hooks';
 import {GenCountSlider} from '../components';
+import {GameContext} from '../GameContext';
 
 export type Role = 'SURVIVOR' | 'KILLER' | undefined;
 
 export const LobbyScreen: React.FC<
   NativeStackScreenProps<GameStackParamList, 'Lobby'>
-> = ({navigation, route}) => {
-  const [survivors, setSurvivors] = useState<Array<PusherMember>>([]);
-  const [killer, setKiller] = useState<PusherMember | undefined>(undefined);
-  const [role, setRole] = useState<Role>(undefined);
+> = ({navigation}) => {
+  const game = useContext(GameContext);
   const [ready, setReady] = useState(false);
   const [genCount, setGenCount] = useState(3);
-  const {id} = route.params;
-  const {channelMembers, playerCount, me} = usePresenceChannel(id);
+  const {gameChannel} = useGameChannel();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const {navigate} = navigation; // todo
 
-  const survivorDisabled = survivors.length >= 4 || !!role;
-  const killerDisabled = !!killer || !!role;
+  if (!game) throw new Error('No game state found');
+
+  const survivorDisabled = game.survivors.length >= 4;
+  const killerDisabled = !!game.killer;
 
   const onPressSurvivor = () => {
-    if (survivors.length <= 4 && me && !role) {
-      setSurvivors(prev => {
-        const newSurvivors = prev.slice();
-        newSurvivors.push(me);
-        return newSurvivors;
-      });
-      setRole('SURVIVOR');
-    }
+    gameChannel?.trigger({
+      channelName: gameChannel.channelName,
+      eventName: 'survivorSelected',
+      data: {survivor: gameChannel.me},
+    });
   };
 
   const onPressKiller = () => {
-    if (!killer && me && !role) {
-      setKiller(me);
-      setRole('KILLER');
-    }
+    gameChannel?.trigger({
+      channelName: gameChannel.channelName,
+      eventName: 'killerSelected',
+      data: {killer: gameChannel.me},
+    });
   };
 
-  const gameReady = survivors.length >= 2 && survivors.length < 5 && !!killer;
+  const gameReady =
+    game.survivors.length >= 2 && game.survivors.length < 5 && !!game.killer;
 
   const onStartGame = () => {
     return null; // todo
@@ -52,7 +52,7 @@ export const LobbyScreen: React.FC<
     <SafeAreaView>
       <View style={styles.wrapper}>
         <View>
-          <Text> {`Game Id : ${id}`} </Text>
+          <Text> {`Game Id : ${gameChannel?.channelName}`} </Text>
         </View>
         <View
           style={{
@@ -104,16 +104,14 @@ export const LobbyScreen: React.FC<
           <View>
             <Text style={{textAlign: 'center'}}>
               {' '}
-              {`Player count: (${playerCount}) -- ${channelMembers.map(
-                m => m.userInfo?.name,
-              )}`}
+              {`Player count: (${gameChannel?.members.size}) -- todo`}
               {', '}
             </Text>
           </View>
           <Text>
             {' '}
-            {`survivor count: ${survivors.length} -- killer: ${
-              killer?.userInfo.name || 'unclaimed'
+            {`survivor count: ${game.survivors.length} -- killer: ${
+              game.killer?.name || 'unclaimed'
             }`}{' '}
           </Text>
         </View>

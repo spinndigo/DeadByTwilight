@@ -3,11 +3,11 @@ import React, {useState} from 'react';
 import {View, StyleSheet, TextInput, Button} from 'react-native';
 
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {DefaultStackParamList} from '../navigators';
+import {GameStackParamList} from '../navigators';
 import {CreateRoomDialog, JoinRoomDialog} from '../components';
 
 export const CreateOrJoinScreen: React.FC<
-  NativeStackScreenProps<DefaultStackParamList, 'CreateOrJoin'>
+  NativeStackScreenProps<GameStackParamList, 'CreateOrJoin'>
 > = ({navigation}) => {
   const [name, setName] = useState('');
   const [showJoinAlert, setShowJoinAlert] = useState(false);
@@ -21,14 +21,14 @@ export const CreateOrJoinScreen: React.FC<
     setShowJoinAlert(true);
   };
 
-  const onPressCreateSubmit = (id: string) => {
+  const onPressCreateSubmit = () => {
     setShowCreateRoom(false);
-    navigation.navigate({name: 'GameStack', params: {id, name}});
+    navigation.navigate('Lobby');
   };
 
-  const onPressJoinSubmit = (id: string) => {
+  const onPressJoinSubmit = () => {
     setShowJoinAlert(false);
-    navigation.navigate({name: 'GameStack', params: {id, name}});
+    navigation.navigate('Lobby');
   };
 
   return (

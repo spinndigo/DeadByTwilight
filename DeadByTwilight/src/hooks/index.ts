@@ -1,1 +1,1 @@
-export * from './usePresenceChannel';
+export * from './useGameChannel';

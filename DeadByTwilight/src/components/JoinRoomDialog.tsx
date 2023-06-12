@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import Dialog from 'react-native-dialog';
 
 interface Props {
-  onPress(id: string): void;
+  onPress(): void;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   show: boolean;
 }
@@ -24,7 +24,7 @@ export const JoinRoomDialog: React.FC<Props> = ({onPress, show, setShow}) => {
           label="submit"
           disabled={!id}
           color={'blue'}
-          onPress={() => onPress(id)}
+          onPress={() => onPress()}
         />
       </Dialog.Container>
     </View>

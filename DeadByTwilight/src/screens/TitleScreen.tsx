@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View, Button, Text, StyleSheet, SafeAreaView} from 'react-native';
 import {TitleGradient} from '../assests';
@@ -15,7 +16,7 @@ export const TitleScreen: React.FC<
       </View>
       <View style={{backgroundColor: '#841584', width: '50%'}}>
         <Button
-          onPress={() => navigation.navigate('CreateOrJoin')}
+          onPress={() => navigation.navigate('GameStack')}
           color="#fff"
           title="get started"
         />
