@@ -26,13 +26,13 @@ export const CreateOrJoinScreen: React.FC<
 
   const onPressCreateSubmit = () => {
     setShowCreateRoom(false);
-    navigation.navigate('Lobby');
+    navigation.navigate('Lobby', {didCreateRoom: true});
   };
 
   const onPressJoinSubmit = (joinId: string) => {
     setShowJoinAlert(false);
     setId(joinId);
-    navigation.navigate('Lobby');
+    navigation.navigate('Lobby', {didCreateRoom: false});
   };
 
   return (

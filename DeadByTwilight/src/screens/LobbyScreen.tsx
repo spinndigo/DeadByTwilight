@@ -13,7 +13,8 @@ export type Role = 'SURVIVOR' | 'KILLER' | undefined;
 
 export const LobbyScreen: React.FC<
   NativeStackScreenProps<GameStackParamList, 'Lobby'>
-> = ({navigation}) => {
+> = ({navigation, route}) => {
+  const createdLobby = route.params.didCreateRoom;
   const game = useContext(GameContext);
   const dispatch = useContext(GameDispatchContext);
   const [hasSelectedRole, setHasSelectedRole] = useState(false);
@@ -105,13 +106,18 @@ export const LobbyScreen: React.FC<
             />
           </View>
         </View>
-
-        <Text> {`generator count: ${genCount} `} </Text>
-
-        <GenCountSlider
-          initialCount={genCount}
-          onValueChange={v => setGenCount(v)}
-        />
+        <View>
+          <Text style={{textAlign: 'center'}}>
+            {' '}
+            {`generator count: ${genCount} `}{' '}
+          </Text>
+          {createdLobby && (
+            <GenCountSlider
+              initialCount={genCount}
+              onValueChange={v => setGenCount(v)}
+            />
+          )}
+        </View>
 
         <View style={{gap: 20}}>
           <View>
@@ -134,18 +140,24 @@ export const LobbyScreen: React.FC<
             }`}</Text>
           </View>
         </View>
-        <View
-          style={{
-            justifyContent: 'flex-end',
-            backgroundColor: '#841584',
-            width: '50%',
-          }}>
-          <Button
-            disabled={!gameReady}
-            onPress={onStartGame}
-            color="#fff"
-            title="Start Game"
-          />
+        <View>
+          {createdLobby ? (
+            <View
+              style={{
+                justifyContent: 'flex-end',
+                backgroundColor: '#841584',
+                width: '50%',
+              }}>
+              <Button
+                disabled={!gameReady}
+                onPress={onStartGame}
+                color="#fff"
+                title="Start Game"
+              />
+            </View>
+          ) : (
+            <Text> {'Waiting for lobby creator to start game...'} </Text>
+          )}
         </View>
       </View>
     </SafeAreaView>
