@@ -43,11 +43,20 @@ export const useGameChannel = (id?: string) => {
             console.log('subscription success: ', _data);
           },
           onEvent(event) {
+            if (!dispatch) return new Error('dispatch not initialized');
             switch (event.eventName) {
-              case 'client-survivor_selected':
-                if (dispatch)
-                  dispatch({type: Action.ADD_SURVIVOR, payload: event.data});
+              case 'client-survivor-selected':
+                dispatch({type: Action.ADD_SURVIVOR, payload: event.data});
                 console.log('received event: ', event.eventName);
+                break;
+              case 'client-killer-selected':
+                dispatch({type: Action.ADD_KILLER, payload: event.data});
+                break;
+              case 'client-survivor-removed':
+                dispatch({type: Action.REMOVE_SURVIVOR, payload: event.data});
+                break;
+              case 'client-killer-removed':
+                dispatch({type: Action.REMOVE_KILLER, payload: event.data});
                 break;
 
               default:

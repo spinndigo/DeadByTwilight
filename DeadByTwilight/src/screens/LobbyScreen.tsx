@@ -16,7 +16,6 @@ export const LobbyScreen: React.FC<
 > = ({navigation}) => {
   const game = useContext(GameContext);
   const dispatch = useContext(GameDispatchContext);
-  const [ready, setReady] = useState(false);
   const [hasSelectedRole, setHasSelectedRole] = useState(false);
   const [genCount, setGenCount] = useState(3);
   const {gameChannel} = useGameChannel();
@@ -105,14 +104,6 @@ export const LobbyScreen: React.FC<
               title="Killer"
             />
           </View>
-          <View>
-            <Text> {'Indicate readiness:'} </Text>
-            <Button
-              color={ready ? 'green' : 'red'}
-              title={ready ? 'Ready :)' : 'Not Ready :('}
-              onPress={() => setReady(r => !r)}
-            />
-          </View>
         </View>
 
         <Text> {`generator count: ${genCount} `} </Text>
@@ -122,20 +113,26 @@ export const LobbyScreen: React.FC<
           onValueChange={v => setGenCount(v)}
         />
 
-        <View>
+        <View style={{gap: 20}}>
           <View>
             <Text style={{textAlign: 'center'}}>
               {' '}
-              {`Player count: (${gameChannel?.members.size}) -- todo`}
-              {', '}
+              {`Players in lobby: (${gameChannel?.members.size})`}
             </Text>
           </View>
-          <Text>
-            {' '}
-            {`survivor count: ${game.survivors.length} -- killer: ${
-              game.killer?.name || 'unclaimed'
-            }`}{' '}
-          </Text>
+          <View>
+            <Text style={{textAlign: 'center'}}>
+              {' '}
+              {`survivors(${game.survivors.length}): ${game.survivors.map(
+                s => `${s.name}, `,
+              )}`}
+            </Text>
+          </View>
+          <View>
+            <Text style={{textAlign: 'center'}}>{`killer: ${
+              game.killer?.name || 'n/a'
+            }`}</Text>
+          </View>
         </View>
         <View
           style={{
