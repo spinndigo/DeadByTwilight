@@ -146,7 +146,7 @@ export const LobbyScreen: React.FC<
               style={{
                 justifyContent: 'flex-end',
                 backgroundColor: '#841584',
-                width: '50%',
+                width: 200,
               }}>
               <Button
                 disabled={!gameReady}
