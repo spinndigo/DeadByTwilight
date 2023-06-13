@@ -17,6 +17,7 @@ export const CreateOrJoinScreen: React.FC<
   const [showCreateRoom, setShowCreateRoom] = useState(false);
 
   const onPressCreate = () => {
+    setId(shortid.generate());
     setShowCreateRoom(true);
   };
 
