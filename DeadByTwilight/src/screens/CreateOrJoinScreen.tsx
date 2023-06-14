@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
-import {View, StyleSheet, TextInput, Button} from 'react-native';
+import {View, StyleSheet, Button} from 'react-native';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {GameStackParamList} from '../navigators';
 import {CreateRoomDialog, JoinRoomDialog} from '../components';
@@ -10,7 +10,6 @@ import {useGameChannel} from '../hooks';
 export const CreateOrJoinScreen: React.FC<
   NativeStackScreenProps<GameStackParamList, 'CreateOrJoin'>
 > = ({navigation}) => {
-  const [name, setName] = useState('');
   const [id, setId] = useState<string | undefined>(shortid.generate());
   useGameChannel(id);
   const [showJoinAlert, setShowJoinAlert] = useState(false);
@@ -39,34 +38,11 @@ export const CreateOrJoinScreen: React.FC<
   return (
     <>
       <View style={styles.wrapper}>
-        <View
-          style={{
-            width: '100%',
-            flexWrap: 'nowrap',
-            flexDirection: 'row',
-            justifyContent: 'center',
-          }}>
-          <TextInput
-            onChangeText={typed => setName(typed)}
-            placeholder="Enter your name"
-            style={styles.input}
-          />
+        <View style={{margin: 40, backgroundColor: '#841584', width: '50%'}}>
+          <Button onPress={onPressCreate} color="white" title="Create Game" />
         </View>
         <View style={{margin: 40, backgroundColor: '#841584', width: '50%'}}>
-          <Button
-            onPress={onPressCreate}
-            disabled={!name}
-            color="white"
-            title="Create Game"
-          />
-        </View>
-        <View style={{margin: 40, backgroundColor: '#841584', width: '50%'}}>
-          <Button
-            onPress={onPressJoin}
-            disabled={!name}
-            color="white"
-            title="Join Game"
-          />
+          <Button onPress={onPressJoin} color="white" title="Join Game" />
         </View>
       </View>
       <CreateRoomDialog
