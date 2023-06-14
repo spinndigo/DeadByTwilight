@@ -7,7 +7,7 @@
 
 import React from 'react';
 import {StatusBar, useColorScheme} from 'react-native';
-
+import 'react-native-devsettings';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {DefaultStack} from './src/navigators';
 import {NavigationContainer} from '@react-navigation/native';
