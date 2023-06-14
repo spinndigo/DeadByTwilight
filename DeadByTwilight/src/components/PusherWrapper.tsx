@@ -6,6 +6,9 @@ import React, {
   useState,
 } from 'react';
 
+const DEVICE_IP = '192.168.10.117';
+const AUTH_ENDPOINT = `http://${DEVICE_IP}:5001/pusher/auth`;
+
 const pusher = Pusher.getInstance();
 export const PusherContext = createContext<Pusher | null>(null);
 export const PusherWrapper: React.FC<PropsWithChildren> = ({children}) => {
@@ -15,7 +18,8 @@ export const PusherWrapper: React.FC<PropsWithChildren> = ({children}) => {
       await pusher.init({
         apiKey: 'b16adf11ba39c8f28218',
         cluster: 'mt1',
-        authEndpoint: 'http://localhost:5001/pusher/auth',
+        authEndpoint: AUTH_ENDPOINT,
+
         onConnectionStateChange(currentState, previousState) {
           console.log(
             `old connection state: ${previousState} \n new connection state: ${currentState}`,

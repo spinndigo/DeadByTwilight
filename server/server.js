@@ -1,6 +1,7 @@
 var express = require('express'); // for running a server
 var bodyParser = require('body-parser'); // for processing JSON submitted in the request body
 var Pusher = require('pusher'); // for connecting to Pusher
+const shortid = require('shortid');
 
 require('dotenv').config();
 
@@ -24,14 +25,15 @@ app.get('/', function(_req, res){ // for testing if the server is running
 });
 
 app.post('/pusher/auth', function(req, res) { // authenticate user's who's trying to connect
-  console.log('someone is connecting: ' , req.body.channel_name);
+  var user_id = shortid.generate();
   var socketId = req.body.socket_id;
   var channel = req.body.channel_name;
+  
 
   const user = {
-    user_id: "some_id",
+    user_id: user_id,
     user_info: {
-      name: "Joe Smith",
+      name: `player-${user_id}`,
     }
   };
 

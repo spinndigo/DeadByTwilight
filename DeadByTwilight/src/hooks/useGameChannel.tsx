@@ -35,6 +35,9 @@ export const useGameChannel = (id?: string) => {
       if (pusher && id) {
         const subbedChannel = await pusher?.subscribe({
           channelName: `presence-${id}`,
+          onMemberAdded(member) {
+            console.log('member added: ', member);
+          },
           onMemberRemoved: m => console.log(`removed: ${m.toString}`),
           onSubscriptionError(channelName, message, _e) {
             console.log(`${channelName} had the following error: ${message}`);
