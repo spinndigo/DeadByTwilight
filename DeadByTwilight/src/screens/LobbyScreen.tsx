@@ -31,7 +31,7 @@ export const LobbyScreen: React.FC<
   const onPressSurvivor = async () => {
     await gameChannel?.trigger({
       channelName: gameChannel.channelName,
-      eventName: 'client-survivor_selected',
+      eventName: 'client-survivor-selected',
       data: {survivor: gameChannel.me},
     });
     if (dispatch)
@@ -49,7 +49,7 @@ export const LobbyScreen: React.FC<
   const onPressKiller = async () => {
     await gameChannel?.trigger({
       channelName: gameChannel.channelName,
-      eventName: 'client-killer_selected',
+      eventName: 'client-killer-selected',
       data: {killer: gameChannel.me},
     });
     if (dispatch)
