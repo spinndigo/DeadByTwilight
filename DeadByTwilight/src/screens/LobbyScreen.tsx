@@ -14,11 +14,10 @@ export type Role = 'SURVIVOR' | 'KILLER' | undefined;
 export const LobbyScreen: React.FC<
   NativeStackScreenProps<GameStackParamList, 'Lobby'>
 > = ({navigation, route}) => {
-  const createdLobby = route.params.didCreateRoom;
+  const {didCreateRoom, name} = route.params;
   const game = useContext(GameContext);
   const dispatch = useContext(GameDispatchContext);
   const [hasSelectedRole, setHasSelectedRole] = useState(false);
-  const [genCount, setGenCount] = useState(3);
   const {gameChannel} = useGameChannel();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const {navigate} = navigation; // todo
@@ -38,8 +37,8 @@ export const LobbyScreen: React.FC<
       dispatch({
         type: Action.ADD_SURVIVOR,
         payload: {
-          id: gameChannel?.me?.userId || '345',
-          name: gameChannel?.me?.userInfo.name || 'Anon',
+          id: gameChannel?.me?.userId || '',
+          name: name || 'Anon',
           health: 'HEALTHY',
         },
       });
@@ -63,8 +62,26 @@ export const LobbyScreen: React.FC<
     setHasSelectedRole(true);
   };
 
+  const onAdjustGenSlider = async (quantity: number) => {
+    await gameChannel?.trigger({
+      channelName: gameChannel.channelName,
+      eventName: 'client-set-initial-gens',
+      data: {quantity},
+    });
+    if (dispatch)
+      dispatch({
+        type: Action.SET_INITIAL_GENS,
+        payload: {
+          quantity,
+        },
+      });
+  };
+
   const gameReady =
-    game.survivors.length >= 2 && game.survivors.length < 5 && !!game.killer;
+    game.survivors.length >= 2 &&
+    game.survivors.length < 5 &&
+    !!game.killer &&
+    game.generators.length >= 3;
 
   const onStartGame = () => {
     return null; // todo
@@ -109,12 +126,12 @@ export const LobbyScreen: React.FC<
         <View>
           <Text style={{textAlign: 'center'}}>
             {' '}
-            {`generator count: ${genCount} `}{' '}
+            {`generator count: ${game.generators.length} `}{' '}
           </Text>
-          {createdLobby && (
+          {didCreateRoom && (
             <GenCountSlider
-              initialCount={genCount}
-              onValueChange={v => setGenCount(v)}
+              initialCount={game.generators.length}
+              onValueChange={v => onAdjustGenSlider(v)}
             />
           )}
         </View>
@@ -141,7 +158,7 @@ export const LobbyScreen: React.FC<
           </View>
         </View>
         <View>
-          {createdLobby ? (
+          {didCreateRoom ? (
             <View
               style={{
                 justifyContent: 'flex-end',

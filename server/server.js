@@ -7,7 +7,7 @@ require('dotenv').config();
 
 var app = express();
 app.use(bodyParser.json()); // for parsing JSON strings passed in the request body
-app.use(bodyParser.urlencoded({ extended: false })); // for parsing URL encoded request body
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing URL encoded request body
 
 var pusher = new Pusher({ // connect to pusher
   appId: process.env.APP_ID, // load the Pusher app settings from the .env file
@@ -29,12 +29,10 @@ app.post('/pusher/auth', function(req, res) { // authenticate user's who's tryin
   var socketId = req.body.socket_id;
   var channel = req.body.channel_name;
   
+  console.log(req.body);
 
   const user = {
     user_id: user_id,
-    user_info: {
-      name: `player-${user_id}`,
-    }
   };
 
   var auth = pusher.authorizeChannel(socketId, channel, user );

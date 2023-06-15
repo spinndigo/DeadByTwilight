@@ -11,10 +11,20 @@ export enum Action {
   REMOVE_SURVIVOR = 'REMOVE_SURVIVOR',
   ADD_KILLER = 'ADD_KILLER',
   REMOVE_KILLER = 'REMOVE_KILLER',
+  SET_INITIAL_GENS = 'SET_INITIAL_GENS',
   UPDATE_PROGRESS = 'UPDATE_PROGRESS',
   UPDATE_GEN_REGRESSION = 'UPDATE_GEN_REGRESSION',
   UPDATE_SURVIVOR_HEALTH = 'UPDATE_SURVIVOR_HEALTH',
 }
+
+export type SetInitialGensPayload = {
+  quantity: number;
+};
+
+type UpdateGenCountAction = {
+  type: Action.SET_INITIAL_GENS;
+  payload: SetInitialGensPayload;
+};
 
 export type UpdateProgressPayload = {
   gen_id: string;
@@ -71,6 +81,7 @@ type RemoveKiller = {
 };
 
 export type GameAction =
+  | UpdateGenCountAction
   | UpdateProgressAction
   | UpdateSurvivorHealthAction
   | UpdateGenRegression
@@ -82,6 +93,7 @@ export type GameAction =
 type GamestateReducer = (state: GameState, action: GameAction) => GameState;
 
 export const gamestateReducer: GamestateReducer = (state, action) => {
+  console.log('running reducer..');
   switch (action.type) {
     case Action.ADD_SURVIVOR:
       return {
@@ -107,6 +119,14 @@ export const gamestateReducer: GamestateReducer = (state, action) => {
       return {
         ...state,
         killer: undefined,
+      };
+
+    case Action.SET_INITIAL_GENS:
+      return {
+        ...state,
+        generators: Array.from({length: action.payload.quantity}, (_, i) => {
+          return {id: `gen-${i}`, progress: 0, isRegressing: false};
+        }),
       };
 
     case Action.UPDATE_PROGRESS:

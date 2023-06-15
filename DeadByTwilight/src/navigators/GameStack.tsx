@@ -14,7 +14,7 @@ import {GameChannelProvider} from '../hooks';
 
 export type GameStackParamList = {
   CreateOrJoin: undefined;
-  Lobby: {didCreateRoom: boolean};
+  Lobby: {didCreateRoom: boolean; name: string};
   Game: undefined;
   PostGame: undefined;
 };

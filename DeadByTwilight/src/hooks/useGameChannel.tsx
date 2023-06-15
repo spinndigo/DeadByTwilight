@@ -32,13 +32,18 @@ export const useGameChannel = (id?: string) => {
   const pusher = useContext(PusherContext);
   useEffect(() => {
     const connectPresenceChannel = async () => {
+      if (!dispatch) return new Error('dispatch not initialized');
       if (pusher && id) {
         const subbedChannel = await pusher?.subscribe({
           channelName: `presence-${id}`,
           onMemberAdded(member) {
-            console.log('member added: ', member);
+            console.log('member added to channel: ', member);
           },
-          onMemberRemoved: m => console.log(`removed: ${m.toString}`),
+          onMemberRemoved: m => {
+            console.log('running member removed: ', m);
+            dispatch({type: Action.REMOVE_SURVIVOR, payload: {id: m.userId}});
+            dispatch({type: Action.REMOVE_KILLER, payload: {id: m.userId}});
+          },
           onSubscriptionError(channelName, message, _e) {
             console.log(`${channelName} had the following error: ${message}`);
           },
@@ -46,11 +51,10 @@ export const useGameChannel = (id?: string) => {
             console.log('subscription success: ', _data);
           },
           onEvent(event) {
-            if (!dispatch) return new Error('dispatch not initialized');
             switch (event.eventName) {
               case 'client-survivor-selected':
                 dispatch({type: Action.ADD_SURVIVOR, payload: event.data});
-                console.log('received event: ', event.eventName);
+                console.log('received survivor selected: ', event.data);
                 break;
               case 'client-killer-selected':
                 dispatch({type: Action.ADD_KILLER, payload: event.data});
@@ -61,7 +65,9 @@ export const useGameChannel = (id?: string) => {
               case 'client-killer-removed':
                 dispatch({type: Action.REMOVE_KILLER, payload: event.data});
                 break;
-
+              case 'client-set-initial-gens':
+                dispatch({type: Action.SET_INITIAL_GENS, payload: event.data});
+                break;
               default:
                 console.warn('received unexpected event: ', event.eventName);
             }

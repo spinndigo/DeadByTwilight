@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
-import {View, StyleSheet, Button} from 'react-native';
+import {View, StyleSheet, Button, TextInput} from 'react-native';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {GameStackParamList} from '../navigators';
 import {CreateRoomDialog, JoinRoomDialog} from '../components';
@@ -11,6 +11,7 @@ export const CreateOrJoinScreen: React.FC<
   NativeStackScreenProps<GameStackParamList, 'CreateOrJoin'>
 > = ({navigation}) => {
   const [id, setId] = useState<string | undefined>(shortid.generate());
+  const [name, setName] = useState('');
   useGameChannel(id);
   const [showJoinAlert, setShowJoinAlert] = useState(false);
   const [showCreateRoom, setShowCreateRoom] = useState(false);
@@ -26,23 +27,46 @@ export const CreateOrJoinScreen: React.FC<
 
   const onPressCreateSubmit = () => {
     setShowCreateRoom(false);
-    navigation.navigate('Lobby', {didCreateRoom: true});
+    navigation.navigate('Lobby', {didCreateRoom: true, name});
   };
 
   const onPressJoinSubmit = (joinId: string) => {
     setShowJoinAlert(false);
     setId(joinId);
-    navigation.navigate('Lobby', {didCreateRoom: false});
+    navigation.navigate('Lobby', {didCreateRoom: false, name});
   };
 
   return (
     <>
       <View style={styles.wrapper}>
-        <View style={{margin: 40, backgroundColor: '#841584', width: '50%'}}>
-          <Button onPress={onPressCreate} color="white" title="Create Game" />
+        <View
+          style={{
+            width: '100%',
+            flexWrap: 'nowrap',
+            flexDirection: 'row',
+            justifyContent: 'center',
+          }}>
+          <TextInput
+            onChangeText={typed => setName(typed)}
+            placeholder="Enter your name"
+            style={styles.input}
+          />
         </View>
         <View style={{margin: 40, backgroundColor: '#841584', width: '50%'}}>
-          <Button onPress={onPressJoin} color="white" title="Join Game" />
+          <Button
+            disabled={!name}
+            onPress={onPressCreate}
+            color="white"
+            title="Create Game"
+          />
+        </View>
+        <View style={{margin: 40, backgroundColor: '#841584', width: '50%'}}>
+          <Button
+            disabled={!name}
+            onPress={onPressJoin}
+            color="white"
+            title="Join Game"
+          />
         </View>
       </View>
       <CreateRoomDialog

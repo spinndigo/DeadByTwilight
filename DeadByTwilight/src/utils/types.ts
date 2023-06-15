@@ -12,7 +12,7 @@ export interface Killer {
   name: string;
 }
 
-export interface Generator {
+export interface Gen {
   id: string;
   progress: number;
   isRegressing: boolean;
@@ -21,5 +21,5 @@ export interface Generator {
 export interface GameState {
   survivors: Array<Survivor>;
   killer: Killer | undefined;
-  generators: Array<Generator>;
+  generators: Array<Gen>;
 }
