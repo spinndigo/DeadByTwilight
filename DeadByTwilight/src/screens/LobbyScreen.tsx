@@ -22,6 +22,8 @@ export const LobbyScreen: React.FC<
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const {navigate} = navigation; // todo
 
+  console.log('game state: ', game);
+
   if (!game) throw new Error('No game state found');
 
   const survivorDisabled = game.survivors.length >= 4 || hasSelectedRole;
@@ -66,7 +68,7 @@ export const LobbyScreen: React.FC<
     await gameChannel?.trigger({
       channelName: gameChannel.channelName,
       eventName: 'client-set-initial-gens',
-      data: {quantity},
+      data: quantity.toString(),
     });
     if (dispatch)
       dispatch({

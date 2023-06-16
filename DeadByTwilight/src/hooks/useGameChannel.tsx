@@ -66,7 +66,13 @@ export const useGameChannel = (id?: string) => {
                 dispatch({type: Action.REMOVE_KILLER, payload: event.data});
                 break;
               case 'client-set-initial-gens':
-                dispatch({type: Action.SET_INITIAL_GENS, payload: event.data});
+                console.log(
+                  `channel received client set initial gens: ${event} `,
+                );
+                dispatch({
+                  type: Action.SET_INITIAL_GENS,
+                  payload: {quantity: event.data},
+                });
                 break;
               default:
                 console.warn('received unexpected event: ', event.eventName);

@@ -93,7 +93,8 @@ export type GameAction =
 type GamestateReducer = (state: GameState, action: GameAction) => GameState;
 
 export const gamestateReducer: GamestateReducer = (state, action) => {
-  console.log('running reducer..');
+  console.log('running reducer with type: ', action.type);
+  console.log('running reducer with payload: ', action.payload);
   switch (action.type) {
     case Action.ADD_SURVIVOR:
       return {

@@ -14,7 +14,12 @@ export const JoinRoomDialog: React.FC<Props> = ({onPress, show, setShow}) => {
     <View>
       <Dialog.Container visible={show}>
         <Dialog.Title>{'Enter Room Id'}</Dialog.Title>
-        <Dialog.Input onChangeText={value => setId(value)} />
+        <Dialog.Input
+          autoCapitalize="none"
+          autoCorrect={false}
+          spellCheck={false}
+          onChangeText={value => setId(value)}
+        />
         <Dialog.Button
           label="cancel"
           color={'red'}
