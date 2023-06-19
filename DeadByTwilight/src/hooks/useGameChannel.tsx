@@ -47,8 +47,8 @@ export const useGameChannel = (id?: string) => {
           onSubscriptionError(channelName, message, _e) {
             console.log(`${channelName} had the following error: ${message}`);
           },
-          onSubscriptionSucceeded: _data => {
-            console.log('subscription success: ', _data);
+          onSubscriptionSucceeded: data => {
+            console.log('channel subscription success: ', data);
           },
           onEvent(event) {
             console.log('received event: ', event);

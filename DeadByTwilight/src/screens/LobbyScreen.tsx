@@ -57,7 +57,7 @@ export const LobbyScreen: React.FC<
       eventName: 'client-killer-selected',
       data: JSON.stringify({
         id: gameChannel?.me?.userId || '345',
-        name: gameChannel?.me?.userInfo.name || 'Anon_killer',
+        name: name || 'Anon_killer',
       }),
     });
     if (dispatch)
@@ -65,7 +65,7 @@ export const LobbyScreen: React.FC<
         type: Action.ADD_KILLER,
         payload: {
           id: gameChannel?.me?.userId || '345',
-          name: gameChannel?.me?.userInfo.name || 'Anon_killer',
+          name: name || 'Anon_killer',
         },
       });
     setHasSelectedRole(true);
