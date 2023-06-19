@@ -93,7 +93,7 @@ export const LobbyScreen: React.FC<
     game.generators.length >= 3;
 
   const onStartGame = () => {
-    return null; // todo
+    navigate('Game');
   };
 
   return (
