@@ -7,7 +7,7 @@ require('dotenv').config();
 
 var app = express();
 app.use(bodyParser.json()); // for parsing JSON strings passed in the request body
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing URL encoded request body
+app.use(bodyParser.urlencoded({ extended: false })); // for parsing URL encoded request body
 
 var pusher = new Pusher({ // connect to pusher
   appId: process.env.APP_ID, // load the Pusher app settings from the .env file
@@ -16,7 +16,7 @@ var pusher = new Pusher({ // connect to pusher
   cluster: process.env.APP_CLUSTER, 
   useTLS: true,
   channelAuthorization: {
-    endpoint: "http://localhost:5001/pusher/auth",
+    endpoint: "https://dead-by-twilight-express-server.onrender.com/pusher/auth",
   }
 });
 
@@ -25,6 +25,7 @@ app.get('/', function(_req, res){ // for testing if the server is running
 });
 
 app.post('/pusher/auth', function(req, res) { // authenticate user's who's trying to connect
+  console.log('someone is trying to authorize..');
   var user_id = shortid.generate();
   var socketId = req.body.socket_id;
   var channel = req.body.channel_name;
@@ -33,6 +34,9 @@ app.post('/pusher/auth', function(req, res) { // authenticate user's who's tryin
 
   const user = {
     user_id: user_id,
+    user_info: {
+      name: 'Ben'
+    }
   };
 
   var auth = pusher.authorizeChannel(socketId, channel, user );
@@ -40,5 +44,6 @@ app.post('/pusher/auth', function(req, res) { // authenticate user's who's tryin
   res.send(auth);
 });
 
+console.log(`running server on port ${process.env.PORT} `);
 var port = process.env.PORT || 5001;
 app.listen(port);

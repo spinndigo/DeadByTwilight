@@ -67,15 +67,18 @@ export const useGameChannel = (id?: string) => {
                 break;
               case 'client-set-initial-gens':
                 console.log(
-                  `channel received client set initial gens: ${event} `,
+                  `channel received client set initial gens: ${event.data} `,
                 );
+                console.log(`parsed json: ${JSON.parse(event.data)}`);
                 dispatch({
                   type: Action.SET_INITIAL_GENS,
-                  payload: {quantity: event.data},
+                  payload: JSON.parse(event.data),
                 });
                 break;
               default:
-                console.warn('received unexpected event: ', event.eventName);
+                console.warn(
+                  `received unexpected event: ${event.eventName} from ${event.channelName} with ${event.data} ,  `,
+                );
             }
           },
         });

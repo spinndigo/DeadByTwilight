@@ -68,7 +68,7 @@ export const LobbyScreen: React.FC<
     await gameChannel?.trigger({
       channelName: gameChannel.channelName,
       eventName: 'client-set-initial-gens',
-      data: quantity.toString(),
+      data: quantity,
     });
     if (dispatch)
       dispatch({

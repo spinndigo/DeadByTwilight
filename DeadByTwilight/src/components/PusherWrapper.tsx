@@ -6,8 +6,7 @@ import React, {
   useState,
 } from 'react';
 
-const DEVICE_IP = '192.168.10.117';
-const AUTH_ENDPOINT = `http://${DEVICE_IP}:5001/pusher/auth`;
+const AUTH_ENDPOINT = 'https://dead-by-twilight-express-server.onrender.com';
 
 const pusher = Pusher.getInstance();
 export const PusherContext = createContext<Pusher | null>(null);
@@ -18,7 +17,7 @@ export const PusherWrapper: React.FC<PropsWithChildren> = ({children}) => {
       await pusher.init({
         apiKey: 'b16adf11ba39c8f28218',
         cluster: 'mt1',
-        authEndpoint: AUTH_ENDPOINT,
+        authEndpoint: `${AUTH_ENDPOINT}/pusher/auth`,
 
         onConnectionStateChange(currentState, previousState) {
           console.log(
