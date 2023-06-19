@@ -3,17 +3,17 @@ import {
   UpdateHealthPayload,
   UpdateProgressPayload,
 } from '../gamestateReducer';
-import {Generator, Health, HealthChange, Survivor} from './types';
+import {Gen, Health, HealthChange, Survivor} from './types';
 
 type UpdateGenProgressHelper = (
-  gens: Array<Generator>,
+  gens: Array<Gen>,
   updatedGen: UpdateProgressPayload,
-) => Array<Generator>;
+) => Array<Gen>;
 
 type UpdateGenRegressionHelper = (
-  gens: Array<Generator>,
+  gens: Array<Gen>,
   updatedGen: UpdateGenRegressionPayload,
-) => Array<Generator>;
+) => Array<Gen>;
 
 type UpdateSurvivorhealth = (
   survivors: Array<Survivor>,

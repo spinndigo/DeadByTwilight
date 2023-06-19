@@ -51,19 +51,33 @@ export const useGameChannel = (id?: string) => {
             console.log('subscription success: ', _data);
           },
           onEvent(event) {
+            console.log('received event: ', event);
             switch (event.eventName) {
               case 'client-survivor-selected':
-                dispatch({type: Action.ADD_SURVIVOR, payload: event.data});
+                dispatch({
+                  type: Action.ADD_SURVIVOR,
+                  payload: JSON.parse(event.data),
+                });
                 console.log('received survivor selected: ', event.data);
                 break;
               case 'client-killer-selected':
-                dispatch({type: Action.ADD_KILLER, payload: event.data});
+                console.log('received killer selected: ', event.data);
+                dispatch({
+                  type: Action.ADD_KILLER,
+                  payload: JSON.parse(event.data),
+                });
                 break;
               case 'client-survivor-removed':
-                dispatch({type: Action.REMOVE_SURVIVOR, payload: event.data});
+                dispatch({
+                  type: Action.REMOVE_SURVIVOR,
+                  payload: JSON.parse(event.data),
+                });
                 break;
               case 'client-killer-removed':
-                dispatch({type: Action.REMOVE_KILLER, payload: event.data});
+                dispatch({
+                  type: Action.REMOVE_KILLER,
+                  payload: JSON.parse(event.data),
+                });
                 break;
               case 'client-set-initial-gens':
                 console.log(

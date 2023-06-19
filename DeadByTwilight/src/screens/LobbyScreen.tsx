@@ -33,7 +33,11 @@ export const LobbyScreen: React.FC<
     await gameChannel?.trigger({
       channelName: gameChannel.channelName,
       eventName: 'client-survivor-selected',
-      data: {survivor: gameChannel.me},
+      data: JSON.stringify({
+        id: gameChannel?.me?.userId || '',
+        name: name || 'Anon',
+        health: 'HEALTHY',
+      }),
     });
     if (dispatch)
       dispatch({
@@ -51,7 +55,10 @@ export const LobbyScreen: React.FC<
     await gameChannel?.trigger({
       channelName: gameChannel.channelName,
       eventName: 'client-killer-selected',
-      data: {killer: gameChannel.me},
+      data: JSON.stringify({
+        id: gameChannel?.me?.userId || '345',
+        name: gameChannel?.me?.userInfo.name || 'Anon_killer',
+      }),
     });
     if (dispatch)
       dispatch({
@@ -68,7 +75,7 @@ export const LobbyScreen: React.FC<
     await gameChannel?.trigger({
       channelName: gameChannel.channelName,
       eventName: 'client-set-initial-gens',
-      data: quantity,
+      data: JSON.stringify({quantity}),
     });
     if (dispatch)
       dispatch({
