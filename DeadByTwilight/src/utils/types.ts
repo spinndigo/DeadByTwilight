@@ -5,6 +5,7 @@ export interface Survivor {
   id: string;
   name: string;
   health: Health;
+  heal_progress: number;
 }
 
 export interface Killer {

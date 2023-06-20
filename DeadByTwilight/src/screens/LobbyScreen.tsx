@@ -19,7 +19,7 @@ export const LobbyScreen: React.FC<
   const dispatch = useContext(GameDispatchContext);
   const [hasSelectedRole, setHasSelectedRole] = useState(false);
   const {gameChannel} = useGameChannel();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const {navigate} = navigation; // todo
 
   console.log('game state: ', game);
