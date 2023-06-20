@@ -4,7 +4,13 @@ import {
   applyGenRegression,
   applySurvivorHealthDelta,
 } from './utils/helpers';
-import {GameState, HealthChange, Killer, Survivor} from './utils/types';
+import {
+  GameState,
+  HealthChange,
+  Killer,
+  Survivor,
+  GameStatus,
+} from './utils/types';
 
 export enum Action {
   ADD_SURVIVOR = 'ADD_SURVIVOR',
@@ -15,10 +21,16 @@ export enum Action {
   UPDATE_PROGRESS = 'UPDATE_PROGRESS',
   UPDATE_GEN_REGRESSION = 'UPDATE_GEN_REGRESSION',
   UPDATE_SURVIVOR_HEALTH = 'UPDATE_SURVIVOR_HEALTH',
+  UPDATE_GAME_STATUS = 'UPDATE_GAME_STATUS',
 }
 
 export type SetInitialGensPayload = {
   quantity: number;
+};
+
+type UpdateGameStatusAction = {
+  type: Action.UPDATE_GAME_STATUS;
+  payload: GameStatus;
 };
 
 type UpdateGenCountAction = {
@@ -81,6 +93,7 @@ type RemoveKiller = {
 };
 
 export type GameAction =
+  | UpdateGameStatusAction
   | UpdateGenCountAction
   | UpdateProgressAction
   | UpdateSurvivorHealthAction
@@ -144,6 +157,12 @@ export const gamestateReducer: GamestateReducer = (state, action) => {
       return {
         ...state,
         survivors: applySurvivorHealthDelta(state.survivors, action.payload),
+      };
+
+    case Action.UPDATE_GAME_STATUS:
+      return {
+        ...state,
+        status: action.payload,
       };
 
     default:

@@ -1,5 +1,6 @@
 export type Health = 'HEALTHY' | 'INJURED' | 'DYING' | 'DEAD';
 export type HealthChange = 'HEALED' | 'HURT';
+export type GameStatus = 'UNBEGUN' | 'ONGOING' | 'FINISHED';
 
 export interface Survivor {
   id: string;
@@ -20,6 +21,7 @@ export interface Gen {
 }
 
 export interface GameState {
+  status: GameStatus;
   survivors: Array<Survivor>;
   killer: Killer | undefined;
   generators: Array<Gen>;

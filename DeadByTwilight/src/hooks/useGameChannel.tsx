@@ -89,6 +89,12 @@ export const useGameChannel = (id?: string) => {
                   payload: JSON.parse(event.data),
                 });
                 break;
+              case 'client-update-game-status':
+                dispatch({
+                  type: Action.UPDATE_GAME_STATUS,
+                  payload: event.data,
+                });
+                break;
               default:
                 console.warn(
                   `received unexpected event: ${event.eventName} from ${event.channelName} with ${event.data} ,  `,

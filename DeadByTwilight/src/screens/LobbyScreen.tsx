@@ -1,6 +1,6 @@
 /* eslint-disable curly */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {View, Text, StyleSheet, SafeAreaView, Button} from 'react-native';
 import {GameStackParamList} from '../navigators';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -34,8 +34,8 @@ export const LobbyScreen: React.FC<
       channelName: gameChannel.channelName,
       eventName: 'client-survivor-selected',
       data: JSON.stringify({
-        id: gameChannel?.me?.userId || '',
-        name: name || 'Anon',
+        id: gameChannel?.me?.userId || '1408',
+        name: name || 'Wendy',
         health: 'HEALTHY',
       }),
     });
@@ -43,9 +43,10 @@ export const LobbyScreen: React.FC<
       dispatch({
         type: Action.ADD_SURVIVOR,
         payload: {
-          id: gameChannel?.me?.userId || '',
-          name: name || 'Anon',
+          id: gameChannel?.me?.userId || '1408',
+          name: name || 'Wendy',
           health: 'HEALTHY',
+          heal_progress: 0,
         },
       });
     setHasSelectedRole(true);
@@ -56,16 +57,16 @@ export const LobbyScreen: React.FC<
       channelName: gameChannel.channelName,
       eventName: 'client-killer-selected',
       data: JSON.stringify({
-        id: gameChannel?.me?.userId || '345',
-        name: name || 'Anon_killer',
+        id: gameChannel?.me?.userId || '237',
+        name: name || 'Jack',
       }),
     });
     if (dispatch)
       dispatch({
         type: Action.ADD_KILLER,
         payload: {
-          id: gameChannel?.me?.userId || '345',
-          name: name || 'Anon_killer',
+          id: gameChannel?.me?.userId || '237',
+          name: name || 'Jack',
         },
       });
     setHasSelectedRole(true);
@@ -89,12 +90,27 @@ export const LobbyScreen: React.FC<
   const gameReady =
     game.survivors.length >= 2 &&
     game.survivors.length < 5 &&
-    !!game.killer &&
-    game.generators.length >= 3;
+    game.generators.length > game.survivors.length &&
+    !!game.killer;
 
-  const onStartGame = () => {
-    navigate('Game');
+  const onStartGame = async () => {
+    await gameChannel?.trigger({
+      channelName: gameChannel.channelName,
+      eventName: 'client-update-game-status',
+      data: 'ONGOING',
+    });
+    if (dispatch)
+      dispatch({
+        type: Action.UPDATE_GAME_STATUS,
+        payload: 'ONGOING',
+      });
   };
+
+  useEffect(() => {
+    if (game.status === 'ONGOING') {
+      navigate('Game');
+    }
+  }, [game.status, navigate]);
 
   return (
     <SafeAreaView>
