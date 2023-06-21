@@ -4,8 +4,8 @@ import {GameStackParamList} from '../navigators';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useGameChannel} from '../hooks';
 import {GameContext, GameDispatchContext} from '../GameContext';
-import {Text, View} from 'react-native';
-import {GenRow, SurvivorRow} from '../components';
+import {StyleSheet, Text, View} from 'react-native';
+import {GenItem, SurvivorItem} from '../components';
 
 export const GameScreen: React.FC<
   NativeStackScreenProps<GameStackParamList, 'Game'>
@@ -21,27 +21,37 @@ export const GameScreen: React.FC<
   }
   return (
     <>
-      <View style={{flexDirection: 'row'}}>
-        <View style={{flexDirection: 'column', flexWrap: 'wrap'}}>
+      <View style={{flexDirection: 'row', width: '90%'}}>
+        <View style={{...styles.column, backgroundColor: 'lightblue'}}>
           {game.survivors.map(s => (
-            <SurvivorRow survivor={s} onPress={() => undefined} />
+            <SurvivorItem survivor={s} onPress={() => undefined} />
           ))}
         </View>
-        <View style={{flexDirection: 'column', flexWrap: 'wrap'}}>
+        <View style={{...styles.column, backgroundColor: 'pink'}}>
           {game.generators.map(g => (
-            <GenRow gen={g} onPress={() => undefined} />
+            <GenItem gen={g} onPress={() => undefined} />
           ))}
+          {isSurvivor && (
+            <View style={{justifyContent: 'center'}}>
+              <Text style={{textAlign: 'center'}}>
+                {`Gens remaining: ${
+                  game.generators.filter(g => g.progress < 100).length
+                }`}
+              </Text>
+            </View>
+          )}
         </View>
-        {isSurvivor && (
-          <View>
-            <Text>
-              {`Gens remaining: ${
-                game.generators.filter(g => g.progress < 100).length
-              }`}
-            </Text>
-          </View>
-        )}
       </View>
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  column: {
+    flexDirection: 'column',
+    flexWrap: 'wrap',
+    width: '50%',
+    justifyContent: 'center',
+    alignContent: 'center',
+  },
+});

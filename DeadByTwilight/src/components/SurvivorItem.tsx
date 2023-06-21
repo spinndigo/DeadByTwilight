@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import {TouchableWithoutFeedback, View} from 'react-native';
+import {Text, TouchableWithoutFeedback, View} from 'react-native';
 import {Health, Survivor} from '../utils/types';
 import UserAvatar from 'react-native-user-avatar';
 import React from 'react';
@@ -20,14 +20,18 @@ interface Props {
   onPress(): void;
 }
 
-export const SurvivorRow: React.FC<Props> = ({survivor, onPress}) => (
+export const SurvivorItem: React.FC<Props> = ({survivor, onPress}) => (
   <TouchableWithoutFeedback onPress={onPress}>
-    <View style={{flexDirection: 'row'}}>
+    <View
+      style={{flexDirection: 'row', justifyContent: 'center', width: '50%'}}>
       <View>
         <UserAvatar
           name={survivor.name}
           bgColor={healthColors[survivor.health]}
         />
+      </View>
+      <View style={{alignContent: 'center'}}>
+        <Text style={{textAlign: 'center'}}> {survivor.name} </Text>
       </View>
     </View>
   </TouchableWithoutFeedback>

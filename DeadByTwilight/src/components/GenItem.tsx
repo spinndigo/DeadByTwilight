@@ -8,9 +8,18 @@ interface Props {
   onPress(): void;
 }
 
-export const GenRow: React.FC<Props> = ({gen, onPress}) => (
+export const GenItem: React.FC<Props> = ({gen, onPress}) => (
   <TouchableWithoutFeedback onPress={onPress}>
-    <View style={{flexDirection: 'row'}}>
+    <View
+      style={{
+        borderColor: 'black',
+        borderWidth: 1,
+        backgroundColor: gen.progress === 100 ? 'yellow' : 'grey',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        width: '30%',
+        height: '30%',
+      }}>
       <View>
         <Text>{gen.id}</Text>
       </View>
