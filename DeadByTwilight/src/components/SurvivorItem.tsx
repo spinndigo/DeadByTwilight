@@ -1,8 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
-import {Text, TouchableWithoutFeedback, View} from 'react-native';
+import {TouchableWithoutFeedback, View} from 'react-native';
 import {Health, Survivor} from '../utils/types';
 import UserAvatar from 'react-native-user-avatar';
 import React from 'react';
+import {SurvivorItemWrapper} from './elements';
+import {Text} from 'react-native';
 
 type HealthColors = {
   [key in Health]: string;
@@ -22,17 +24,22 @@ interface Props {
 
 export const SurvivorItem: React.FC<Props> = ({survivor, onPress}) => (
   <TouchableWithoutFeedback onPress={onPress}>
-    <View
-      style={{flexDirection: 'row', justifyContent: 'center', width: '50%'}}>
-      <View>
-        <UserAvatar
-          name={survivor.name}
-          bgColor={healthColors[survivor.health]}
-        />
+    <>
+      <SurvivorItemWrapper>
+        <View>
+          <UserAvatar
+            size={100}
+            name={survivor.name}
+            bgColor={healthColors[survivor.health]}
+          />
+        </View>
+      </SurvivorItemWrapper>
+      <View style={{marginTop: 10}}>
+        <Text style={{fontWeight: 'bold', textAlign: 'center'}}>
+          {' '}
+          {survivor.health.toLocaleUpperCase()}{' '}
+        </Text>
       </View>
-      <View style={{alignContent: 'center'}}>
-        <Text style={{textAlign: 'center'}}> {survivor.name} </Text>
-      </View>
-    </View>
+    </>
   </TouchableWithoutFeedback>
 );

@@ -21,18 +21,17 @@ export const GameScreen: React.FC<
   }
   return (
     <>
-      <View style={{flexDirection: 'row', width: '90%'}}>
+      <View style={{flexDirection: 'row', width: '100%', height: '100%'}}>
         <View style={{...styles.column, backgroundColor: 'lightblue'}}>
           {game.survivors.map(s => (
-            <SurvivorItem survivor={s} onPress={() => undefined} />
+            <View style={{...styles.items}}>
+              <SurvivorItem survivor={s} onPress={() => undefined} />
+            </View>
           ))}
         </View>
-        <View style={{...styles.column, backgroundColor: 'pink'}}>
-          {game.generators.map(g => (
-            <GenItem gen={g} onPress={() => undefined} />
-          ))}
+        <View style={{...styles.row, backgroundColor: 'pink'}}>
           {isSurvivor && (
-            <View style={{justifyContent: 'center'}}>
+            <View style={{justifyContent: 'center', width: '100%'}}>
               <Text style={{textAlign: 'center'}}>
                 {`Gens remaining: ${
                   game.generators.filter(g => g.progress < 100).length
@@ -40,6 +39,11 @@ export const GameScreen: React.FC<
               </Text>
             </View>
           )}
+          {game.generators.map(g => (
+            <View style={{...styles.items}}>
+              <GenItem gen={g} onPress={() => undefined} />
+            </View>
+          ))}
         </View>
       </View>
     </>
@@ -53,5 +57,17 @@ const styles = StyleSheet.create({
     width: '50%',
     justifyContent: 'center',
     alignContent: 'center',
+  },
+  row: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    width: '50%',
+    justifyContent: 'center',
+    alignContent: 'center',
+  },
+  items: {
+    height: '30%',
+    width: '30%',
+    margin: 10,
   },
 });
