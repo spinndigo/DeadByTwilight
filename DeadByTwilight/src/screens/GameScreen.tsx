@@ -5,7 +5,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useGameChannel} from '../hooks';
 import {GameContext, GameDispatchContext} from '../GameContext';
 import {StyleSheet, Text, View} from 'react-native';
-import {GenItem, SurvivorItem} from '../components';
+import {ActionModal, GenItem, SurvivorItem} from '../components';
 
 export const GameScreen: React.FC<
   NativeStackScreenProps<GameStackParamList, 'Game'>
@@ -46,6 +46,7 @@ export const GameScreen: React.FC<
           ))}
         </View>
       </View>
+      {/* <ActionModal /> */}
     </>
   );
 };
