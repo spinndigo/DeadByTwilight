@@ -3,7 +3,7 @@ import {
   UpdateHealthPayload,
   UpdateProgressPayload,
 } from '../gamestateReducer';
-import {Gen, Health, HealthChange, Survivor} from './types';
+import {GameElement, Gen, Health, HealthChange, Survivor} from './types';
 
 type UpdateGenProgressHelper = (
   gens: Array<Gen>,
@@ -90,3 +90,7 @@ export const addSurvivor = (
     return survivors;
   }
 };
+
+export function isSurvivor(element: GameElement): element is Survivor {
+  return (element as Survivor).health !== undefined;
+}

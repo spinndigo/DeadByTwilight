@@ -26,3 +26,5 @@ export interface GameState {
   killer: Killer | undefined;
   generators: Array<Gen>;
 }
+
+export type GameElement = Survivor | Gen;

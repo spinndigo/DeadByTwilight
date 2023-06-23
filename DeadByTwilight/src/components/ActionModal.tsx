@@ -1,31 +1,28 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {Gen, Survivor} from '../utils/types';
-
 import {Button, Modal, ModalBaseProps, View} from 'react-native';
 import {SurvivorItem} from './SurvivorItem';
 import {GenItem} from './GenItem';
+import {GameElement} from '../utils/types';
+import {isSurvivor} from '../utils/helpers';
 
-type GameElement = Survivor | Gen;
+type ElementInteraction = {label: string; onPress(): void};
 
 interface Props {
-  modalProps: ModalBaseProps;
-  gameElement: GameElement;
-  buttonLabel: string;
-  onPress(): void;
+  gameElement: GameElement | undefined;
+  interaction: ElementInteraction;
 }
 
-function isSurvivor(element: GameElement): element is Survivor {
-  return (element as Survivor).health !== undefined;
-}
-
-export const ActionModal: React.FC<Props> = ({
-  modalProps,
+export const ActionModal: React.FC<Props & ModalBaseProps> = ({
   gameElement,
-  buttonLabel,
-  onPress,
+  interaction,
+  ...modalProps
 }) => {
+  if (!gameElement) {
+    return <></>;
+  } // should not happen
   const elementIsSurvivor = isSurvivor(gameElement);
+  const {label, onPress} = interaction;
 
   return (
     <Modal {...modalProps}>
@@ -48,7 +45,7 @@ export const ActionModal: React.FC<Props> = ({
             flexDirection: 'column',
             justifyContent: 'center',
           }}>
-          <Button title={buttonLabel} onPress={onPress} />
+          <Button title={label} onPress={onPress} />
         </View>
       </View>
     </Modal>

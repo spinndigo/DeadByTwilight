@@ -1,11 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {GameStackParamList} from '../navigators';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useGameChannel} from '../hooks';
 import {GameContext, GameDispatchContext} from '../GameContext';
 import {StyleSheet, Text, View} from 'react-native';
 import {ActionModal, GenItem, SurvivorItem} from '../components';
+import {GameElement} from '../utils/types';
 
 export const GameScreen: React.FC<
   NativeStackScreenProps<GameStackParamList, 'Game'>
@@ -16,16 +17,24 @@ export const GameScreen: React.FC<
   const isSurvivor = game?.survivors.some(
     s => s.id === gameChannel?.me?.userId,
   );
+  const [selectedElement, setSelectedElement] = useState<
+    GameElement | undefined
+  >(undefined);
+
   if (!game || !gameChannel || !dispatch) {
     return <Text> {'Something went wrong'} </Text>;
   }
+
   return (
     <>
       <View style={{flexDirection: 'row', width: '100%', height: '100%'}}>
         <View style={{...styles.column, backgroundColor: 'lightblue'}}>
           {game.survivors.map(s => (
             <View style={{...styles.items}}>
-              <SurvivorItem survivor={s} onPress={() => undefined} />
+              <SurvivorItem
+                survivor={s}
+                onPress={() => setSelectedElement(s)}
+              />
             </View>
           ))}
         </View>
@@ -41,12 +50,16 @@ export const GameScreen: React.FC<
           )}
           {game.generators.map(g => (
             <View style={{...styles.items}}>
-              <GenItem gen={g} onPress={() => undefined} />
+              <GenItem gen={g} onPress={() => setSelectedElement(g)} />
             </View>
           ))}
         </View>
       </View>
-      {/* <ActionModal /> */}
+      <ActionModal
+        interaction={{label: 'todo', onPress: () => undefined}}
+        visible={!!selectedElement}
+        gameElement={selectedElement}
+      />
     </>
   );
 };
