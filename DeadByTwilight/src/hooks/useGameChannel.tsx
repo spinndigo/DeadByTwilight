@@ -12,6 +12,7 @@ import React, {
 import {PusherContext} from '../components';
 import {GameDispatchContext} from '../GameContext';
 import {Action} from '../gamestateReducer';
+import {GEN_KICK_DAMAGE} from '../utils/constants';
 
 type ChannelContextValue = [
   PusherChannel | null,
@@ -93,6 +94,18 @@ export const useGameChannel = (id?: string) => {
                 dispatch({
                   type: Action.UPDATE_GAME_STATUS,
                   payload: event.data,
+                });
+                break;
+              case 'client-killer-hit':
+                dispatch({
+                  type: Action.UPDATE_SURVIVOR_HEALTH,
+                  payload: {survivor_id: event.data, healthChange: 'HURT'},
+                });
+                break;
+              case 'client-killer-kick':
+                dispatch({
+                  type: Action.UPDATE_PROGRESS,
+                  payload: {gen_id: id, delta: GEN_KICK_DAMAGE},
                 });
                 break;
               default:

@@ -1,3 +1,4 @@
+/* eslint-disable curly */
 import {
   UpdateGenRegressionPayload,
   UpdateHealthPayload,
@@ -91,6 +92,8 @@ export const addSurvivor = (
   }
 };
 
-export function isSurvivor(element: GameElement): element is Survivor {
+export function isSurvivor(
+  element: GameElement | undefined,
+): element is Survivor {
   return (element as Survivor).health !== undefined;
 }

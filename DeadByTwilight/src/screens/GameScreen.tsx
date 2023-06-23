@@ -5,8 +5,18 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useGameChannel} from '../hooks';
 import {GameContext, GameDispatchContext} from '../GameContext';
 import {StyleSheet, Text, View} from 'react-native';
-import {ActionModal, GenItem, SurvivorItem} from '../components';
+import {
+  ActionModal,
+  ElementInteraction,
+  GenItem,
+  SurvivorItem,
+} from '../components';
 import {GameElement} from '../utils/types';
+import {isSurvivor} from '../utils/helpers';
+import {Action} from '../gamestateReducer';
+import {GEN_KICK_DAMAGE} from '../utils/constants';
+
+type ActionHandler = (id: string) => void;
 
 export const GameScreen: React.FC<
   NativeStackScreenProps<GameStackParamList, 'Game'>
@@ -14,9 +24,7 @@ export const GameScreen: React.FC<
   const {gameChannel} = useGameChannel();
   const game = useContext(GameContext);
   const dispatch = useContext(GameDispatchContext);
-  const isSurvivor = game?.survivors.some(
-    s => s.id === gameChannel?.me?.userId,
-  );
+  const isKiller = game?.killer?.id === gameChannel?.me?.userId;
   const [selectedElement, setSelectedElement] = useState<
     GameElement | undefined
   >(undefined);
@@ -24,6 +32,47 @@ export const GameScreen: React.FC<
   if (!game || !gameChannel || !dispatch) {
     return <Text> {'Something went wrong'} </Text>;
   }
+
+  const isSurvivorAction = isSurvivor(selectedElement);
+
+  const hitHandler: ActionHandler = async id => {
+    await gameChannel?.trigger({
+      channelName: gameChannel.channelName,
+      eventName: 'client-killer-hit',
+      data: id,
+    });
+    dispatch({
+      type: Action.UPDATE_SURVIVOR_HEALTH,
+      payload: {survivor_id: id, healthChange: 'HURT'},
+    });
+  };
+
+  const kickHandler: ActionHandler = async id => {
+    await gameChannel?.trigger({
+      channelName: gameChannel.channelName,
+      eventName: 'client-killer-kick',
+      data: id,
+    });
+    dispatch({
+      type: Action.UPDATE_PROGRESS,
+      payload: {gen_id: id, delta: GEN_KICK_DAMAGE},
+    });
+  };
+
+  const healHandler: ActionHandler = _id => undefined; // todo
+  const repairHandler: ActionHandler = _id => undefined; // todo
+
+  const playerAction: ElementInteraction =
+    isKiller && isSurvivorAction
+      ? {label: 'Hit', onPress: () => hitHandler(selectedElement.id)}
+      : isKiller && !isSurvivorAction
+      ? {label: 'Kick', onPress: () => kickHandler(selectedElement?.id || '')}
+      : !isKiller && isSurvivorAction
+      ? {label: 'Heal', onPress: () => healHandler(selectedElement.id)}
+      : {
+          label: 'Repair',
+          onPress: () => repairHandler(selectedElement?.id || ''),
+        };
 
   return (
     <>
@@ -39,7 +88,7 @@ export const GameScreen: React.FC<
           ))}
         </View>
         <View style={{...styles.row, backgroundColor: 'pink'}}>
-          {isSurvivor && (
+          {!isKiller && (
             <View style={{justifyContent: 'center', width: '100%'}}>
               <Text style={{textAlign: 'center'}}>
                 {`Gens remaining: ${
@@ -56,7 +105,7 @@ export const GameScreen: React.FC<
         </View>
       </View>
       <ActionModal
-        interaction={{label: 'todo', onPress: () => undefined}}
+        interaction={playerAction}
         visible={!!selectedElement}
         gameElement={selectedElement}
       />

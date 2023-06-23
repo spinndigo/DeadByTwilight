@@ -6,7 +6,7 @@ import {GenItem} from './GenItem';
 import {GameElement} from '../utils/types';
 import {isSurvivor} from '../utils/helpers';
 
-type ElementInteraction = {label: string; onPress(): void};
+export type ElementInteraction = {label: string; onPress(): void};
 
 interface Props {
   gameElement: GameElement | undefined;
