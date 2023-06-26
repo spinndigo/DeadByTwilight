@@ -20,7 +20,7 @@ export const LobbyScreen: React.FC<
   const [hasSelectedRole, setHasSelectedRole] = useState(false);
   const {gameChannel} = useGameChannel();
 
-  const {navigate} = navigation; // todo
+  const {navigate} = navigation;
 
   console.log('game state: ', game);
 
@@ -47,6 +47,7 @@ export const LobbyScreen: React.FC<
           name: name || 'Wendy',
           health: 'HEALTHY',
           heal_progress: 0,
+          numHealers: 0,
         },
       });
     setHasSelectedRole(true);

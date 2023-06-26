@@ -7,6 +7,7 @@ export interface Survivor {
   name: string;
   health: Health;
   heal_progress: number;
+  numHealers: number;
 }
 
 export interface Killer {
@@ -17,7 +18,8 @@ export interface Killer {
 export interface Gen {
   id: string;
   progress: number;
-  isRegressing: boolean;
+  isRegressing: boolean; // wont use for initial version
+  numHealers: number;
 }
 
 export interface GameState {

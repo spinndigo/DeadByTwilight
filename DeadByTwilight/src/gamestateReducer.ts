@@ -2,6 +2,7 @@ import {
   addSurvivor,
   applyGenDelta,
   applyGenRegression,
+  applyHealerCountDelta,
   applySurvivorHealthDelta,
 } from './utils/helpers';
 import {
@@ -22,7 +23,24 @@ export enum Action {
   UPDATE_GEN_REGRESSION = 'UPDATE_GEN_REGRESSION',
   UPDATE_SURVIVOR_HEALTH = 'UPDATE_SURVIVOR_HEALTH',
   UPDATE_GAME_STATUS = 'UPDATE_GAME_STATUS',
+  UPDATE_SURVIVOR_HEALER_COUNT = 'UPDATE_SURVIVOR_HEALER_COUNT',
+  UPDATE_GEN_HEALER_COUNT = 'UPDATE_GEN_HEALER_COUNT',
 }
+
+export type UpdateHealerCountPayload = {
+  id: string; // for a survivor or a gen
+  delta: number; // typically 1
+};
+
+type UpdateSurvivorHealerCount = {
+  type: Action.UPDATE_SURVIVOR_HEALER_COUNT;
+  payload: UpdateHealerCountPayload;
+};
+
+type UpdateGenHealerCount = {
+  type: Action.UPDATE_GEN_HEALER_COUNT;
+  payload: UpdateHealerCountPayload;
+};
 
 export type SetInitialGensPayload = {
   quantity: number;
@@ -94,6 +112,8 @@ type RemoveKiller = {
 
 export type GameAction =
   | UpdateGameStatusAction
+  | UpdateGenHealerCount
+  | UpdateSurvivorHealerCount
   | UpdateGenCountAction
   | UpdateProgressAction
   | UpdateSurvivorHealthAction
@@ -137,7 +157,12 @@ export const gamestateReducer: GamestateReducer = (state, action) => {
       return {
         ...state,
         generators: Array.from({length: action.payload.quantity}, (_, i) => {
-          return {id: `gen-${i}`, progress: 0, isRegressing: false};
+          return {
+            id: `gen-${i}`,
+            progress: 0,
+            isRegressing: false,
+            numHealers: 0,
+          };
         }),
       };
 
@@ -163,6 +188,18 @@ export const gamestateReducer: GamestateReducer = (state, action) => {
       return {
         ...state,
         status: action.payload,
+      };
+
+    case Action.UPDATE_SURVIVOR_HEALER_COUNT:
+      return {
+        ...state,
+        survivors: applyHealerCountDelta(state.survivors, action.payload),
+      };
+
+    case Action.UPDATE_GEN_HEALER_COUNT:
+      return {
+        ...state,
+        generators: applyHealerCountDelta(state.generators, action.payload),
       };
 
     default:

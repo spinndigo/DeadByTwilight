@@ -1,6 +1,7 @@
 /* eslint-disable curly */
 import {
   UpdateGenRegressionPayload,
+  UpdateHealerCountPayload,
   UpdateHealthPayload,
   UpdateProgressPayload,
 } from '../gamestateReducer';
@@ -20,6 +21,11 @@ type UpdateSurvivorhealth = (
   survivors: Array<Survivor>,
   updatedSurvivor: UpdateHealthPayload,
 ) => Array<Survivor>;
+
+type UpdateHealerCount = <T extends GameElement>(
+  elements: Array<T>,
+  updatedElement: UpdateHealerCountPayload,
+) => Array<T>;
 
 export const applyGenDelta: UpdateGenProgressHelper = (gens, updatedGen) => {
   const newGens = gens.slice();
@@ -78,7 +84,18 @@ export const applySurvivorHealthDelta: UpdateSurvivorhealth = (
     updatedSurvivor.healthChange,
   );
   newSurvivors[survivorIndex].health = newHealth;
+  newSurvivors[survivorIndex].heal_progress = 0;
   return newSurvivors;
+};
+
+export const applyHealerCountDelta: UpdateHealerCount = (
+  elements,
+  updatedElement,
+) => {
+  const newElements = elements.slice();
+  const elementIndex = newElements.findIndex(e => e.id === updatedElement.id);
+  newElements[elementIndex].numHealers += updatedElement.delta;
+  return newElements;
 };
 
 export const addSurvivor = (
