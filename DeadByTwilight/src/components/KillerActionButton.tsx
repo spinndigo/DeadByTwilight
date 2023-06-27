@@ -1,5 +1,6 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useContext} from 'react';
-import {Button} from 'react-native';
+import {Text, TouchableHighlight, View} from 'react-native';
 import {GameElement} from '../utils/types';
 import {useGameChannel} from '../hooks';
 import {GameDispatchContext} from '../GameContext';
@@ -52,5 +53,11 @@ export const KillerActionButton: React.FC<Props> = ({element}) => {
     ? () => hitHandler(element.id)
     : () => kickHandler(element.id);
 
-  return <Button title={title} onPress={actionHandler} />;
+  return (
+    <View style={{backgroundColor: 'purple'}}>
+      <TouchableHighlight onPress={actionHandler}>
+        <Text style={{color: 'white', fontWeight: 'bold'}}>{title}</Text>
+      </TouchableHighlight>
+    </View>
+  );
 };

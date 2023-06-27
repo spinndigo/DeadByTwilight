@@ -68,6 +68,7 @@ export const GameScreen: React.FC<
       </View>
       <ActionModal
         visible={!!selectedElement}
+        onDismiss={() => setSelectedElement(undefined)}
         gameElement={selectedElement}
         action={action}
       />
