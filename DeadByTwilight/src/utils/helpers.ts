@@ -5,12 +5,8 @@ import {
   UpdateHealthPayload,
   UpdateProgressPayload,
 } from '../gamestateReducer';
+import {BASE_SURVIVOR_HEAL_RATE, BASE_GEN_REPAIR_RATE} from './constants';
 import {GameElement, Gen, Health, HealthChange, Survivor} from './types';
-
-type UpdateGenProgressHelper = (
-  gens: Array<Gen>,
-  updatedGen: UpdateProgressPayload,
-) => Array<Gen>;
 
 type UpdateGenRegressionHelper = (
   gens: Array<Gen>,
@@ -22,21 +18,32 @@ type UpdateSurvivorhealth = (
   updatedSurvivor: UpdateHealthPayload,
 ) => Array<Survivor>;
 
+type UpdateProgressHelper = <T extends GameElement>(
+  gens: Array<T>,
+  updatedGen: UpdateProgressPayload,
+) => Array<T>;
+
 type UpdateHealerCount = <T extends GameElement>(
   elements: Array<T>,
   updatedElement: UpdateHealerCountPayload,
 ) => Array<T>;
 
-export const applyGenDelta: UpdateGenProgressHelper = (gens, updatedGen) => {
-  const newGens = gens.slice();
-  const genIndex = newGens.findIndex(g => g.id === updatedGen.gen_id);
-  const newProgress = Math.max(
-    0,
-    newGens[genIndex].progress + updatedGen.delta,
-  ); // prevent negative progress
-  newGens[genIndex] = {...newGens[genIndex], progress: newProgress};
+export const applyProgressDelta: UpdateProgressHelper = (
+  elements,
+  updatedElement,
+) => {
+  const newElements = elements.slice();
+  const elementIndex = newElements.findIndex(e => e.id === updatedElement.id);
+  const newProgress = Math.min(
+    100,
+    Math.max(0, newElements[elementIndex].progress + updatedElement.delta),
+  ); // progress must be from [0,100]
+  newElements[elementIndex] = {
+    ...newElements[elementIndex],
+    progress: newProgress,
+  };
 
-  return newGens;
+  return newElements;
 };
 
 export const applyGenRegression: UpdateGenRegressionHelper = (
@@ -84,7 +91,7 @@ export const applySurvivorHealthDelta: UpdateSurvivorhealth = (
     updatedSurvivor.healthChange,
   );
   newSurvivors[survivorIndex].health = newHealth;
-  newSurvivors[survivorIndex].heal_progress = 0;
+  newSurvivors[survivorIndex].progress = 0;
   return newSurvivors;
 };
 
@@ -114,3 +121,12 @@ export function isSurvivor(
 ): element is Survivor {
   return (element as Survivor).health !== undefined;
 }
+
+export const getProgressionRate = (element: GameElement) => {
+  const elIsSurvivor = isSurvivor(element);
+  const baseProgressRate = elIsSurvivor
+    ? BASE_SURVIVOR_HEAL_RATE
+    : BASE_GEN_REPAIR_RATE;
+
+  return baseProgressRate;
+};

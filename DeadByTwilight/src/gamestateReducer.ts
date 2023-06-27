@@ -1,6 +1,6 @@
 import {
   addSurvivor,
-  applyGenDelta,
+  applyProgressDelta,
   applyGenRegression,
   applyHealerCountDelta,
   applySurvivorHealthDelta,
@@ -19,9 +19,10 @@ export enum Action {
   ADD_KILLER = 'ADD_KILLER',
   REMOVE_KILLER = 'REMOVE_KILLER',
   SET_INITIAL_GENS = 'SET_INITIAL_GENS',
-  UPDATE_PROGRESS = 'UPDATE_PROGRESS',
+  UPDATE_GEN_PROGRESS = 'UPDATE_GEN_PROGRESS',
   UPDATE_GEN_REGRESSION = 'UPDATE_GEN_REGRESSION',
   UPDATE_SURVIVOR_HEALTH = 'UPDATE_SURVIVOR_HEALTH',
+  UPDATE_SURVIVOR_PROGRESS = 'UPDATE_SURVIVOR_PROGRESS',
   UPDATE_GAME_STATUS = 'UPDATE_GAME_STATUS',
   UPDATE_SURVIVOR_HEALER_COUNT = 'UPDATE_SURVIVOR_HEALER_COUNT',
   UPDATE_GEN_HEALER_COUNT = 'UPDATE_GEN_HEALER_COUNT',
@@ -57,12 +58,17 @@ type UpdateGenCountAction = {
 };
 
 export type UpdateProgressPayload = {
-  gen_id: string;
+  id: string;
   delta: number;
 };
 
-type UpdateProgressAction = {
-  type: Action.UPDATE_PROGRESS;
+type UpdateGenProgressAction = {
+  type: Action.UPDATE_GEN_PROGRESS;
+  payload: UpdateProgressPayload;
+};
+
+type UpdateSurvivorProgressAction = {
+  type: Action.UPDATE_SURVIVOR_PROGRESS;
   payload: UpdateProgressPayload;
 };
 
@@ -115,8 +121,9 @@ export type GameAction =
   | UpdateGenHealerCount
   | UpdateSurvivorHealerCount
   | UpdateGenCountAction
-  | UpdateProgressAction
+  | UpdateGenProgressAction
   | UpdateSurvivorHealthAction
+  | UpdateSurvivorProgressAction
   | UpdateGenRegression
   | AddSurvivor
   | RemoveSurvivor
@@ -166,10 +173,10 @@ export const gamestateReducer: GamestateReducer = (state, action) => {
         }),
       };
 
-    case Action.UPDATE_PROGRESS:
+    case Action.UPDATE_GEN_PROGRESS:
       return {
         ...state,
-        generators: applyGenDelta(state.generators, action.payload),
+        generators: applyProgressDelta(state.generators, action.payload),
       };
 
     case Action.UPDATE_GEN_REGRESSION:
@@ -182,6 +189,12 @@ export const gamestateReducer: GamestateReducer = (state, action) => {
       return {
         ...state,
         survivors: applySurvivorHealthDelta(state.survivors, action.payload),
+      };
+
+    case Action.UPDATE_SURVIVOR_PROGRESS:
+      return {
+        ...state,
+        survivors: applyProgressDelta(state.survivors, action.payload),
       };
 
     case Action.UPDATE_GAME_STATUS:

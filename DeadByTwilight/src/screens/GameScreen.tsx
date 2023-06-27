@@ -54,8 +54,8 @@ export const GameScreen: React.FC<
       data: id,
     });
     dispatch({
-      type: Action.UPDATE_PROGRESS,
-      payload: {gen_id: id, delta: GEN_KICK_DAMAGE},
+      type: Action.UPDATE_GEN_PROGRESS,
+      payload: {id: id, delta: GEN_KICK_DAMAGE},
     });
   };
 

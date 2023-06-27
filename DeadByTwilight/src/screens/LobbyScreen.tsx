@@ -46,7 +46,7 @@ export const LobbyScreen: React.FC<
           id: gameChannel?.me?.userId || '1408',
           name: name || 'Wendy',
           health: 'HEALTHY',
-          heal_progress: 0,
+          progress: 0,
           numHealers: 0,
         },
       });

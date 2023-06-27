@@ -6,7 +6,7 @@ export interface Survivor {
   id: string;
   name: string;
   health: Health;
-  heal_progress: number;
+  progress: number; // heal measurement
   numHealers: number;
 }
 
@@ -17,7 +17,7 @@ export interface Killer {
 
 export interface Gen {
   id: string;
-  progress: number;
+  progress: number; // repair measurement
   isRegressing: boolean; // wont use for initial version
   numHealers: number;
 }
