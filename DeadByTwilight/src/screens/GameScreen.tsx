@@ -7,16 +7,12 @@ import {GameContext, GameDispatchContext} from '../GameContext';
 import {StyleSheet, Text, View} from 'react-native';
 import {
   ActionModal,
-  ElementInteraction,
   GenItem,
+  KillerActionButton,
+  SurvivorActionBar,
   SurvivorItem,
 } from '../components';
 import {GameElement} from '../utils/types';
-import {isSurvivor} from '../utils/helpers';
-import {Action} from '../gamestateReducer';
-import {GEN_KICK_DAMAGE} from '../utils/constants';
-
-type ActionHandler = (id: string) => void;
 
 export const GameScreen: React.FC<
   NativeStackScreenProps<GameStackParamList, 'Game'>
@@ -33,46 +29,12 @@ export const GameScreen: React.FC<
     return <Text> {'Something went wrong'} </Text>;
   }
 
-  const isSurvivorAction = isSurvivor(selectedElement);
-
-  const hitHandler: ActionHandler = async id => {
-    await gameChannel?.trigger({
-      channelName: gameChannel.channelName,
-      eventName: 'client-killer-hit',
-      data: id,
-    });
-    dispatch({
-      type: Action.UPDATE_SURVIVOR_HEALTH,
-      payload: {survivor_id: id, healthChange: 'HURT'},
-    });
-  };
-
-  const kickHandler: ActionHandler = async id => {
-    await gameChannel?.trigger({
-      channelName: gameChannel.channelName,
-      eventName: 'client-killer-kick',
-      data: id,
-    });
-    dispatch({
-      type: Action.UPDATE_GEN_PROGRESS,
-      payload: {id: id, delta: GEN_KICK_DAMAGE},
-    });
-  };
-
-  const healHandler: ActionHandler = _id => undefined; // todo
-  const repairHandler: ActionHandler = _id => undefined; // todo
-
-  const playerAction: ElementInteraction =
-    isKiller && isSurvivorAction
-      ? {label: 'Hit', onPress: () => hitHandler(selectedElement.id)}
-      : isKiller && !isSurvivorAction
-      ? {label: 'Kick', onPress: () => kickHandler(selectedElement?.id || '')}
-      : !isKiller && isSurvivorAction
-      ? {label: 'Heal', onPress: () => healHandler(selectedElement.id)}
-      : {
-          label: 'Repair',
-          onPress: () => repairHandler(selectedElement?.id || ''),
-        };
+  const action = (selectedElement &&
+    (isKiller ? (
+      <KillerActionButton element={selectedElement} />
+    ) : (
+      <SurvivorActionBar element={selectedElement} />
+    ))) || <></>;
 
   return (
     <>
@@ -105,9 +67,9 @@ export const GameScreen: React.FC<
         </View>
       </View>
       <ActionModal
-        interaction={playerAction}
         visible={!!selectedElement}
         gameElement={selectedElement}
+        action={action}
       />
     </>
   );

@@ -108,6 +108,19 @@ export const useGameChannel = (id?: string) => {
                   payload: {id: id, delta: GEN_KICK_DAMAGE},
                 });
                 break;
+              case 'client-survivor-progressed':
+                dispatch({
+                  type: Action.UPDATE_SURVIVOR_PROGRESS,
+                  payload: {id: id, delta: event.data},
+                });
+                break;
+              case 'client-gen-progressed':
+                dispatch({
+                  type: Action.UPDATE_GEN_PROGRESS,
+                  payload: {id: id, delta: event.data},
+                });
+                break;
+
               default:
                 console.warn(
                   `received unexpected event: ${event.eventName} from ${event.channelName} with ${event.data} ,  `,

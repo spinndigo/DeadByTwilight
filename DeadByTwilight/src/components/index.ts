@@ -6,4 +6,5 @@ export * from './SurvivorItem';
 export * from './GenItem';
 export * from './GenCountSlider';
 export * from './ActionModal';
-export * from './HeldProgressBar';
+export * from './SurvivorActionBar';
+export * from './KillerActionButton';

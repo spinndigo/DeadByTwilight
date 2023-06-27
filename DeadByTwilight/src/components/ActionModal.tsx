@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {Button, Modal, ModalBaseProps, View} from 'react-native';
+import {Modal, ModalBaseProps, View} from 'react-native';
 import {SurvivorItem} from './SurvivorItem';
 import {GenItem} from './GenItem';
 import {GameElement} from '../utils/types';
@@ -10,19 +10,18 @@ export type ElementInteraction = {label: string; onPress(): void};
 
 interface Props {
   gameElement: GameElement | undefined;
-  interaction: ElementInteraction;
+  action: React.ReactNode;
 }
 
 export const ActionModal: React.FC<Props & ModalBaseProps> = ({
   gameElement,
-  interaction,
+  action,
   ...modalProps
 }) => {
   if (!gameElement) {
     return <></>;
-  } // should not happen
+  }
   const elementIsSurvivor = isSurvivor(gameElement);
-  const {label, onPress} = interaction;
 
   return (
     <Modal {...modalProps}>
@@ -45,7 +44,7 @@ export const ActionModal: React.FC<Props & ModalBaseProps> = ({
             flexDirection: 'column',
             justifyContent: 'center',
           }}>
-          <Button title={label} onPress={onPress} />
+          {action}
         </View>
       </View>
     </Modal>
