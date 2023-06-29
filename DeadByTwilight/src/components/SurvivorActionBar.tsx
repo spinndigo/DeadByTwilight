@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import * as Progress from 'react-native-progress';
 import React, {useState} from 'react';
-import {Button, TouchableHighlight, View} from 'react-native';
+import {TouchableHighlight, View} from 'react-native';
 import {GameElement} from '../utils/types';
 import {useProgression} from '../hooks/useProgression';
 import {isSurvivor} from '../utils/helpers';

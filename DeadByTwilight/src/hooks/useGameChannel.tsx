@@ -27,16 +27,16 @@ export const GameChannelProvider: React.FC<PropsWithChildren> = ({
   return <GameChannelContext.Provider value={value} children={children} />;
 };
 
-export const useGameChannel = (id?: string) => {
+export const useGameChannel = (channelId?: string) => {
   const [gameChannel, setGameChannel] = useContext(GameChannelContext);
   const dispatch = useContext(GameDispatchContext);
   const pusher = useContext(PusherContext);
   useEffect(() => {
     const connectPresenceChannel = async () => {
       if (!dispatch) return new Error('dispatch not initialized');
-      if (pusher && id) {
+      if (pusher && channelId) {
         const subbedChannel = await pusher?.subscribe({
-          channelName: `presence-${id}`,
+          channelName: `presence-${channelId}`,
           onMemberAdded(member) {
             console.log('member added to channel: ', member);
           },
@@ -105,19 +105,19 @@ export const useGameChannel = (id?: string) => {
               case 'client-killer-kick':
                 dispatch({
                   type: Action.UPDATE_GEN_PROGRESS,
-                  payload: {id: id, delta: GEN_KICK_DAMAGE},
+                  payload: {id: event.data, delta: GEN_KICK_DAMAGE},
                 });
                 break;
               case 'client-survivor-progressed':
                 dispatch({
                   type: Action.UPDATE_SURVIVOR_PROGRESS,
-                  payload: {id: id, delta: event.data},
+                  payload: JSON.parse(event.data),
                 });
                 break;
               case 'client-gen-progressed':
                 dispatch({
                   type: Action.UPDATE_GEN_PROGRESS,
-                  payload: {id: id, delta: event.data},
+                  payload: JSON.parse(event.data),
                 });
                 break;
 
@@ -134,7 +134,7 @@ export const useGameChannel = (id?: string) => {
       }
     };
     connectPresenceChannel();
-  }, [dispatch, id, pusher, setGameChannel]);
+  }, [dispatch, channelId, pusher, setGameChannel]);
 
   return {
     gameChannel,
