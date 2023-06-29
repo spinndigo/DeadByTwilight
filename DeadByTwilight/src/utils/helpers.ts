@@ -1,7 +1,6 @@
 /* eslint-disable curly */
 import {
   UpdateGenRegressionPayload,
-  UpdateHealerCountPayload,
   UpdateHealthPayload,
   UpdateProgressPayload,
 } from '../gamestateReducer';
@@ -19,27 +18,27 @@ type UpdateSurvivorhealth = (
 ) => Array<Survivor>;
 
 type UpdateProgressHelper = <T extends GameElement>(
-  gens: Array<T>,
-  updatedGen: UpdateProgressPayload,
-) => Array<T>;
-
-type UpdateHealerCount = <T extends GameElement>(
   elements: Array<T>,
-  updatedElement: UpdateHealerCountPayload,
+  updated: UpdateProgressPayload,
 ) => Array<T>;
 
-export const applyProgressDelta: UpdateProgressHelper = (
-  elements,
-  updatedElement,
-) => {
+export const applyProgressDelta: UpdateProgressHelper = (elements, updated) => {
   const newElements = elements.slice();
-  const elementIndex = newElements.findIndex(e => e.id === updatedElement.id);
-  const newProgress = Math.min(
+  const elementIndex = newElements.findIndex(e => e.id === updated.id);
+  const element = newElements[elementIndex];
+  const elIsSurvivor = isSurvivor(element);
+  let newProgress = Math.min(
     100,
-    Math.max(0, newElements[elementIndex].progress + updatedElement.delta),
+    Math.max(0, element.progress + updated.delta),
   ); // progress must be from [0,100]
+
+  if (elIsSurvivor && newProgress === 100) {
+    element.health = applyHealthDelta(element.health, 'HEALED'); // heal if necessary
+    newProgress = 0; // reset progress
+  }
+
   newElements[elementIndex] = {
-    ...newElements[elementIndex],
+    ...element,
     progress: newProgress,
   };
 
@@ -93,16 +92,6 @@ export const applySurvivorHealthDelta: UpdateSurvivorhealth = (
   newSurvivors[survivorIndex].health = newHealth;
   newSurvivors[survivorIndex].progress = 0;
   return newSurvivors;
-};
-
-export const applyHealerCountDelta: UpdateHealerCount = (
-  elements,
-  updatedElement,
-) => {
-  const newElements = elements.slice();
-  const elementIndex = newElements.findIndex(e => e.id === updatedElement.id);
-  newElements[elementIndex].numHealers += updatedElement.delta;
-  return newElements;
 };
 
 export const addSurvivor = (

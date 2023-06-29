@@ -10,7 +10,9 @@ import {useGameChannel} from '../hooks';
 export const CreateOrJoinScreen: React.FC<
   NativeStackScreenProps<GameStackParamList, 'CreateOrJoin'>
 > = ({navigation}) => {
-  const [id, setId] = useState<string | undefined>(shortid.generate());
+  const [id, setId] = useState<string | undefined>(
+    shortid.generate().replace('I', 'i').replace('l', 'L'),
+  );
   const [name, setName] = useState('');
   useGameChannel(id);
   const [showJoinAlert, setShowJoinAlert] = useState(false);

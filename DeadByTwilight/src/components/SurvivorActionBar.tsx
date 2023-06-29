@@ -21,36 +21,63 @@ export const SurvivorActionBar: React.FC<Props> = ({element}) => {
     <View
       style={{
         flexDirection: 'row',
-        flexWrap: 'wrap',
-        width: '50%',
-        justifyContent: 'center',
+        flexWrap: 'nowrap',
+        alignContent: 'center',
       }}>
-      <View style={{width: '100%'}}>
-        <Text style={{fontSize: 40, fontWeight: 'bold', margin: 20}}>
-          {elementLabel}
-        </Text>
-        <Progress.Bar progress={element.progress * 0.01} />
-      </View>
-      <View style={{marginTop: 30, justifyContent: 'center'}}>
-        <TouchableHighlight
-          disabled={element.progress >= 100}
-          onPressIn={() => setIsHeld(true)}
-          onPressOut={() => setIsHeld(false)}>
+      <View style={{flexDirection: 'row', flexWrap: 'nowrap'}}>
+        <View
+          style={{
+            width: '50%',
+            justifyContent: 'center',
+            flexDirection: 'column',
+          }}>
           <Text
             style={{
-              fontSize: 30,
+              fontSize: 40,
               fontWeight: 'bold',
+              marginBottom: 20,
               textAlign: 'center',
-              color: 'white',
-              backgroundColor: 'purple',
-              padding: 10,
             }}>
-            {title}
+            {elementLabel}
           </Text>
-        </TouchableHighlight>
-        <Text style={{textAlign: 'center', marginTop: 20}}>
-          {isHeld && `${title.toLowerCase()}ing...`}
-        </Text>
+          <View
+            style={{
+              width: '100%',
+              justifyContent: 'center',
+              flexDirection: 'row',
+            }}>
+            <Progress.Bar progress={element.progress * 0.01} />
+          </View>
+          <View style={{width: '100%'}}>
+            <Text style={{textAlign: 'center'}}>
+              {isHeld && `${title.toLowerCase()}ing...`}
+            </Text>
+          </View>
+        </View>
+        <View
+          style={{
+            width: '50%',
+            justifyContent: 'center',
+            alignContent: 'center',
+          }}>
+          <TouchableHighlight
+            style={{width: '80%'}}
+            disabled={element.progress >= 100}
+            onPressIn={() => setIsHeld(true)}
+            onPressOut={() => setIsHeld(false)}>
+            <Text
+              style={{
+                fontSize: 30,
+                fontWeight: 'bold',
+                textAlign: 'center',
+                color: 'white',
+                backgroundColor: 'purple',
+                padding: 20,
+              }}>
+              {title}
+            </Text>
+          </TouchableHighlight>
+        </View>
       </View>
     </View>
   );

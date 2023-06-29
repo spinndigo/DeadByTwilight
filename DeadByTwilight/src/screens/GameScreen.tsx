@@ -41,7 +41,7 @@ export const GameScreen: React.FC<
       <View style={{flexDirection: 'row', width: '100%', height: '100%'}}>
         <View style={{...styles.column, backgroundColor: 'lightblue'}}>
           {game.survivors.map(s => (
-            <View style={{...styles.items}}>
+            <View id={`id-${s.id}`} style={{...styles.items}}>
               <SurvivorItem
                 survivor={s}
                 onPress={() => setSelectedElement(s)}
@@ -60,7 +60,7 @@ export const GameScreen: React.FC<
             </View>
           )}
           {game.generators.map(g => (
-            <View style={{...styles.items}}>
+            <View id={`id-${g.id}`} style={{...styles.items}}>
               <GenItem gen={g} onPress={() => setSelectedElement(g)} />
             </View>
           ))}
@@ -68,7 +68,7 @@ export const GameScreen: React.FC<
       </View>
       <ActionModal
         visible={!!selectedElement}
-        onDismiss={() => setSelectedElement(undefined)}
+        onPressX={() => setSelectedElement(undefined)}
         gameElement={selectedElement}
         action={action}
       />

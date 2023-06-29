@@ -23,8 +23,8 @@ interface Props {
 }
 
 export const SurvivorItem: React.FC<Props> = ({survivor, onPress}) => (
-  <TouchableWithoutFeedback onPress={onPress}>
-    <>
+  <>
+    <TouchableWithoutFeedback onPress={onPress}>
       <SurvivorItemWrapper>
         <View>
           <UserAvatar
@@ -34,12 +34,11 @@ export const SurvivorItem: React.FC<Props> = ({survivor, onPress}) => (
           />
         </View>
       </SurvivorItemWrapper>
-      <View style={{marginTop: 10}}>
-        <Text style={{fontWeight: 'bold', textAlign: 'center'}}>
-          {' '}
-          {survivor.health.toLocaleUpperCase()}{' '}
-        </Text>
-      </View>
-    </>
-  </TouchableWithoutFeedback>
+    </TouchableWithoutFeedback>
+    <View style={{marginTop: 10}}>
+      <Text style={{fontWeight: 'bold', textAlign: 'center'}}>
+        {survivor.health.toLocaleUpperCase()}
+      </Text>
+    </View>
+  </>
 );
