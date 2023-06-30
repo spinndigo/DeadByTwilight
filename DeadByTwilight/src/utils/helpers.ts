@@ -1,40 +1,36 @@
 /* eslint-disable curly */
-import {
-  UpdateGenRegressionPayload,
-  UpdateHealthPayload,
-  UpdateProgressPayload,
-} from '../gamestateReducer';
+import {UpdateHealthPayload, UpdateProgressPayload} from '../gamestateReducer';
 import {BASE_SURVIVOR_HEAL_RATE, BASE_GEN_REPAIR_RATE} from './constants';
 import {GameElement, Gen, Health, HealthChange, Survivor} from './types';
-
-type UpdateGenRegressionHelper = (
-  gens: Array<Gen>,
-  updatedGen: UpdateGenRegressionPayload,
-) => Array<Gen>;
 
 type UpdateSurvivorhealth = (
   survivors: Array<Survivor>,
   updatedSurvivor: UpdateHealthPayload,
 ) => Array<Survivor>;
 
-type UpdateProgressHelper = <T extends GameElement>(
+type UpdateProgressHelper<T extends GameElement> = (
   elements: Array<T>,
   updated: UpdateProgressPayload,
 ) => Array<T>;
 
-export const applyProgressDelta: UpdateProgressHelper = (elements, updated) => {
+type UpdateGenProgressHelper = UpdateProgressHelper<Gen>;
+type UpdateSurvivorProgressHelper = UpdateProgressHelper<Survivor>;
+
+export const applySurvivorProgressDelta: UpdateSurvivorProgressHelper = (
+  elements,
+  updated,
+) => {
   const newElements = elements.slice();
   const elementIndex = newElements.findIndex(e => e.id === updated.id);
   const element = newElements[elementIndex];
-  const elIsSurvivor = isSurvivor(element);
   let newProgress = Math.min(
     100,
     Math.max(0, element.progress + updated.delta),
-  ); // progress must be from [0,100]
+  );
 
-  if (elIsSurvivor && newProgress === 100) {
-    element.health = applyHealthDelta(element.health, 'HEALED'); // heal if necessary
-    newProgress = 0; // reset progress
+  if (newProgress === 100) {
+    element.health = applyHealthDelta(element.health, 'HEALED');
+    newProgress = 0;
   }
 
   newElements[elementIndex] = {
@@ -45,13 +41,26 @@ export const applyProgressDelta: UpdateProgressHelper = (elements, updated) => {
   return newElements;
 };
 
-export const applyGenRegression: UpdateGenRegressionHelper = (
+export const applyGenProgressDelta: UpdateGenProgressHelper = (
   gens,
-  updatedGen,
+  updated,
 ) => {
   const newGens = gens.slice();
-  const genIndex = newGens.findIndex(g => g.id === updatedGen.id);
-  newGens[genIndex].isRegressing = updatedGen.isRegressing;
+  const genIndex = newGens.findIndex(e => e.id === updated.id);
+  const gen = newGens[genIndex];
+  const newProgress = Math.min(100, Math.max(0, gen.progress + updated.delta)); // progress must be from [0,100]
+
+  if (updated.delta < 0) {
+    gen.isRegressing = true;
+  } else {
+    gen.isRegressing = false;
+  }
+
+  newGens[genIndex] = {
+    ...gen,
+    progress: newProgress,
+  };
+
   return newGens;
 };
 
@@ -111,6 +120,20 @@ export function isSurvivor(
   return (element as Survivor).health !== undefined;
 }
 
+export const getInvalidInteractionMessage = (
+  isKiller: boolean,
+  subject: GameElement,
+) => {
+  const subjectIsSurvivor = isSurvivor(subject);
+  if (subjectIsSurvivor && subject.health === 'DEAD') return 'Survivor is dead';
+  if (!isKiller && subjectIsSurvivor && subject.health === 'HEALTHY')
+    return 'Survivor is healthy';
+  if (!subjectIsSurvivor && subject.progress >= 100)
+    return 'Gen is operational';
+  return '';
+};
+
+// no multiplying bonus for now
 export const getProgressionRate = (element: GameElement) => {
   const elIsSurvivor = isSurvivor(element);
   const baseProgressRate = elIsSurvivor

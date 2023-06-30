@@ -30,3 +30,4 @@ export interface GameState {
 }
 
 export type GameElement = Survivor | Gen;
+export type Player = Survivor | Killer;

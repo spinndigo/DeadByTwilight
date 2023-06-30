@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useContext} from 'react';
 import {
   Modal,
   ModalBaseProps,
@@ -8,6 +8,9 @@ import {
   View,
 } from 'react-native';
 import {GameElement} from '../utils/types';
+import {useGameChannel} from '../hooks';
+import {GameContext} from '../GameContext';
+import {getInvalidInteractionMessage} from '../utils/helpers';
 
 export type ElementInteraction = {label: string; onPress(): void};
 
@@ -23,9 +26,15 @@ export const ActionModal: React.FC<Props & ModalBaseProps> = ({
   action,
   ...modalProps
 }) => {
+  const {gameChannel} = useGameChannel();
+  const game = useContext(GameContext);
+  const isKiller = game?.killer?.id === gameChannel?.me?.userId;
+
   if (!gameElement) {
     return <></>;
   }
+  const invalidMessage = getInvalidInteractionMessage(isKiller, gameElement);
+
   return (
     <Modal
       animationType="fade"
@@ -50,7 +59,11 @@ export const ActionModal: React.FC<Props & ModalBaseProps> = ({
             alignContent: 'center',
             alignItems: 'center',
           }}>
-          <View>{action}</View>
+          {invalidMessage ? (
+            <Text>{invalidMessage}</Text>
+          ) : (
+            <View>{action}</View>
+          )}
           <View
             style={{
               justifyContent: 'center',
