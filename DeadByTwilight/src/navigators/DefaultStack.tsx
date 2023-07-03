@@ -13,7 +13,11 @@ const Stack = createNativeStackNavigator<DefaultStackParamList>();
 
 export const DefaultStack = () => {
   return (
-    <Stack.Navigator initialRouteName="Title">
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+      initialRouteName="Title">
       <Stack.Screen name="Title" component={TitleScreen} />
       <Stack.Screen name="GameStack" component={GameStack} />
     </Stack.Navigator>

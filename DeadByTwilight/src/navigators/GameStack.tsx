@@ -35,7 +35,11 @@ export const GameStack = () => {
     <GameChannelProvider>
       <GameContext.Provider value={game}>
         <GameDispatchContext.Provider value={dispatch}>
-          <Stack.Navigator initialRouteName="CreateOrJoin">
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
+            }}
+            initialRouteName="CreateOrJoin">
             <Stack.Screen name="CreateOrJoin" component={CreateOrJoinScreen} />
             <Stack.Screen name="Lobby" component={LobbyScreen} />
             <Stack.Screen
