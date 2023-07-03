@@ -6,7 +6,7 @@ import {GameStack} from './GameStack';
 
 export type DefaultStackParamList = {
   Title: undefined;
-  GameStack: {id: string; name: string};
+  GameStack: undefined;
 };
 
 const Stack = createNativeStackNavigator<DefaultStackParamList>();

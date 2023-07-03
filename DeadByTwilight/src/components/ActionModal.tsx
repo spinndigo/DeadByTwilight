@@ -28,12 +28,20 @@ export const ActionModal: React.FC<Props & ModalBaseProps> = ({
 }) => {
   const {gameChannel} = useGameChannel();
   const game = useContext(GameContext);
-  const isKiller = game?.killer?.id === gameChannel?.me?.userId;
 
-  if (!gameElement) {
+  if (!gameElement || !game || !gameChannel) {
     return <></>;
   }
-  const invalidMessage = getInvalidInteractionMessage(isKiller, gameElement);
+  const player =
+    game.killer?.id === gameChannel.me?.userId
+      ? game.killer
+      : game.survivors.find(s => s.id === gameChannel.me?.userId);
+
+  if (!player) {
+    return <></>;
+  }
+
+  const invalidMessage = getInvalidInteractionMessage(player, gameElement);
 
   return (
     <Modal

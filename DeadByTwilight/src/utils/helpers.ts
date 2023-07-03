@@ -1,7 +1,15 @@
 /* eslint-disable curly */
 import {UpdateHealthPayload, UpdateProgressPayload} from '../gamestateReducer';
 import {BASE_SURVIVOR_HEAL_RATE, BASE_GEN_REPAIR_RATE} from './constants';
-import {GameElement, Gen, Health, HealthChange, Survivor} from './types';
+import {
+  GameElement,
+  GameState,
+  Gen,
+  Health,
+  HealthChange,
+  Player,
+  Survivor,
+} from './types';
 
 type UpdateSurvivorhealth = (
   survivors: Array<Survivor>,
@@ -120,16 +128,33 @@ export function isSurvivor(
   return (element as Survivor).health !== undefined;
 }
 
+export function playerIsSurvivor(player: Player): player is Survivor {
+  return (player as Survivor).health !== undefined;
+}
+
+export const getPlayer = (id: string, game: GameState) => {
+  if (game.survivors.some(s => s.id === id))
+    return game.survivors.find(s => s.id === id);
+  else {
+    return game.killer;
+  }
+};
+
 export const getInvalidInteractionMessage = (
-  isKiller: boolean,
+  actor: Player,
   subject: GameElement,
 ) => {
+  const actorIsSurvivor = playerIsSurvivor(actor);
   const subjectIsSurvivor = isSurvivor(subject);
+  if (actorIsSurvivor && actor.health === 'DEAD') return 'You are dead';
   if (subjectIsSurvivor && subject.health === 'DEAD') return 'Survivor is dead';
-  if (!isKiller && subjectIsSurvivor && subject.health === 'HEALTHY')
+  if (actorIsSurvivor && subjectIsSurvivor && subject.health === 'HEALTHY')
     return 'Survivor is healthy';
   if (!subjectIsSurvivor && subject.progress >= 100)
     return 'Gen is operational';
+  if (!actorIsSurvivor && !subjectIsSurvivor && subject.isRegressing === true) {
+    return 'Gen is already kicked';
+  }
   return '';
 };
 

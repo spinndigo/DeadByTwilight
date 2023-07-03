@@ -1,0 +1,24 @@
+{
+  "name": "deadbytwilight",
+  "version": "1.0.0",
+  "description": "React Native game made to play the Dead By Daylight in real life as a yard game. The application uses Pusher channels to facilitate actions like generator completion and survivor injuries.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spinosajoseph/DeadByTwilight.git"
+  },
+  "author": "Joseph Spinosa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/spinosajoseph/DeadByTwilight/issues"
+  },
+  "homepage": "https://github.com/spinosajoseph/DeadByTwilight#readme",
+  "devDependencies": {
+    "husky": "^8.0.3",
+    "typescript": "^5.1.6"
+  }
+}

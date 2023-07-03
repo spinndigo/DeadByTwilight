@@ -8,11 +8,13 @@ export interface Survivor {
   health: Health;
   progress: number; // heal measurement
   numHealers: number;
+  kind: 'SURVIVOR';
 }
 
 export interface Killer {
   id: string;
   name: string;
+  kind: 'KILLER';
 }
 
 export interface Gen {

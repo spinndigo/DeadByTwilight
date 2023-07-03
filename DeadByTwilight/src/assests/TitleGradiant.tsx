@@ -5,7 +5,7 @@ import Svg, {LinearGradient, Defs, Stop, SvgProps} from 'react-native-svg';
 
 /* SVGR has dropped some elements not supported by react-native-svg: title */
 export const TitleGradient: React.FC<SvgProps> = props => (
-  <Svg xmlns="http://www.w3.org/2000/svg" width={48} height={1} {...props}>
+  <Svg width={48} height={1} {...props}>
     <Defs>
       <LinearGradient id="Gradient1">
         <Stop stopColor={'#73716f'} offset="0%" />
