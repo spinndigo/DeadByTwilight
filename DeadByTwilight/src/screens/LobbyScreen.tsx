@@ -37,6 +37,8 @@ export const LobbyScreen: React.FC<
         id: gameChannel?.me?.userId || '1408',
         name: name || 'Wendy',
         health: 'HEALTHY',
+        progress: 0,
+        numHealers: 0,
       }),
     });
     if (dispatch)
@@ -48,6 +50,7 @@ export const LobbyScreen: React.FC<
           health: 'HEALTHY',
           progress: 0,
           numHealers: 0,
+          kind: 'SURVIVOR',
         },
       });
     setHasSelectedRole(true);
@@ -68,6 +71,7 @@ export const LobbyScreen: React.FC<
         payload: {
           id: gameChannel?.me?.userId || '237',
           name: name || 'Jack',
+          kind: 'KILLER',
         },
       });
     setHasSelectedRole(true);
@@ -117,18 +121,28 @@ export const LobbyScreen: React.FC<
     <SafeAreaView>
       <View style={styles.wrapper}>
         <View>
-          <Text> {`Game Id : ${gameChannel?.channelName}`} </Text>
+          <Text style={{textAlign: 'center', fontSize: 16}}>
+            {'Game Id : \n\n'}
+          </Text>
+          <Text style={{fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>
+            {gameChannel?.channelName.slice(9)}
+          </Text>
         </View>
         <View
           style={{
             flexWrap: 'wrap',
             justifyContent: 'center',
           }}>
-          <Text style={{width: '100%', textAlign: 'center'}}>
-            {' '}
-            {'Choose your role: '}{' '}
+          <Text
+            style={{
+              width: '100%',
+              textAlign: 'center',
+              fontWeight: 'bold',
+              fontSize: 20,
+            }}>
+            {'Choose your role: '}
           </Text>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
             <Button
               color={
                 survivorDisabled
@@ -150,9 +164,8 @@ export const LobbyScreen: React.FC<
           </View>
         </View>
         <View>
-          <Text style={{textAlign: 'center'}}>
-            {' '}
-            {`generator count: ${game.generators.length} `}{' '}
+          <Text style={{textAlign: 'center', fontSize: 20, fontWeight: 'bold'}}>
+            {`Generator count: ${game.generators.length}\n `}
           </Text>
           {didCreateRoom && (
             <GenCountSlider
@@ -166,7 +179,7 @@ export const LobbyScreen: React.FC<
           <View>
             <Text style={{textAlign: 'center'}}>
               {' '}
-              {`Players in lobby: (${gameChannel?.members.size})`}
+              {`Player Count: ${gameChannel?.members.size}`}
             </Text>
           </View>
           <View>
