@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {GameStackParamList} from '../navigators';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useGameChannel} from '../hooks';
@@ -16,7 +16,8 @@ import {GameElement} from '../utils/types';
 
 export const GameScreen: React.FC<
   NativeStackScreenProps<GameStackParamList, 'Game'>
-> = ({}) => {
+> = ({navigation}) => {
+  const {navigate} = navigation;
   const {gameChannel} = useGameChannel();
   const game = useContext(GameContext);
   const dispatch = useContext(GameDispatchContext);
@@ -24,6 +25,16 @@ export const GameScreen: React.FC<
   const [selectedElement, setSelectedElement] = useState<
     GameElement | undefined
   >(undefined);
+
+  if (!game) {
+    throw new Error('No game state found');
+  }
+
+  useEffect(() => {
+    if (game.status === 'FINISHED') {
+      navigate('PostGame');
+    }
+  }, [game.status, navigate]);
 
   if (!game || !gameChannel || !dispatch) {
     return <Text> {'Something went wrong'} </Text>;

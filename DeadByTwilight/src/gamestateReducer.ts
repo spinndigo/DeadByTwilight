@@ -142,15 +142,24 @@ export const gamestateReducer: GamestateReducer = (state, action) => {
       };
 
     case Action.UPDATE_GEN_PROGRESS:
+      const newGens = applyGenProgressDelta(state.generators, action.payload);
       return {
         ...state,
-        generators: applyGenProgressDelta(state.generators, action.payload),
+        generators: newGens,
+        status: newGens.some(g => g.progress < 100) ? state.status : 'FINISHED',
       };
 
     case Action.UPDATE_SURVIVOR_HEALTH:
+      const newSurivors = applySurvivorHealthDelta(
+        state.survivors,
+        action.payload,
+      );
       return {
         ...state,
-        survivors: applySurvivorHealthDelta(state.survivors, action.payload),
+        survivors: newSurivors,
+        status: newSurivors.some(s => s.health !== 'DEAD')
+          ? state.status
+          : 'FINISHED',
       };
 
     case Action.UPDATE_SURVIVOR_PROGRESS:

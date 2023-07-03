@@ -54,9 +54,24 @@ export const KillerActionButton: React.FC<Props> = ({element}) => {
     : () => kickHandler(element.id);
 
   return (
-    <View style={{backgroundColor: 'purple'}}>
+    <View
+      style={{
+        backgroundColor: 'purple',
+        height: 100,
+        width: 200,
+        justifyContent: 'center',
+        alignContent: 'center',
+      }}>
       <TouchableHighlight onPress={actionHandler}>
-        <Text style={{color: 'white', fontWeight: 'bold'}}>{title}</Text>
+        <Text
+          style={{
+            color: 'white',
+            fontWeight: 'bold',
+            textAlign: 'center',
+            fontSize: 50,
+          }}>
+          {title}
+        </Text>
       </TouchableHighlight>
     </View>
   );

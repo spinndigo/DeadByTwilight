@@ -61,33 +61,29 @@ export const ActionModal: React.FC<Props & ModalBaseProps> = ({
             height: '80%',
             width: '80%',
             padding: 10,
-            flexDirection: 'column',
-            flexWrap: 'nowrap',
             justifyContent: 'center',
-            alignContent: 'center',
             alignItems: 'center',
           }}>
           {invalidMessage ? (
-            <Text>{invalidMessage}</Text>
+            <Text style={{fontSize: 50, fontWeight: 'bold'}}>
+              {invalidMessage}
+            </Text>
           ) : (
-            <View>{action}</View>
+            action
           )}
+
           <View
             style={{
               justifyContent: 'center',
               alignContent: 'center',
-              width: '100%',
               marginTop: 'auto',
+              borderRadius: 50,
+              height: 60,
+              width: 60,
+              backgroundColor: 'purple',
             }}>
-            <TouchableWithoutFeedback
-              style={{
-                borderRadius: 50,
-                height: 60,
-                width: 60,
-                backgroundColor: 'purple',
-              }}
-              onPress={onPressX}>
-              <Text style={{color: 'green', fontSize: 35, textAlign: 'center'}}>
+            <TouchableWithoutFeedback style={{}} onPress={onPressX}>
+              <Text style={{color: 'white', fontSize: 40, textAlign: 'center'}}>
                 {'X'}
               </Text>
             </TouchableWithoutFeedback>
