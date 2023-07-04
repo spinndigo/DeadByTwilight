@@ -159,6 +159,17 @@ export const getInvalidInteractionMessage = (
   return '';
 };
 
+export const isSurvivorsWinner = (game: GameState) => {
+  if (
+    game.generators.every(g => g.progress >= 100) &&
+    !game.survivors.every(s => s.health === 'DEAD') &&
+    game.status === 'FINISHED'
+  ) {
+    return true;
+  }
+  return false;
+};
+
 // no multiplying bonus for now
 export const getProgressionRate = (element: GameElement) => {
   const elIsSurvivor = isSurvivor(element);
