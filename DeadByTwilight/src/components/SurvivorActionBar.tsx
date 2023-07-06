@@ -79,6 +79,7 @@ export const SurvivorActionBar: React.FC<Props> = ({element}) => {
         <ColumnWrapper
           style={{
             width: '50%',
+            alignContent: 'flex-end',
           }}>
           <SkillCheck
             onGood={() => console.log('good')}
