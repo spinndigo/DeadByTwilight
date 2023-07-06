@@ -8,3 +8,4 @@ export * from './GenCountSlider';
 export * from './ActionModal';
 export * from './SurvivorActionBar';
 export * from './KillerActionButton';
+export * from './SkillCheck';
