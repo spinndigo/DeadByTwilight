@@ -205,7 +205,7 @@ export const LobbyScreen: React.FC<
                 width: 200,
               }}>
               <Button
-                disabled={!gameReady && false}
+                disabled={!gameReady}
                 onPress={onStartGame}
                 color="#fff"
                 title="Start Game"
