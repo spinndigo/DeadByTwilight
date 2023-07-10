@@ -1,2 +1,2 @@
 export * from './TitleGradiant';
-export * from './GradiantCircle';
+export * from './SegmentedCircle';
