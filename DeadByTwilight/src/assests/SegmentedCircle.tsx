@@ -1,11 +1,12 @@
 /*
 see here for solution used below:
-https://stackoverflow.com/questions/37165715/react-native-transforms-with-pivot-point?rq=3
+https://github.com/software-mansion/react-native-svg/issues/1248#issuecomment-573429140
 */
 
 import {Circle, G, Line, Svg} from 'react-native-svg';
-import React, {useEffect, useRef} from 'react';
-import {Animated, Easing} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {Animated, Easing, TouchableWithoutFeedback} from 'react-native';
+import {CheckProps} from '../components';
 
 interface Props {
   hitOffset?: number;
@@ -20,7 +21,13 @@ const circleCenterPoint = {cx: `${circleCenter.x}`, cy: `${circleCenter.y}`};
 const hitZoneArcLength = goodArcLength + greatArcLength;
 
 const AnimatetdG = Animated.createAnimatedComponent(G);
-export const SegmentedCircle: React.FC<Props> = ({hitOffset = 0}) => {
+export const SegmentedCircle: React.FC<Props & CheckProps> = ({
+  hitOffset = 0,
+  onGood = () => undefined,
+  onGreat,
+  onMiss,
+}) => {
+  const [show, setShow] = useState(true);
   const rotateIntensity = useRef(new Animated.Value(0)).current;
   const rotateInterpolator = rotateIntensity.interpolate({
     inputRange: [0, 1],
@@ -30,16 +37,32 @@ export const SegmentedCircle: React.FC<Props> = ({hitOffset = 0}) => {
   useEffect(() => {
     Animated.timing(rotateIntensity, {
       toValue: 1,
-      duration: 1500,
+      duration: 1000,
       easing: Easing.linear,
       useNativeDriver: true,
     }).start(result => {
-      console.log(result);
+      if (result.finished) {
+        onMiss();
+      }
+      setShow(false);
     });
   }, []);
 
+  const onPress = () => {
+    rotateIntensity.stopAnimation(value => {
+      if (0.65 <= value && value <= 0.75) onGreat();
+      else if (0.75 <= value && value < 1) onGood();
+      else {
+        onMiss();
+        setShow(false);
+      }
+    });
+  };
+
+  if (!show) return null; // check is complete, no need for component anymore
+
   return (
-    <>
+    <TouchableWithoutFeedback onPress={onPress}>
       <Svg width={'100%'} height={'100%'}>
         <Circle
           {...circleCenterPoint}
@@ -80,6 +103,7 @@ export const SegmentedCircle: React.FC<Props> = ({hitOffset = 0}) => {
                 {
                   translateX: 0,
                 },
+                {perspective: 1000},
               ],
             }}>
             <G transform={`translate(-${circleCenter.x}, -${circleCenter.y})`}>
@@ -95,6 +119,6 @@ export const SegmentedCircle: React.FC<Props> = ({hitOffset = 0}) => {
           </AnimatetdG>
         </G>
       </Svg>
-    </>
+    </TouchableWithoutFeedback>
   );
 };

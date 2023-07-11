@@ -2,16 +2,17 @@ import React from 'react';
 import {View} from 'react-native';
 import {SegmentedCircle} from '../assests/SegmentedCircle';
 
-interface Props {
+export interface CheckProps {
   onGood(): void;
   onGreat(): void;
   onMiss(): void;
 }
 
-export const SkillCheck: React.FC<Props> = () => {
+// assume repair/heal button is held if this is rendering
+export const SkillCheck: React.FC<CheckProps> = props => {
   return (
     <View>
-      <SegmentedCircle />
+      <SegmentedCircle {...props} />
     </View>
   );
 };
