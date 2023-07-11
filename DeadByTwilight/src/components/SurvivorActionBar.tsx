@@ -21,7 +21,6 @@ type CheckResult = 'Miss' | 'Good' | 'Great';
 export const SurvivorActionBar: React.FC<Props> = ({element}) => {
   const {gameChannel} = useGameChannel();
   const dispatch = useContext(GameDispatchContext);
-  const [isHeld, setIsHeld] = useState(false);
   const [lastCheck, setLastCheck] = useState<CheckResult | ''>('');
   const elIsSurvivor = isSurvivor(element);
   const title = elIsSurvivor ? 'HEAL' : 'REPAIR';
@@ -30,11 +29,11 @@ export const SurvivorActionBar: React.FC<Props> = ({element}) => {
     ? Action.UPDATE_SURVIVOR_PROGRESS
     : Action.UPDATE_GEN_PROGRESS;
 
-  useProgression(element, isHeld);
+  useProgression(element, true);
 
   const applySkillDelta = async (result: CheckResult) => {
     if (result === 'Good') return;
-    const skillCheckDelta = result === 'Great' ? 5 : -5;
+    const skillCheckDelta = result === 'Great' ? 5 : -15;
     await gameChannel?.trigger({
       channelName: gameChannel.channelName,
       eventName: `client-${elIsSurvivor ? 'survivor' : 'gen'}-progressed`,
@@ -91,29 +90,10 @@ export const SurvivorActionBar: React.FC<Props> = ({element}) => {
               <Progress.Bar progress={element.progress * 0.01} />
             </View>
           </RowWrapper>
-          <RowWrapper>
-            <TouchableHighlight
-              style={{width: '80%'}}
-              disabled={element.progress >= 100}
-              onPressIn={() => setIsHeld(true)}
-              onPressOut={() => setIsHeld(false)}>
-              <Text
-                style={{
-                  fontSize: 30,
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                  color: 'white',
-                  backgroundColor: 'purple',
-                  padding: 20,
-                }}>
-                {title}
-              </Text>
-            </TouchableHighlight>
-          </RowWrapper>
 
           <View style={{width: '100%'}}>
             <Text style={{textAlign: 'center'}}>
-              {isHeld && `${title.toLowerCase()}ing...`}
+              {`${title.toLowerCase()}ing...`}
             </Text>
             {lastCheck && (
               <Text
@@ -128,13 +108,11 @@ export const SurvivorActionBar: React.FC<Props> = ({element}) => {
             width: '50%',
             alignContent: 'flex-end',
           }}>
-          {isHeld && (
-            <SkillCheck
-              onGood={() => setLastCheck('Good')}
-              onGreat={onGreat}
-              onMiss={onMiss}
-            />
-          )}
+          <SkillCheck
+            onGood={() => setLastCheck('Good')}
+            onGreat={onGreat}
+            onMiss={onMiss}
+          />
         </ColumnWrapper>
       </View>
     </View>

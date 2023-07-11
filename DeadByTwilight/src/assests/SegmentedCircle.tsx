@@ -12,7 +12,7 @@ interface Props {
   hitOffset?: number;
 }
 
-const radius = 120;
+const radius = 120; // TODO animation does not finish if this is altered
 const circumference = 2 * Math.PI * radius;
 const goodArcLength = Math.round(circumference / 8); // 45 degrees
 const greatArcLength = Math.round(goodArcLength / 4); // 11 degrees

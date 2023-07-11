@@ -24,7 +24,11 @@ export const SkillCheck: React.FC<CheckProps> = props => {
   if (!show) return null;
 
   return (
-    <View>
+    <View
+      style={{
+        justifyContent: 'center',
+        alignContent: 'center',
+      }}>
       <SegmentedCircle hitOffset={hitOffset} {...props} />
     </View>
   );
