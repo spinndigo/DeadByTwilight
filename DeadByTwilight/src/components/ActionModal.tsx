@@ -59,7 +59,7 @@ export const ActionModal: React.FC<Props & ModalBaseProps> = ({
         <View
           style={{
             height: '80%',
-            width: '80%',
+            width: '90%',
             padding: 10,
             justifyContent: 'center',
             alignItems: 'center',

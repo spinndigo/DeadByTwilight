@@ -1,21 +1,63 @@
 /* eslint-disable react-native/no-inline-styles */
 import * as Progress from 'react-native-progress';
-import React, {useState} from 'react';
-import {TouchableHighlight, View} from 'react-native';
+import React, {useContext, useState} from 'react';
+import {View} from 'react-native';
 import {GameElement} from '../utils/types';
 import {useProgression} from '../hooks/useProgression';
 import {isSurvivor} from '../utils/helpers';
 import {Text} from 'react-native';
+import {ColumnWrapper, RowWrapper} from './elements';
+import {SkillCheck} from './SkillCheck';
+import {useGameChannel} from '../hooks';
+import {GameDispatchContext} from '../GameContext';
+import {Action} from '../gamestateReducer';
 
 interface Props {
   element: GameElement;
 }
 
+type CheckResult = 'Miss' | 'Good' | 'Great';
+
 export const SurvivorActionBar: React.FC<Props> = ({element}) => {
-  const [isHeld, setIsHeld] = useState(false);
-  const title = isSurvivor(element) ? 'HEAL' : 'REPAIR';
-  const elementLabel = isSurvivor(element) ? element.name : element.id;
-  useProgression(element, isHeld);
+  const {gameChannel} = useGameChannel();
+  const dispatch = useContext(GameDispatchContext);
+  const [lastCheck, setLastCheck] = useState<CheckResult | ''>('');
+  const elIsSurvivor = isSurvivor(element);
+  const title = elIsSurvivor ? 'HEAL' : 'REPAIR';
+  const elementLabel = elIsSurvivor ? element.name : element.id;
+  const action = elIsSurvivor
+    ? Action.UPDATE_SURVIVOR_PROGRESS
+    : Action.UPDATE_GEN_PROGRESS;
+
+  useProgression(element, true);
+
+  const applySkillDelta = async (result: CheckResult) => {
+    if (result === 'Good') return;
+    const skillCheckDelta = result === 'Great' ? 2 : -15;
+    await gameChannel?.trigger({
+      channelName: gameChannel.channelName,
+      eventName: `client-${elIsSurvivor ? 'survivor' : 'gen'}-progressed`,
+      data: JSON.stringify({
+        id: element.id,
+        delta: skillCheckDelta,
+      }),
+    });
+    if (dispatch)
+      dispatch({
+        type: action,
+        payload: {id: element.id, delta: skillCheckDelta},
+      });
+  };
+
+  const onGreat = () => {
+    setLastCheck('Great');
+    applySkillDelta('Great');
+  };
+
+  const onMiss = () => {
+    setLastCheck('Miss');
+    applySkillDelta('Miss');
+  };
 
   return (
     <View
@@ -24,61 +66,57 @@ export const SurvivorActionBar: React.FC<Props> = ({element}) => {
         flexWrap: 'nowrap',
         alignContent: 'center',
       }}>
-      <View style={{flexDirection: 'row', flexWrap: 'nowrap'}}>
-        <View
-          style={{
-            width: '50%',
-            justifyContent: 'center',
-            flexDirection: 'column',
-          }}>
+      <ColumnWrapper
+        style={{
+          width: '50%',
+          justifyContent: 'space-evenly',
+        }}>
+        <RowWrapper style={{justifyContent: 'center', gap: 10}}>
           <Text
             style={{
-              fontSize: 40,
+              fontSize: 30,
               fontWeight: 'bold',
-              marginBottom: 20,
+
               textAlign: 'center',
             }}>
             {elementLabel}
           </Text>
+        </RowWrapper>
+        <RowWrapper>
           <View
             style={{
-              width: '100%',
               justifyContent: 'center',
               flexDirection: 'row',
             }}>
             <Progress.Bar progress={element.progress * 0.01} />
           </View>
-          <View style={{width: '100%'}}>
-            <Text style={{textAlign: 'center'}}>
-              {isHeld && `${title.toLowerCase()}ing...`}
-            </Text>
-          </View>
-        </View>
-        <View
-          style={{
-            width: '50%',
-            justifyContent: 'center',
-            alignContent: 'center',
-          }}>
-          <TouchableHighlight
-            style={{width: '80%'}}
-            disabled={element.progress >= 100}
-            onPressIn={() => setIsHeld(true)}
-            onPressOut={() => setIsHeld(false)}>
+        </RowWrapper>
+
+        <View style={{width: '100%'}}>
+          <Text style={{textAlign: 'center'}}>
+            {`${title.toLowerCase()}ing...`}
+          </Text>
+          {lastCheck && (
             <Text
               style={{
-                fontSize: 30,
-                fontWeight: 'bold',
                 textAlign: 'center',
-                color: 'white',
-                backgroundColor: 'purple',
-                padding: 20,
-              }}>
-              {title}
-            </Text>
-          </TouchableHighlight>
+              }}>{`Last Skill Check: ${lastCheck}`}</Text>
+          )}
         </View>
-      </View>
+      </ColumnWrapper>
+      <ColumnWrapper
+        style={{
+          width: '50%',
+          alignContent: 'center',
+        }}>
+        <View>
+          <SkillCheck
+            onGood={() => setLastCheck('Good')}
+            onGreat={onGreat}
+            onMiss={onMiss}
+          />
+        </View>
+      </ColumnWrapper>
     </View>
   );
 };
