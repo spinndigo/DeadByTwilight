@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import * as Progress from 'react-native-progress';
 import React, {useContext, useState} from 'react';
-import {TouchableHighlight, View} from 'react-native';
+import {View} from 'react-native';
 import {GameElement} from '../utils/types';
 import {useProgression} from '../hooks/useProgression';
 import {isSurvivor} from '../utils/helpers';
@@ -82,6 +82,8 @@ export const SurvivorActionBar: React.FC<Props> = ({element}) => {
               }}>
               {elementLabel}
             </Text>
+          </RowWrapper>
+          <RowWrapper>
             <View
               style={{
                 justifyContent: 'center',
@@ -106,13 +108,15 @@ export const SurvivorActionBar: React.FC<Props> = ({element}) => {
         <ColumnWrapper
           style={{
             width: '50%',
-            alignContent: 'flex-end',
+            alignContent: 'flex-start',
           }}>
-          <SkillCheck
-            onGood={() => setLastCheck('Good')}
-            onGreat={onGreat}
-            onMiss={onMiss}
-          />
+          <View>
+            <SkillCheck
+              onGood={() => setLastCheck('Good')}
+              onGreat={onGreat}
+              onMiss={onMiss}
+            />
+          </View>
         </ColumnWrapper>
       </View>
     </View>
