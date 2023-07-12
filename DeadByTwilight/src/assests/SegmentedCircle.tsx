@@ -12,13 +12,17 @@ interface Props {
   hitOffset?: number;
 }
 
-const radius = 100; // TODO animation does not finish if this is altered - needs 120
+const radius = 100;
 const circumference = 2 * Math.PI * radius;
 const goodArcLength = Math.round(circumference / 8); // 45 degrees
 const greatArcLength = Math.round(goodArcLength / 4); // 11 degrees
 const circleCenter = {x: 250, y: 160};
 const circleCenterPoint = {cx: `${circleCenter.x}`, cy: `${circleCenter.y}`};
-const hitZoneArcLength = goodArcLength + greatArcLength;
+const hitZoneAngleSpan = Math.floor(
+  ((goodArcLength + greatArcLength) / circumference) * 360,
+); // 56 degrees
+
+const arrowArcStartOffset = 40;
 
 const AnimatetdG = Animated.createAnimatedComponent(G);
 export const SegmentedCircle: React.FC<Props & CheckProps> = ({
@@ -29,9 +33,12 @@ export const SegmentedCircle: React.FC<Props & CheckProps> = ({
 }) => {
   const [show, setShow] = useState(true);
   const rotateIntensity = useRef(new Animated.Value(0)).current;
+  const hitStart = hitOffset + arrowArcStartOffset;
+  const arrowStartAngle = hitStart;
+  const arrowEndAngle = hitStart + hitZoneAngleSpan + arrowArcStartOffset;
   const rotateInterpolator = rotateIntensity.interpolate({
     inputRange: [0, 1],
-    outputRange: [`${hitOffset}deg`, `${hitOffset + hitZoneArcLength + 35}deg`],
+    outputRange: [`${arrowStartAngle}deg`, `${arrowEndAngle}deg`],
   });
 
   useEffect(() => {
@@ -50,8 +57,8 @@ export const SegmentedCircle: React.FC<Props & CheckProps> = ({
 
   const onPress = () => {
     rotateIntensity.stopAnimation(value => {
-      if (0.65 <= value && value <= 0.75) onGreat();
-      else if (0.75 <= value && value < 1) onGood();
+      if (0.5 <= value && value < 0.65) onGreat();
+      else if (0.65 <= value && value < 1) onGood();
       else {
         onMiss();
         setShow(false);

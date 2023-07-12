@@ -22,7 +22,7 @@ export const useProgression = (element: GameElement, isHeld: boolean) => {
         return;
       }
 
-      if (!isHeld) return; // do nothing if not held
+      if (!isHeld || element.progress >= 100) return; // do nothing if not held or if done
 
       await gameChannel?.trigger({
         channelName: gameChannel.channelName,
