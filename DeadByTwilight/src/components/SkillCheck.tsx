@@ -27,7 +27,7 @@ export const SkillCheck: React.FC<CheckProps> = props => {
     <View
       style={{
         justifyContent: 'center',
-        alignContent: 'center',
+        alignContent: 'flex-start',
       }}>
       <SegmentedCircle hitOffset={hitOffset} {...props} />
     </View>

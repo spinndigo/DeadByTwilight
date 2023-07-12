@@ -12,7 +12,7 @@ interface Props {
   hitOffset?: number;
 }
 
-const radius = 120; // TODO animation does not finish if this is altered
+const radius = 100; // TODO animation does not finish if this is altered - needs 120
 const circumference = 2 * Math.PI * radius;
 const goodArcLength = Math.round(circumference / 8); // 45 degrees
 const greatArcLength = Math.round(goodArcLength / 4); // 11 degrees
@@ -31,7 +31,7 @@ export const SegmentedCircle: React.FC<Props & CheckProps> = ({
   const rotateIntensity = useRef(new Animated.Value(0)).current;
   const rotateInterpolator = rotateIntensity.interpolate({
     inputRange: [0, 1],
-    outputRange: [`${hitOffset}deg`, `${hitOffset + hitZoneArcLength + 18}deg`],
+    outputRange: [`${hitOffset}deg`, `${hitOffset + hitZoneArcLength + 35}deg`],
   });
 
   useEffect(() => {
@@ -63,7 +63,10 @@ export const SegmentedCircle: React.FC<Props & CheckProps> = ({
 
   return (
     <TouchableWithoutFeedback onPress={onPress}>
-      <Svg width={'100%'} height={'100%'}>
+      <Svg
+        width={radius * 3}
+        height={radius * 2.5}
+        viewBox={`50 0 ${radius * 3} ${radius * 3}`}>
         <Circle
           {...circleCenterPoint}
           r={`${radius}`}

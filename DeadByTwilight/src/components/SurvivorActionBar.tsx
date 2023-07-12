@@ -66,59 +66,57 @@ export const SurvivorActionBar: React.FC<Props> = ({element}) => {
         flexWrap: 'nowrap',
         alignContent: 'center',
       }}>
-      <View style={{flexDirection: 'row', flexWrap: 'nowrap'}}>
-        <ColumnWrapper
-          style={{
-            width: '50%',
-            justifyContent: 'space-evenly',
-          }}>
-          <RowWrapper style={{justifyContent: 'center', gap: 10}}>
+      <ColumnWrapper
+        style={{
+          width: '50%',
+          justifyContent: 'space-evenly',
+        }}>
+        <RowWrapper style={{justifyContent: 'center', gap: 10}}>
+          <Text
+            style={{
+              fontSize: 30,
+              fontWeight: 'bold',
+
+              textAlign: 'center',
+            }}>
+            {elementLabel}
+          </Text>
+        </RowWrapper>
+        <RowWrapper>
+          <View
+            style={{
+              justifyContent: 'center',
+              flexDirection: 'row',
+            }}>
+            <Progress.Bar progress={element.progress * 0.01} />
+          </View>
+        </RowWrapper>
+
+        <View style={{width: '100%'}}>
+          <Text style={{textAlign: 'center'}}>
+            {`${title.toLowerCase()}ing...`}
+          </Text>
+          {lastCheck && (
             <Text
               style={{
-                fontSize: 30,
-                fontWeight: 'bold',
-
                 textAlign: 'center',
-              }}>
-              {elementLabel}
-            </Text>
-          </RowWrapper>
-          <RowWrapper>
-            <View
-              style={{
-                justifyContent: 'center',
-                flexDirection: 'row',
-              }}>
-              <Progress.Bar progress={element.progress * 0.01} />
-            </View>
-          </RowWrapper>
-
-          <View style={{width: '100%'}}>
-            <Text style={{textAlign: 'center'}}>
-              {`${title.toLowerCase()}ing...`}
-            </Text>
-            {lastCheck && (
-              <Text
-                style={{
-                  textAlign: 'center',
-                }}>{`Last Skill Check: ${lastCheck}`}</Text>
-            )}
-          </View>
-        </ColumnWrapper>
-        <ColumnWrapper
-          style={{
-            width: '50%',
-            alignContent: 'flex-start',
-          }}>
-          <View>
-            <SkillCheck
-              onGood={() => setLastCheck('Good')}
-              onGreat={onGreat}
-              onMiss={onMiss}
-            />
-          </View>
-        </ColumnWrapper>
-      </View>
+              }}>{`Last Skill Check: ${lastCheck}`}</Text>
+          )}
+        </View>
+      </ColumnWrapper>
+      <ColumnWrapper
+        style={{
+          width: '50%',
+          alignContent: 'center',
+        }}>
+        <View>
+          <SkillCheck
+            onGood={() => setLastCheck('Good')}
+            onGreat={onGreat}
+            onMiss={onMiss}
+          />
+        </View>
+      </ColumnWrapper>
     </View>
   );
 };
