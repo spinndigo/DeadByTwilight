@@ -33,7 +33,7 @@ export const SurvivorActionBar: React.FC<Props> = ({element}) => {
 
   const applySkillDelta = async (result: CheckResult) => {
     if (result === 'Good') return;
-    const skillCheckDelta = result === 'Great' ? 5 : -15;
+    const skillCheckDelta = result === 'Great' ? 2 : -15;
     await gameChannel?.trigger({
       channelName: gameChannel.channelName,
       eventName: `client-${elIsSurvivor ? 'survivor' : 'gen'}-progressed`,
