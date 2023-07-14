@@ -50,7 +50,13 @@ export const GameScreen: React.FC<
   return (
     <>
       <View style={{flexDirection: 'row', width: '100%', height: '100%'}}>
-        <View style={{...styles.column, backgroundColor: 'lightblue'}}>
+        <View
+          style={{
+            ...styles.column,
+            backgroundColor: '#668cff',
+            borderRightWidth: 2,
+          }}>
+          {/* <Text style={{alignSelf: 'center'}}> {'Survivors'} </Text> */}
           {game.survivors.map(s => (
             <View id={`id-${s.id}`} style={{...styles.items}}>
               <SurvivorItem
@@ -60,7 +66,12 @@ export const GameScreen: React.FC<
             </View>
           ))}
         </View>
-        <View style={{...styles.row, backgroundColor: 'pink'}}>
+        <View
+          style={{
+            ...styles.row,
+            backgroundColor: '#b30059',
+            borderLeftWidth: 2,
+          }}>
           {!isKiller && (
             <View style={{justifyContent: 'center', width: '100%'}}>
               <Text style={{textAlign: 'center'}}>

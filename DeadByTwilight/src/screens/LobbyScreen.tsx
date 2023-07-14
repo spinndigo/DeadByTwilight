@@ -8,6 +8,7 @@ import {useGameChannel} from '../hooks';
 import {GenCountSlider} from '../components';
 import {GameContext, GameDispatchContext} from '../GameContext';
 import {Action} from '../gamestateReducer';
+import {global} from '../styles/global';
 
 export type Role = 'SURVIVOR' | 'KILLER' | undefined;
 
@@ -119,12 +120,10 @@ export const LobbyScreen: React.FC<
 
   return (
     <SafeAreaView>
-      <View style={styles.wrapper}>
+      <View style={{...styles.wrapper, ...global.screenWrapper}}>
         <View>
-          <Text style={{textAlign: 'center', fontSize: 16}}>
-            {'Game Id : \n\n'}
-          </Text>
-          <Text style={{fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>
+          <Text style={{fontSize: 16, ...styles.text}}>{'Game Id : \n\n'}</Text>
+          <Text style={{fontWeight: 'bold', fontSize: 20, ...styles.text}}>
             {gameChannel?.channelName.slice(9)}
           </Text>
         </View>
@@ -136,9 +135,9 @@ export const LobbyScreen: React.FC<
           <Text
             style={{
               width: '100%',
-              textAlign: 'center',
               fontWeight: 'bold',
               fontSize: 20,
+              ...styles.text,
             }}>
             {'Choose your role: '}
           </Text>
@@ -164,7 +163,7 @@ export const LobbyScreen: React.FC<
           </View>
         </View>
         <View>
-          <Text style={{textAlign: 'center', fontSize: 20, fontWeight: 'bold'}}>
+          <Text style={{fontSize: 20, fontWeight: 'bold', ...styles.text}}>
             {`Generator count: ${game.generators.length}\n `}
           </Text>
           {didCreateRoom && (
@@ -177,13 +176,13 @@ export const LobbyScreen: React.FC<
 
         <View style={{gap: 20}}>
           <View>
-            <Text style={{textAlign: 'center'}}>
+            <Text style={{...styles.text}}>
               {' '}
               {`Player Count: ${gameChannel?.members.size}`}
             </Text>
           </View>
           <View>
-            <Text style={{textAlign: 'center'}}>
+            <Text style={{...styles.text}}>
               {' '}
               {`survivors(${game.survivors.length}): ${game.survivors.map(
                 s => `${s.name}, `,
@@ -191,7 +190,7 @@ export const LobbyScreen: React.FC<
             </Text>
           </View>
           <View>
-            <Text style={{textAlign: 'center'}}>{`killer: ${
+            <Text style={{...styles.text}}>{`killer: ${
               game.killer?.name || 'n/a'
             }`}</Text>
           </View>
@@ -205,7 +204,7 @@ export const LobbyScreen: React.FC<
                 width: 200,
               }}>
               <Button
-                disabled={!gameReady}
+                disabled={!gameReady && false}
                 onPress={onStartGame}
                 color="#fff"
                 title="Start Game"
@@ -245,7 +244,6 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 40,
+    color: '#fff',
   },
 });

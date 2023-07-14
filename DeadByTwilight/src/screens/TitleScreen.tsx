@@ -1,16 +1,15 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View, Button, Text, StyleSheet, SafeAreaView} from 'react-native';
-import {TitleGradient} from '../assests';
 import {DefaultStackParamList} from '../navigators';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {global} from '../styles/global';
 
 export const TitleScreen: React.FC<
   NativeStackScreenProps<DefaultStackParamList, 'Title'>
 > = ({navigation}) => (
   <SafeAreaView>
-    <View style={styles.wrapper}>
-      <TitleGradient />
+    <View style={{...styles.wrapper, ...global.screenWrapper}}>
       <View style={styles.header}>
         <Text style={styles.text}> Dead by Twilight</Text>
       </View>
@@ -42,6 +41,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   text: {
+    color: '#fff',
     fontWeight: 'bold',
     fontSize: 40,
   },

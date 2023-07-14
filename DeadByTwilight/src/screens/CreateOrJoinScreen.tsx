@@ -6,6 +6,8 @@ import {GameStackParamList} from '../navigators';
 import {CreateRoomDialog, JoinRoomDialog} from '../components';
 import shortid from 'shortid';
 import {useGameChannel} from '../hooks';
+import {global} from '../styles/global';
+import {ColumnWrapper} from '../components/elements';
 
 export const CreateOrJoinScreen: React.FC<
   NativeStackScreenProps<GameStackParamList, 'CreateOrJoin'>
@@ -40,36 +42,37 @@ export const CreateOrJoinScreen: React.FC<
 
   return (
     <>
-      <View style={styles.wrapper}>
-        <View
+      <View style={{...styles.wrapper, ...global.screenWrapper}}>
+        <ColumnWrapper
           style={{
-            width: '100%',
-            flexWrap: 'nowrap',
-            flexDirection: 'row',
+            height: '80%',
+            width: '80%',
             justifyContent: 'center',
+            alignItems: 'center',
           }}>
           <TextInput
             onChangeText={typed => setName(typed)}
             placeholder="Enter your name"
             style={styles.input}
           />
-        </View>
-        <View style={{margin: 40, backgroundColor: '#841584', width: '50%'}}>
-          <Button
-            disabled={!name}
-            onPress={onPressCreate}
-            color="white"
-            title="Create Game"
-          />
-        </View>
-        <View style={{margin: 40, backgroundColor: '#841584', width: '50%'}}>
-          <Button
-            disabled={!name}
-            onPress={onPressJoin}
-            color="white"
-            title="Join Game"
-          />
-        </View>
+
+          <View style={{margin: 20, backgroundColor: '#841584', width: '50%'}}>
+            <Button
+              disabled={!name}
+              onPress={onPressCreate}
+              color="white"
+              title="Create Game"
+            />
+          </View>
+          <View style={{margin: 20, backgroundColor: '#841584', width: '50%'}}>
+            <Button
+              disabled={!name}
+              onPress={onPressJoin}
+              color="white"
+              title="Join Game"
+            />
+          </View>
+        </ColumnWrapper>
       </View>
       <CreateRoomDialog
         id={id || ''}
@@ -106,10 +109,11 @@ const styles = StyleSheet.create({
     fontSize: 40,
   },
   input: {
-    height: 40,
-    width: '60%',
-    margin: 12,
-    borderWidth: 1,
     padding: 10,
+    backgroundColor: '#fff',
+    height: 50,
+    width: '80%',
+    borderWidth: 2,
+    marginBottom: 40,
   },
 });
