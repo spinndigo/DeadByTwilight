@@ -50,27 +50,29 @@ export const CreateOrJoinScreen: React.FC<
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <TextInput
-            onChangeText={typed => setName(typed)}
-            placeholder="Enter your name"
-            style={styles.input}
-          />
+          <View style={{...styles.formWrapper}}>
+            <TextInput
+              onChangeText={typed => setName(typed)}
+              placeholder="Enter your name"
+              style={styles.input}
+            />
 
-          <View style={{margin: 20, backgroundColor: '#841584', width: '50%'}}>
-            <Button
-              disabled={!name}
-              onPress={onPressCreate}
-              color="white"
-              title="Create Game"
-            />
-          </View>
-          <View style={{margin: 20, backgroundColor: '#841584', width: '50%'}}>
-            <Button
-              disabled={!name}
-              onPress={onPressJoin}
-              color="white"
-              title="Join Game"
-            />
+            <View style={{...styles.button}}>
+              <Button
+                disabled={!name}
+                onPress={onPressCreate}
+                color="white"
+                title="Create Game"
+              />
+            </View>
+            <View style={{...styles.button}}>
+              <Button
+                disabled={!name}
+                onPress={onPressJoin}
+                color="white"
+                title="Join Game"
+              />
+            </View>
           </View>
         </ColumnWrapper>
       </View>
@@ -96,13 +98,25 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignItems: 'center',
   },
+  formWrapper: {
+    width: '100%',
+    backgroundColor: '#002266',
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+  },
   header: {
     height: '30%',
     justifyContent: 'flex-start',
     textAlign: 'center',
   },
   button: {
-    justifyContent: 'flex-end',
+    margin: 20,
+    marginTop: 10,
+    backgroundColor: '#841584',
+    width: '75%',
+    fontWeight: '400',
   },
   text: {
     fontWeight: 'bold',

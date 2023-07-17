@@ -8,7 +8,7 @@ import {global} from '../styles/global';
 export const TitleScreen: React.FC<
   NativeStackScreenProps<DefaultStackParamList, 'Title'>
 > = ({navigation}) => (
-  <SafeAreaView>
+  <>
     <View style={{...styles.wrapper, ...global.screenWrapper}}>
       <View style={styles.header}>
         <Text style={styles.text}> Dead by Twilight</Text>
@@ -21,7 +21,7 @@ export const TitleScreen: React.FC<
         />
       </View>
     </View>
-  </SafeAreaView>
+  </>
 );
 
 const styles = StyleSheet.create({

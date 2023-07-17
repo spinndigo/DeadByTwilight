@@ -14,7 +14,7 @@ export const PlayerCard: React.FC<Props> = ({name, role}) => {
   return (
     <View
       style={{...styles.wrapper, backgroundColor: getBackgroundColor(role)}}>
-      <Text style={styles.name}> {name} </Text>
+      <Text style={styles.name}>{`${name} -`}</Text>
       <Text style={styles.role}>{role}</Text>
     </View>
   );
@@ -24,14 +24,22 @@ const styles = StyleSheet.create({
   wrapper: {
     display: 'flex',
     flexDirection: 'row',
+    alignContent: 'center',
+    justifyContent: 'center',
     flexWrap: 'nowrap',
     width: '50%',
+    height: 30,
+    borderRadius: 3,
   },
   name: {
     justifyContent: 'flex-start',
+    color: 'white',
+    textAlign: 'center',
   },
   role: {
     justifyContent: 'flex-end',
     color: 'white',
+    width: '40%',
+    textAlign: 'center',
   },
 });

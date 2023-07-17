@@ -5,10 +5,11 @@ import {View, Text, StyleSheet, SafeAreaView, Button} from 'react-native';
 import {GameStackParamList} from '../navigators';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useGameChannel} from '../hooks';
-import {GenCountSlider} from '../components';
+import {GenCountSlider, PlayerCard} from '../components';
 import {GameContext, GameDispatchContext} from '../GameContext';
 import {Action} from '../gamestateReducer';
 import {global} from '../styles/global';
+import {RowWrapper} from '../components/elements';
 
 export type Role = 'SURVIVOR' | 'KILLER' | undefined;
 
@@ -20,6 +21,7 @@ export const LobbyScreen: React.FC<
   const dispatch = useContext(GameDispatchContext);
   const [hasSelectedRole, setHasSelectedRole] = useState(false);
   const {gameChannel} = useGameChannel();
+  const members = gameChannel?.members ? Array.from(gameChannel?.members) : [];
 
   const {navigate} = navigation;
 
@@ -119,18 +121,20 @@ export const LobbyScreen: React.FC<
   }, [game.status, navigate]);
 
   return (
-    <SafeAreaView>
-      <View style={{...styles.wrapper, ...global.screenWrapper}}>
-        <View>
-          <Text style={{fontSize: 16, ...styles.text}}>{'Game Id : \n\n'}</Text>
-          <Text style={{fontWeight: 'bold', fontSize: 20, ...styles.text}}>
-            {gameChannel?.channelName.slice(9)}
-          </Text>
-        </View>
+    <View style={{...styles.wrapper, ...global.screenWrapper}}>
+      <RowWrapper style={{gap: 5, marginTop: 5}}>
+        <Text style={{fontSize: 20, ...styles.text}}>{`Game Id: `}</Text>
+        <Text style={{fontWeight: 'bold', fontSize: 20, ...styles.text}}>
+          {gameChannel?.channelName.slice(9)}
+        </Text>
+      </RowWrapper>
+      <RowWrapper style={{marginTop: 30}}>
         <View
           style={{
             flexWrap: 'wrap',
             justifyContent: 'center',
+            flexDirection: 'row',
+            width: '50%',
           }}>
           <Text
             style={{
@@ -162,7 +166,8 @@ export const LobbyScreen: React.FC<
             />
           </View>
         </View>
-        <View>
+        <View
+          style={{width: '50%', alignContent: 'center', alignItems: 'center'}}>
           <Text style={{fontSize: 20, fontWeight: 'bold', ...styles.text}}>
             {`Generator count: ${game.generators.length}\n `}
           </Text>
@@ -173,49 +178,43 @@ export const LobbyScreen: React.FC<
             />
           )}
         </View>
+      </RowWrapper>
+      <RowWrapper>
+        <Text>{`Number of players in lobby: ${gameChannel?.members.size}`}</Text>
+      </RowWrapper>
+      <RowWrapper style={{justifyContent: 'center', width: '90%'}}>
+        <View style={{...styles.playerColumn}}>
+          <Text>{'Survivors: '}</Text>
+          {game.survivors.map(s => (
+            <PlayerCard name={s.name} role="survivor" />
+          ))}
+        </View>
+        <View style={{...styles.playerColumn}}>
+          <Text>{'Killer: '}</Text>
+          {game.killer && <PlayerCard name={game.killer?.name} role="killer" />}
+        </View>
+      </RowWrapper>
 
-        <View style={{gap: 20}}>
-          <View>
-            <Text style={{...styles.text}}>
-              {' '}
-              {`Player Count: ${gameChannel?.members.size}`}
-            </Text>
+      <RowWrapper>
+        {didCreateRoom ? (
+          <View
+            style={{
+              justifyContent: 'flex-end',
+              backgroundColor: '#841584',
+              width: 200,
+            }}>
+            <Button
+              disabled={!gameReady && false}
+              onPress={onStartGame}
+              color="#fff"
+              title="Start Game"
+            />
           </View>
-          <View>
-            <Text style={{...styles.text}}>
-              {' '}
-              {`survivors(${game.survivors.length}): ${game.survivors.map(
-                s => `${s.name}, `,
-              )}`}
-            </Text>
-          </View>
-          <View>
-            <Text style={{...styles.text}}>{`killer: ${
-              game.killer?.name || 'n/a'
-            }`}</Text>
-          </View>
-        </View>
-        <View>
-          {didCreateRoom ? (
-            <View
-              style={{
-                justifyContent: 'flex-end',
-                backgroundColor: '#841584',
-                width: 200,
-              }}>
-              <Button
-                disabled={!gameReady && false}
-                onPress={onStartGame}
-                color="#fff"
-                title="Start Game"
-              />
-            </View>
-          ) : (
-            <Text> {'Waiting for lobby creator to start game...'} </Text>
-          )}
-        </View>
-      </View>
-    </SafeAreaView>
+        ) : (
+          <Text> {'Waiting for lobby creator to start game...'} </Text>
+        )}
+      </RowWrapper>
+    </View>
   );
 };
 
@@ -223,9 +222,17 @@ const styles = StyleSheet.create({
   wrapper: {
     display: 'flex',
     height: '100%',
-    flexDirection: 'column',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'space-around',
+    padding: 40,
+  },
+  playerColumn: {
+    width: '50%',
+    alignContent: 'center',
+    alignItems: 'center',
+    height: 100,
   },
   header: {
     height: '20%',

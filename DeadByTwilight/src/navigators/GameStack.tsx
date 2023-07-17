@@ -41,7 +41,11 @@ export const GameStack = () => {
             }}
             initialRouteName="CreateOrJoin">
             <Stack.Screen name="CreateOrJoin" component={CreateOrJoinScreen} />
-            <Stack.Screen name="Lobby" component={LobbyScreen} />
+            <Stack.Screen
+              name="Lobby"
+              component={LobbyScreen}
+              options={{orientation: 'landscape'}}
+            />
             <Stack.Screen
               name="Game"
               component={GameScreen}
