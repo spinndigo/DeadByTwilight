@@ -13,6 +13,7 @@ import {
   SurvivorItem,
 } from '../components';
 import {GameElement} from '../utils/types';
+import {getGensRemaining} from '../utils/helpers';
 
 export const GameScreen: React.FC<
   NativeStackScreenProps<GameStackParamList, 'Game'>
@@ -74,10 +75,13 @@ export const GameScreen: React.FC<
           }}>
           {!isKiller && (
             <View style={{justifyContent: 'center', width: '100%'}}>
-              <Text style={{textAlign: 'center'}}>
-                {`Gens remaining: ${
-                  game.generators.filter(g => g.progress < 100).length
-                }`}
+              <Text
+                style={{
+                  textAlign: 'center',
+                  color: 'white',
+                  fontWeight: 'bold',
+                }}>
+                {`Gens remaining: ${getGensRemaining(game.generators)}`}
               </Text>
             </View>
           )}
@@ -114,8 +118,8 @@ const styles = StyleSheet.create({
     alignContent: 'center',
   },
   items: {
-    height: '30%',
-    width: '30%',
+    height: '25%',
+    width: '25%',
     margin: 10,
   },
 });

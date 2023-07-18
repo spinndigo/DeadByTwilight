@@ -159,9 +159,16 @@ export const getInvalidInteractionMessage = (
   return '';
 };
 
+export const getGensRemaining = (gens: Array<Gen>) => {
+  const totalCount = gens.length;
+  const neededToWin = totalCount - 2;
+  const remaining = neededToWin - gens.filter(g => g.progress >= 100).length;
+  return remaining;
+};
+
 export const isGensComplete = (gens: Array<Gen>) => {
-  const incompleteCount = gens.filter(g => g.progress < 100).length;
-  if (incompleteCount <= 2) return true;
+  const remainingCount = getGensRemaining(gens);
+  if (remainingCount === 0) return true;
   return false;
 };
 
