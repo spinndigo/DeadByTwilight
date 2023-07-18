@@ -169,11 +169,14 @@ export const LobbyScreen: React.FC<
         <View
           style={{width: '50%', alignContent: 'center', alignItems: 'center'}}>
           <Text style={{fontSize: 20, fontWeight: 'bold', ...styles.text}}>
-            {`Generator count: ${game.generators.length}\n `}
+            {`Generator count: ${game.generators.length || 6}`}
           </Text>
+          <Text style={{color: 'white'}}>{`Needed to win: ${
+            (game.generators.length || 6) - 2
+          }`}</Text>
           {didCreateRoom && (
             <GenCountSlider
-              initialCount={game.generators.length}
+              initialCount={3}
               onValueChange={v => onAdjustGenSlider(v)}
             />
           )}

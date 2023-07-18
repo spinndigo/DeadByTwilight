@@ -159,9 +159,15 @@ export const getInvalidInteractionMessage = (
   return '';
 };
 
+export const isGensComplete = (gens: Array<Gen>) => {
+  const incompleteCount = gens.filter(g => g.progress < 100).length;
+  if (incompleteCount <= 2) return true;
+  return false;
+};
+
 export const isSurvivorsWinner = (game: GameState) => {
   if (
-    game.generators.every(g => g.progress >= 100) &&
+    isGensComplete(game.generators) &&
     !game.survivors.every(s => s.health === 'DEAD') &&
     game.status === 'FINISHED'
   ) {

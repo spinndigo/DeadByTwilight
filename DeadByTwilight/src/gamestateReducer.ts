@@ -3,6 +3,7 @@ import {
   applyGenProgressDelta,
   applySurvivorHealthDelta,
   applySurvivorProgressDelta,
+  isGensComplete,
 } from './utils/helpers';
 import {
   GameState,
@@ -131,14 +132,17 @@ export const gamestateReducer: GamestateReducer = (state, action) => {
     case Action.SET_INITIAL_GENS:
       return {
         ...state,
-        generators: Array.from({length: action.payload.quantity}, (_, i) => {
-          return {
-            id: `gen-${i}`,
-            progress: 0,
-            isRegressing: false,
-            numHealers: 0,
-          };
-        }),
+        generators: Array.from(
+          {length: action.payload.quantity + 3},
+          (_, i) => {
+            return {
+              id: `gen-${i}`,
+              progress: 0,
+              isRegressing: false,
+              numHealers: 0,
+            };
+          },
+        ),
       };
 
     case Action.UPDATE_GEN_PROGRESS:
@@ -146,7 +150,7 @@ export const gamestateReducer: GamestateReducer = (state, action) => {
       return {
         ...state,
         generators: newGens,
-        status: newGens.some(g => g.progress < 100) ? state.status : 'FINISHED',
+        status: isGensComplete(newGens) ? 'FINISHED' : state.status,
       };
 
     case Action.UPDATE_SURVIVOR_HEALTH:
