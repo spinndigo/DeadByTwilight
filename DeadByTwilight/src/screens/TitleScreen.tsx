@@ -1,28 +1,46 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
-import {View, Button, Text, StyleSheet, SafeAreaView} from 'react-native';
+import React, {useEffect, useRef} from 'react';
+import {View, Button, Text, StyleSheet, Animated} from 'react-native';
 import {DefaultStackParamList} from '../navigators';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {global} from '../styles/global';
 
 export const TitleScreen: React.FC<
   NativeStackScreenProps<DefaultStackParamList, 'Title'>
-> = ({navigation}) => (
-  <>
-    <View style={{...styles.wrapper, ...global.screenWrapper}}>
-      <View style={styles.header}>
-        <Text style={styles.text}> Dead by Twilight</Text>
+> = ({navigation}) => {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const fadeIn = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 5000,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  useEffect(() => {
+    fadeIn();
+  }, []);
+
+  return (
+    <>
+      <View style={{...styles.wrapper, ...global.screenWrapper}}>
+        <View style={styles.header}>
+          <Text style={styles.text}>Dead by</Text>
+          <Animated.Text style={{...styles.text, opacity: fadeAnim}}>
+            Twilight
+          </Animated.Text>
+        </View>
+        <View style={{backgroundColor: '#841584', width: '50%'}}>
+          <Button
+            onPress={() => navigation.navigate('GameStack')}
+            color="#fff"
+            title="get started"
+          />
+        </View>
       </View>
-      <View style={{backgroundColor: '#841584', width: '50%'}}>
-        <Button
-          onPress={() => navigation.navigate('GameStack')}
-          color="#fff"
-          title="get started"
-        />
-      </View>
-    </View>
-  </>
-);
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -36,6 +54,7 @@ const styles = StyleSheet.create({
     height: '30%',
     justifyContent: 'flex-start',
     textAlign: 'center',
+    flexWrap: 'nowrap',
   },
   button: {
     justifyContent: 'flex-end',
