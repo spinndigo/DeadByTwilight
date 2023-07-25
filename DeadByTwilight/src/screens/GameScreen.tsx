@@ -14,6 +14,7 @@ import {
 } from '../components';
 import {GameElement} from '../utils/types';
 import {getGensRemaining} from '../utils/helpers';
+import {GEN_BACKGROUND_COLOR, SURVIVOR_BACKGROUND_COLOR} from '../styles';
 
 export const GameScreen: React.FC<
   NativeStackScreenProps<GameStackParamList, 'Game'>
@@ -54,7 +55,7 @@ export const GameScreen: React.FC<
         <View
           style={{
             ...styles.column,
-            backgroundColor: '#668cff',
+            backgroundColor: SURVIVOR_BACKGROUND_COLOR,
             borderRightWidth: 2,
           }}>
           {/* <Text style={{alignSelf: 'center'}}> {'Survivors'} </Text> */}
@@ -70,7 +71,7 @@ export const GameScreen: React.FC<
         <View
           style={{
             ...styles.row,
-            backgroundColor: '#b30059',
+            backgroundColor: GEN_BACKGROUND_COLOR,
             borderLeftWidth: 2,
           }}>
           {!isKiller && (

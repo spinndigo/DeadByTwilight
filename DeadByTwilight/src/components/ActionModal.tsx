@@ -10,7 +10,8 @@ import {
 import {GameElement} from '../utils/types';
 import {useGameChannel} from '../hooks';
 import {GameContext} from '../GameContext';
-import {getInvalidInteractionMessage} from '../utils/helpers';
+import {getInvalidInteractionMessage, isSurvivor} from '../utils/helpers';
+import {GEN_BACKGROUND_COLOR, SURVIVOR_BACKGROUND_COLOR} from '../styles';
 
 export type ElementInteraction = {label: string; onPress(): void};
 
@@ -42,6 +43,7 @@ export const ActionModal: React.FC<Props & ModalBaseProps> = ({
   }
 
   const invalidMessage = getInvalidInteractionMessage(player, gameElement);
+  const elIsSurvivor = isSurvivor(gameElement);
 
   return (
     <Modal
@@ -52,6 +54,9 @@ export const ActionModal: React.FC<Props & ModalBaseProps> = ({
         style={{
           height: '100%',
           width: '100%',
+          backgroundColor: elIsSurvivor
+            ? SURVIVOR_BACKGROUND_COLOR
+            : GEN_BACKGROUND_COLOR,
           justifyContent: 'center',
           alignContent: 'center',
           alignItems: 'center',
