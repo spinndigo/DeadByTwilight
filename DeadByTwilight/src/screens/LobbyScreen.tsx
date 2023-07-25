@@ -146,24 +146,34 @@ export const LobbyScreen: React.FC<
             {'Choose your role: '}
           </Text>
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-            <Button
-              color={
-                survivorDisabled
-                  ? 'grey'
-                  : styles.survivorButton.backgroundColor
-              }
-              disabled={survivorDisabled}
-              onPress={onPressSurvivor}
-              title="Survivor"
-            />
-            <Button
-              color={
-                killerDisabled ? 'grey' : styles.killerButton.backgroundColor
-              }
-              disabled={killerDisabled}
-              onPress={onPressKiller}
-              title="Killer"
-            />
+            {!hasSelectedRole ? (
+              <>
+                <Button
+                  color={
+                    survivorDisabled
+                      ? 'grey'
+                      : styles.survivorButton.backgroundColor
+                  }
+                  disabled={survivorDisabled}
+                  onPress={onPressSurvivor}
+                  title="Survivor"
+                />
+                <Button
+                  color={
+                    killerDisabled
+                      ? 'grey'
+                      : styles.killerButton.backgroundColor
+                  }
+                  disabled={killerDisabled}
+                  onPress={onPressKiller}
+                  title="Killer"
+                />
+              </>
+            ) : (
+              <Text style={{...styles.text, marginTop: 10}}>
+                {'You have selected a role'}
+              </Text>
+            )}
           </View>
         </View>
         <View
@@ -171,7 +181,7 @@ export const LobbyScreen: React.FC<
           <Text style={{fontSize: 20, fontWeight: 'bold', ...styles.text}}>
             {`Generator count: ${game.generators.length || 6}`}
           </Text>
-          <Text style={{color: 'white'}}>{`Needed to win: ${
+          <Text style={{...styles.text}}>{`Needed to win: ${
             (game.generators.length || 6) - 2
           }`}</Text>
           {didCreateRoom && (
@@ -183,17 +193,20 @@ export const LobbyScreen: React.FC<
         </View>
       </RowWrapper>
       <RowWrapper>
-        <Text>{`Number of players in lobby: ${gameChannel?.members.size}`}</Text>
+        <Text
+          style={{
+            ...styles.text,
+          }}>{`Number of players in lobby: ${gameChannel?.members.size}`}</Text>
       </RowWrapper>
       <RowWrapper style={{justifyContent: 'center', width: '90%'}}>
-        <View style={{...styles.playerColumn}}>
-          <Text>{'Survivors: '}</Text>
+        <View style={{...styles.playerRow}}>
+          <Text style={{...styles.text}}>{'Survivors: '}</Text>
           {game.survivors.map(s => (
-            <PlayerCard name={s.name} role="survivor" />
+            <PlayerCard name={s.name} isMe={name === s.name} role="survivor" />
           ))}
         </View>
-        <View style={{...styles.playerColumn}}>
-          <Text>{'Killer: '}</Text>
+        <View style={{...styles.playerRow, width: '20%'}}>
+          <Text style={{...styles.text}}>{'Killer: '}</Text>
           {game.killer && <PlayerCard name={game.killer?.name} role="killer" />}
         </View>
       </RowWrapper>
@@ -214,7 +227,9 @@ export const LobbyScreen: React.FC<
             />
           </View>
         ) : (
-          <Text> {'Waiting for lobby creator to start game...'} </Text>
+          <Text style={{...styles.text}}>
+            {'Waiting for lobby creator to start game...'}
+          </Text>
         )}
       </RowWrapper>
     </View>
@@ -231,11 +246,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     padding: 40,
   },
-  playerColumn: {
-    width: '50%',
+  playerRow: {
+    flexDirection: 'row',
+    flexWrap: 'nowrap',
+    width: '80%',
     alignContent: 'center',
     alignItems: 'center',
     height: 100,
+    gap: 10,
   },
   header: {
     height: '20%',
