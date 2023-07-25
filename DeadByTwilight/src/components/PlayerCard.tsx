@@ -13,9 +13,14 @@ const getBackgroundColor = (role: Role) =>
   role === 'survivor' ? 'blue' : role === 'killer' ? 'red' : 'grey';
 export const PlayerCard: React.FC<Props> = ({name, role, isMe}) => {
   const meLabel = isMe ? '(me)' : '';
+  const width = role === 'survivor' ? styles.survivorWidth : styles.killerWidth;
   return (
     <View
-      style={{...styles.wrapper, backgroundColor: getBackgroundColor(role)}}>
+      style={{
+        ...styles.wrapper,
+        ...width,
+        backgroundColor: getBackgroundColor(role),
+      }}>
       <Text style={styles.name}>{`${name} ${meLabel}`}</Text>
     </View>
   );
@@ -28,11 +33,17 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     justifyContent: 'center',
     flexWrap: 'nowrap',
-    width: '15%',
-    maxWidth: '20%',
     padding: 5,
     borderRadius: 3,
     textAlign: 'center',
+  },
+  survivorWidth: {
+    width: '15%',
+    maxWidth: '20%',
+  },
+  killerWidth: {
+    width: '80%',
+    maxWidth: '90%',
   },
   name: {
     color: 'white',
