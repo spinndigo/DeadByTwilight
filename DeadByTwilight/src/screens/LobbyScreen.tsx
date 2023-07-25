@@ -20,9 +20,8 @@ export const LobbyScreen: React.FC<
   const {didCreateRoom, name} = route.params;
   const game = useContext(GameContext);
   const dispatch = useContext(GameDispatchContext);
-  const [hasSelectedRole, setHasSelectedRole] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<Role>(undefined);
   const {gameChannel} = useGameChannel();
-  const members = gameChannel?.members ? Array.from(gameChannel?.members) : [];
 
   const {navigate} = navigation;
 
@@ -30,8 +29,8 @@ export const LobbyScreen: React.FC<
 
   if (!game) throw new Error('No game state found');
 
-  const survivorDisabled = game.survivors.length >= 4 || hasSelectedRole;
-  const killerDisabled = !!game.killer || hasSelectedRole;
+  const survivorDisabled = game.survivors.length >= 4 || selectedRole;
+  const killerDisabled = !!game.killer || selectedRole;
 
   const onPressSurvivor = async () => {
     await gameChannel?.trigger({
@@ -57,7 +56,7 @@ export const LobbyScreen: React.FC<
           kind: 'SURVIVOR',
         },
       });
-    setHasSelectedRole(true);
+    setSelectedRole('SURVIVOR');
   };
 
   const onPressKiller = async () => {
@@ -78,7 +77,7 @@ export const LobbyScreen: React.FC<
           kind: 'KILLER',
         },
       });
-    setHasSelectedRole(true);
+    setSelectedRole('KILLER');
   };
 
   const onAdjustGenSlider = async (quantity: number) => {
@@ -143,7 +142,7 @@ export const LobbyScreen: React.FC<
             {'Choose your role: '}
           </Text>
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-            {!hasSelectedRole ? (
+            {!selectedRole ? (
               <>
                 <Button
                   color={
@@ -151,7 +150,7 @@ export const LobbyScreen: React.FC<
                       ? 'grey'
                       : styles.survivorButton.backgroundColor
                   }
-                  disabled={survivorDisabled}
+                  disabled={!!survivorDisabled}
                   onPress={onPressSurvivor}
                   title="Survivor"
                 />
@@ -161,14 +160,14 @@ export const LobbyScreen: React.FC<
                       ? 'grey'
                       : styles.killerButton.backgroundColor
                   }
-                  disabled={killerDisabled}
+                  disabled={!!killerDisabled}
                   onPress={onPressKiller}
                   title="Killer"
                 />
               </>
             ) : (
               <Text style={{...styles.text, marginTop: 10}}>
-                {'You have selected a role'}
+                {`You have selected ${selectedRole} `}
               </Text>
             )}
           </View>
@@ -204,7 +203,13 @@ export const LobbyScreen: React.FC<
         </View>
         <View style={{...styles.playerRow, width: '20%'}}>
           <Text style={{...styles.text}}>{'Killer: '}</Text>
-          {game.killer && <PlayerCard name={game.killer?.name} role="killer" />}
+          {game.killer && (
+            <PlayerCard
+              name={game.killer?.name}
+              isMe={name === game.killer.name}
+              role="killer"
+            />
+          )}
         </View>
       </RowWrapper>
 
