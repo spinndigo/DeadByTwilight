@@ -10,6 +10,7 @@ import {GameContext, GameDispatchContext} from '../GameContext';
 import {Action} from '../gamestateReducer';
 import {global} from '../styles/global';
 import {RowWrapper} from '../components/elements';
+import {isGameReady} from '../utils/helpers';
 
 export type Role = 'SURVIVOR' | 'KILLER' | undefined;
 
@@ -95,11 +96,7 @@ export const LobbyScreen: React.FC<
       });
   };
 
-  const gameReady =
-    game.survivors.length >= 2 &&
-    game.survivors.length < 5 &&
-    game.generators.length > game.survivors.length &&
-    !!game.killer;
+  const gameReady = __DEV__ ? true : isGameReady(game);
 
   const onStartGame = async () => {
     await gameChannel?.trigger({
@@ -220,7 +217,7 @@ export const LobbyScreen: React.FC<
               width: 200,
             }}>
             <Button
-              disabled={!gameReady && false}
+              disabled={!gameReady}
               onPress={onStartGame}
               color="#fff"
               title="Start Game"

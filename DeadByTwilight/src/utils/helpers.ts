@@ -140,6 +140,15 @@ export const getPlayer = (id: string, game: GameState) => {
   }
 };
 
+export const isGameReady = (game: GameState) => {
+  return (
+    game.survivors.length >= 2 &&
+    game.survivors.length < 5 &&
+    game.generators.length > game.survivors.length &&
+    !!game.killer
+  );
+};
+
 export const getInvalidInteractionMessage = (
   actor: Player,
   subject: GameElement,
