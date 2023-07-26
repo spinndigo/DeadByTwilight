@@ -60,7 +60,7 @@ export const GameScreen: React.FC<
           }}>
           {/* <Text style={{alignSelf: 'center'}}> {'Survivors'} </Text> */}
           {game.survivors.map(s => (
-            <View id={`id-${s.id}`} style={{...styles.items}}>
+            <View key={`id-${s.id}`} style={{...styles.items}}>
               <SurvivorItem
                 survivor={s}
                 onPress={() => setSelectedElement(s)}
@@ -87,7 +87,7 @@ export const GameScreen: React.FC<
             </View>
           )}
           {game.generators.map(g => (
-            <View id={`id-${g.id}`} style={{...styles.items}}>
+            <View key={`id-${g.id}`} style={{...styles.items}}>
               <GenItem gen={g} onPress={() => setSelectedElement(g)} />
             </View>
           ))}

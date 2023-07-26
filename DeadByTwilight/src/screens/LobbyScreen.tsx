@@ -1,7 +1,7 @@
 /* eslint-disable curly */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useContext, useEffect, useState} from 'react';
-import {View, Text, StyleSheet, SafeAreaView, Button} from 'react-native';
+import {View, Text, StyleSheet, Button} from 'react-native';
 import {GameStackParamList} from '../navigators';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useGameChannel} from '../hooks';
@@ -198,13 +198,19 @@ export const LobbyScreen: React.FC<
         <View style={{...styles.playerRow}}>
           <Text style={{...styles.text}}>{'Survivors: '}</Text>
           {game.survivors.map(s => (
-            <PlayerCard name={s.name} isMe={name === s.name} role="survivor" />
+            <PlayerCard
+              key={`${s.id}-${s.name}`}
+              name={s.name}
+              isMe={name === s.name}
+              role="survivor"
+            />
           ))}
         </View>
         <View style={{...styles.playerRow, width: '20%'}}>
           <Text style={{...styles.text}}>{'Killer: '}</Text>
           {game.killer && (
             <PlayerCard
+              key={`${game.killer.id}-${game.killer.name}`}
               name={game.killer?.name}
               isMe={name === game.killer.name}
               role="killer"
