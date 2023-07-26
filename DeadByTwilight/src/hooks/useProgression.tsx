@@ -6,7 +6,7 @@ import {GameElement} from '../utils/types';
 import {useContext, useEffect} from 'react';
 import {useGameChannel} from './useGameChannel';
 
-export const useProgression = (element: GameElement, isHeld: boolean) => {
+export const useProgression = (element: GameElement) => {
   const rate = getProgressionRate(element);
   const elIsSurvivor = isSurvivor(element);
   const action = elIsSurvivor
@@ -22,7 +22,7 @@ export const useProgression = (element: GameElement, isHeld: boolean) => {
         return;
       }
 
-      if (!isHeld || element.progress >= 100) return; // do nothing if not held or if done
+      if (element.progress >= 100) return; // do nothing if not held or if done
 
       await gameChannel?.trigger({
         channelName: gameChannel.channelName,
@@ -39,5 +39,5 @@ export const useProgression = (element: GameElement, isHeld: boolean) => {
     };
     const timer = setInterval(onHold, 1000);
     return () => clearInterval(timer);
-  }, [action, dispatch, elIsSurvivor, element.id, gameChannel, isHeld, rate]);
+  }, [action, dispatch, elIsSurvivor, element.id, gameChannel, rate]);
 };

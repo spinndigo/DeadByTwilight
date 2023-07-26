@@ -25,8 +25,6 @@ export const LobbyScreen: React.FC<
 
   const {navigate} = navigation;
 
-  console.log('game state: ', game);
-
   if (!game) throw new Error('No game state found');
 
   const survivorDisabled = game.survivors.length >= 4 || selectedRole;

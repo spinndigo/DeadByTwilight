@@ -9,7 +9,7 @@ import {Text} from 'react-native';
 import {ColumnWrapper, RowWrapper} from './elements';
 import {SkillCheck} from './SkillCheck';
 import {useGameChannel} from '../hooks';
-import {GameDispatchContext} from '../GameContext';
+import {GameContext, GameDispatchContext} from '../GameContext';
 import {Action} from '../gamestateReducer';
 
 interface Props {
@@ -20,6 +20,7 @@ type CheckResult = 'Miss' | 'Good' | 'Great';
 
 export const SurvivorActionBar: React.FC<Props> = ({element}) => {
   const {gameChannel} = useGameChannel();
+  const game = useContext(GameContext);
   const dispatch = useContext(GameDispatchContext);
   const [lastCheck, setLastCheck] = useState<CheckResult | ''>('');
   const elIsSurvivor = isSurvivor(element);
@@ -28,8 +29,9 @@ export const SurvivorActionBar: React.FC<Props> = ({element}) => {
   const action = elIsSurvivor
     ? Action.UPDATE_SURVIVOR_PROGRESS
     : Action.UPDATE_GEN_PROGRESS;
-
-  useProgression(element, true);
+  const progress = elIsSurvivor
+    ? game?.survivors.find(s => s.id === element.id)?.progress
+    : game?.generators.find(g => g.id === element.id)?.progress;
 
   const applySkillDelta = async (result: CheckResult) => {
     if (result === 'Good') return;
@@ -59,6 +61,11 @@ export const SurvivorActionBar: React.FC<Props> = ({element}) => {
     applySkillDelta('Miss');
   };
 
+  useProgression(element);
+
+  if (!progress) return null;
+  const isComplete = progress >= 100;
+
   return (
     <View
       style={{
@@ -66,57 +73,67 @@ export const SurvivorActionBar: React.FC<Props> = ({element}) => {
         flexWrap: 'nowrap',
         alignContent: 'center',
       }}>
-      <ColumnWrapper
-        style={{
-          width: '50%',
-          justifyContent: 'space-evenly',
-        }}>
-        <RowWrapper style={{justifyContent: 'center', gap: 10}}>
-          <Text
-            style={{
-              fontSize: 30,
-              fontWeight: 'bold',
-
-              textAlign: 'center',
-            }}>
-            {elementLabel}
-          </Text>
-        </RowWrapper>
-        <RowWrapper>
-          <View
-            style={{
-              justifyContent: 'center',
-              flexDirection: 'row',
-            }}>
-            <Progress.Bar progress={element.progress * 0.01} />
-          </View>
-        </RowWrapper>
-
-        <View style={{width: '100%'}}>
-          <Text style={{textAlign: 'center'}}>
-            {`${title.toLowerCase()}ing...`}
-          </Text>
-          {lastCheck && (
-            <Text
-              style={{
-                textAlign: 'center',
-              }}>{`Last Skill Check: ${lastCheck}`}</Text>
-          )}
-        </View>
-      </ColumnWrapper>
-      <ColumnWrapper
-        style={{
-          width: '50%',
-          alignContent: 'center',
-        }}>
+      {isComplete ? (
         <View>
-          <SkillCheck
-            onGood={() => setLastCheck('Good')}
-            onGreat={onGreat}
-            onMiss={onMiss}
-          />
+          <Text style={{color: 'white', fontWeight: 'bold', fontSize: 30}}>
+            {'Complete!'}
+          </Text>
         </View>
-      </ColumnWrapper>
+      ) : (
+        <>
+          <ColumnWrapper
+            style={{
+              width: '50%',
+              justifyContent: 'space-evenly',
+            }}>
+            <RowWrapper style={{justifyContent: 'center', gap: 10}}>
+              <Text
+                style={{
+                  fontSize: 30,
+                  fontWeight: 'bold',
+
+                  textAlign: 'center',
+                }}>
+                {elementLabel}
+              </Text>
+            </RowWrapper>
+            <RowWrapper>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  flexDirection: 'row',
+                }}>
+                <Progress.Bar progress={progress * 0.01} />
+              </View>
+            </RowWrapper>
+
+            <View style={{width: '100%'}}>
+              <Text style={{textAlign: 'center'}}>
+                {`${title.toLowerCase()}ing...`}
+              </Text>
+              {lastCheck && (
+                <Text
+                  style={{
+                    textAlign: 'center',
+                  }}>{`Last Skill Check: ${lastCheck}`}</Text>
+              )}
+            </View>
+          </ColumnWrapper>
+          <ColumnWrapper
+            style={{
+              width: '50%',
+              alignContent: 'center',
+            }}>
+            <View>
+              <SkillCheck
+                onGood={() => setLastCheck('Good')}
+                onGreat={onGreat}
+                onMiss={onMiss}
+              />
+            </View>
+          </ColumnWrapper>
+        </>
+      )}
     </View>
   );
 };
