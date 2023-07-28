@@ -63,7 +63,7 @@ export const SurvivorActionBar: React.FC<Props> = ({element}) => {
 
   useProgression(element);
 
-  if (!progress) return null;
+  if (progress === undefined) return null;
   const isComplete = progress >= 100;
 
   return (

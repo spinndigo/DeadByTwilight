@@ -3,6 +3,7 @@ import {
   applyGenProgressDelta,
   applySurvivorHealthDelta,
   applySurvivorProgressDelta,
+  assertUnreachable,
   isGensComplete,
 } from './utils/helpers';
 import {
@@ -23,6 +24,7 @@ export enum Action {
   UPDATE_SURVIVOR_HEALTH = 'UPDATE_SURVIVOR_HEALTH',
   UPDATE_SURVIVOR_PROGRESS = 'UPDATE_SURVIVOR_PROGRESS',
   UPDATE_GAME_STATUS = 'UPDATE_GAME_STATUS',
+  RESET_GAME = 'RESET_GAME',
 }
 
 export type SetInitialGensPayload = {
@@ -88,6 +90,10 @@ type RemoveKiller = {
   payload: RemovekillerPayload;
 };
 
+type ResetGame = {
+  type: Action.RESET_GAME;
+};
+
 export type GameAction =
   | UpdateGameStatusAction
   | UpdateGenCountAction
@@ -97,9 +103,17 @@ export type GameAction =
   | AddSurvivor
   | RemoveSurvivor
   | AddKiller
-  | RemoveKiller;
+  | RemoveKiller
+  | ResetGame;
 
 type GamestateReducer = (state: GameState, action: GameAction) => GameState;
+
+export const initialState: GameState = {
+  status: 'UNBEGUN',
+  survivors: [],
+  killer: undefined,
+  generators: [],
+};
 
 export const gamestateReducer: GamestateReducer = (state, action) => {
   switch (action.type) {
@@ -178,7 +192,12 @@ export const gamestateReducer: GamestateReducer = (state, action) => {
         status: action.payload,
       };
 
+    case Action.RESET_GAME:
+      return {
+        ...initialState,
+      };
+
     default:
-      throw new Error();
+      assertUnreachable(action);
   }
 };

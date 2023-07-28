@@ -114,6 +114,10 @@ export const useGameChannel = (channelId?: string) => {
                   payload: JSON.parse(event.data),
                 });
                 break;
+              case 'client-reset-game':
+                dispatch({
+                  type: Action.RESET_GAME,
+                });
 
               default:
                 console.warn(

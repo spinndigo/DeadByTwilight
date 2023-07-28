@@ -12,7 +12,7 @@ type HealthColors = {
 
 const healthColors: HealthColors = {
   HEALTHY: 'green',
-  INJURED: 'yellow',
+  INJURED: '#ffcc00',
   DYING: 'red',
   DEAD: 'grey',
 };

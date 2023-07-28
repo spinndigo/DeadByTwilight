@@ -8,8 +8,7 @@ import {
   PostGameScreen,
 } from '../screens';
 import {GameContext, GameDispatchContext} from '../GameContext';
-import {gamestateReducer} from '../gamestateReducer';
-import {GameState} from '../utils/types';
+import {gamestateReducer, initialState} from '../gamestateReducer';
 import {GameChannelProvider} from '../hooks';
 
 export type GameStackParamList = {
@@ -22,14 +21,7 @@ export type GameStackParamList = {
 const Stack = createNativeStackNavigator<GameStackParamList>();
 
 export const GameStack = () => {
-  const initialGame: GameState = {
-    status: 'UNBEGUN',
-    survivors: [],
-    killer: undefined,
-    generators: [],
-  };
-
-  const [game, dispatch] = React.useReducer(gamestateReducer, initialGame);
+  const [game, dispatch] = React.useReducer(gamestateReducer, initialState);
 
   return (
     <GameChannelProvider>

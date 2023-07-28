@@ -208,3 +208,11 @@ export const getRandomInt = (min: number, max: number) => {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
+
+/* OTHER UTILITIES */
+
+type Unreachable = (e: never) => never;
+
+export const assertUnreachable: Unreachable = e => {
+  throw new Error("Didn't expect to get here");
+};
