@@ -156,7 +156,8 @@ export const getInvalidInteractionMessage = (
   const actorIsSurvivor = playerIsSurvivor(actor);
   const subjectIsSurvivor = isSurvivor(subject);
   if (actor.id === subject.id) return 'You cannot heal yourself';
-  if (actorIsSurvivor && actor.health === 'DYING') 'Cannot act while dying';
+  if (actorIsSurvivor && actor.health === 'DYING')
+    return 'Cannot act while dying';
   if (actorIsSurvivor && actor.health === 'DEAD') return 'You are dead';
   if (subjectIsSurvivor && subject.health === 'DEAD') return 'Survivor is dead';
   if (actorIsSurvivor && subjectIsSurvivor && subject.health === 'HEALTHY')
