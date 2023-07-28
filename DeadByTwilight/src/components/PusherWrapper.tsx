@@ -1,15 +1,10 @@
 import {Pusher} from '@pusher/pusher-websocket-react-native';
-import React, {
-  PropsWithChildren,
-  createContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, {PropsWithChildren, useEffect, useState} from 'react';
+import {PusherContext} from '../PusherContext';
 
 const AUTH_ENDPOINT = 'https://dead-by-twilight-express-server.onrender.com';
-
 const pusher = Pusher.getInstance();
-export const PusherContext = createContext<Pusher | null>(null);
+
 export const PusherWrapper: React.FC<PropsWithChildren> = ({children}) => {
   const [pusherInstance, setPusherInstance] = useState<Pusher | null>(null);
   useEffect(() => {

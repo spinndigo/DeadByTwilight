@@ -9,10 +9,11 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import {PusherContext} from '../components';
+
 import {GameDispatchContext} from '../GameContext';
 import {Action} from '../gamestateReducer';
 import {GEN_KICK_DAMAGE} from '../utils/constants';
+import {PusherContext} from '../PusherContext';
 
 type ChannelContextValue = [
   PusherChannel | null,
