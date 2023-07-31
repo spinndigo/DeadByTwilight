@@ -23,6 +23,7 @@ export enum Action {
   UPDATE_GEN_PROGRESS = 'UPDATE_GEN_PROGRESS',
   UPDATE_SURVIVOR_HEALTH = 'UPDATE_SURVIVOR_HEALTH',
   UPDATE_SURVIVOR_PROGRESS = 'UPDATE_SURVIVOR_PROGRESS',
+  UPDATE_SURVIVOR_ONGOING_ACTION = 'UPDATE_SURVIVOR_ONGOING_ACTION',
   UPDATE_GAME_STATUS = 'UPDATE_GAME_STATUS',
   RESET_GAME = 'RESET_GAME',
 }
@@ -44,6 +45,16 @@ type UpdateGenCountAction = {
 export type UpdateProgressPayload = {
   id: string;
   delta: number;
+};
+
+export type UpdateOngoingActionPayload = {
+  subjectId: string;
+  targetId: string | null;
+};
+
+type UpdateOngoingAction = {
+  type: Action.UPDATE_SURVIVOR_ONGOING_ACTION;
+  payload: UpdateOngoingActionPayload;
 };
 
 type UpdateGenProgressAction = {
@@ -100,6 +111,7 @@ export type GameAction =
   | UpdateGenProgressAction
   | UpdateSurvivorHealthAction
   | UpdateSurvivorProgressAction
+  | UpdateOngoingAction
   | AddSurvivor
   | RemoveSurvivor
   | AddKiller
@@ -184,6 +196,23 @@ export const gamestateReducer: GamestateReducer = (state, action) => {
       return {
         ...state,
         survivors: applySurvivorProgressDelta(state.survivors, action.payload),
+      };
+
+    case Action.UPDATE_SURVIVOR_ONGOING_ACTION:
+      const newSurvivors = [...state.survivors];
+      const survivorIdx = newSurvivors.findIndex(
+        s => s.id === action.payload.subjectId,
+      );
+      if (survivorIdx >= 0) {
+        newSurvivors[survivorIdx].ongoingAction = action.payload.targetId
+          ? {
+              id: action.payload.targetId,
+            }
+          : null;
+      }
+      return {
+        ...state,
+        survivors: newSurvivors,
       };
 
     case Action.UPDATE_GAME_STATUS:

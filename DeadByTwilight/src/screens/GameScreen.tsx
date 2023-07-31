@@ -15,6 +15,7 @@ import {
 import {GameElement} from '../utils/types';
 import {getGensRemaining} from '../utils/helpers';
 import {GEN_BACKGROUND_COLOR, SURVIVOR_BACKGROUND_COLOR} from '../styles';
+import {Action} from '../gamestateReducer';
 
 export const GameScreen: React.FC<
   NativeStackScreenProps<GameStackParamList, 'Game'>
@@ -37,6 +38,28 @@ export const GameScreen: React.FC<
       navigate('PostGame');
     }
   }, [game.status, navigate]);
+
+  useEffect(() => {
+    const updateOngoingAction = async () => {
+      await gameChannel?.trigger({
+        channelName: gameChannel.channelName,
+        eventName: `client-survivor-ongoing-updated`,
+        data: JSON.stringify({
+          subjectId: gameChannel?.me?.userId || '',
+          targetId: null,
+        }),
+      });
+      if (dispatch)
+        dispatch({
+          type: Action.UPDATE_SURVIVOR_ONGOING_ACTION,
+          payload: {
+            subjectId: gameChannel?.me?.userId || '',
+            targetId: null,
+          },
+        });
+    };
+    if (!isKiller) updateOngoingAction();
+  }, []);
 
   if (!game || !gameChannel || !dispatch) {
     return <Text> {'Something went wrong'} </Text>;

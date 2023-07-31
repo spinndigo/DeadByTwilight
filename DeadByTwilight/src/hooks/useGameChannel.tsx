@@ -115,6 +115,14 @@ export const useGameChannel = (channelId?: string) => {
                   payload: JSON.parse(event.data),
                 });
                 break;
+
+              case 'client-survivor-ongoing-updated':
+                dispatch({
+                  type: Action.UPDATE_SURVIVOR_ONGOING_ACTION,
+                  payload: JSON.parse(event.data),
+                });
+                break;
+
               case 'client-reset-game':
                 dispatch({
                   type: Action.RESET_GAME,
