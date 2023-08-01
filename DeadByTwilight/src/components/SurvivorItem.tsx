@@ -38,26 +38,30 @@ export const SurvivorItem: React.FC<Props> = ({survivor, onPress}) => {
     : '';
   const ongoingProgress = ongoingElement ? ongoingElement.progress : null;
   return (
-    <View style={{flexDirection: 'row', width: '100%'}}>
-      <View style={{width: '33%'}}>
+    <View
+      style={{
+        flexDirection: 'row',
+        alignContent: 'center',
+        justifyContent: 'center',
+        width: '80%',
+      }}>
+      <View style={{width: '50%'}}>
         <TouchableWithoutFeedback onPress={onPress}>
-          <SurvivorItemWrapper>
-            <View>
-              <UserAvatar
-                size={100}
-                name={survivor.name}
-                bgColor={healthColors[survivor.health]}
-              />
-            </View>
+          <SurvivorItemWrapper style={{flexWrap: 'wrap'}}>
+            <UserAvatar
+              size={80}
+              name={survivor.name}
+              bgColor={healthColors[survivor.health]}
+            />
+            <Text
+              style={{fontWeight: 'bold', textAlign: 'center', width: '100%'}}>
+              {survivor.health.toLocaleUpperCase()}
+            </Text>
           </SurvivorItemWrapper>
         </TouchableWithoutFeedback>
       </View>
-      <View style={{width: '33%'}}>
-        <Text style={{fontWeight: 'bold', textAlign: 'center'}}>
-          {survivor.health.toLocaleUpperCase()}
-        </Text>
-      </View>
-      <View style={{width: '33%'}}>
+
+      <View style={{width: '50%'}}>
         {ongoingElement && (
           <>
             <Text

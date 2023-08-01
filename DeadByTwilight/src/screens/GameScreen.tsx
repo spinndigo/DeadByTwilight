@@ -131,8 +131,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     flexWrap: 'wrap',
     width: '50%',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignContent: 'center',
+    gap: 20,
   },
   row: {
     flexDirection: 'row',
@@ -149,6 +150,9 @@ const styles = StyleSheet.create({
   survivorItems: {
     height: '25%',
     width: '100%',
+    alignContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginTop: 20,
   },
 });
