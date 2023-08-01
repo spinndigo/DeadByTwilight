@@ -33,8 +33,8 @@ export const SurvivorItem: React.FC<Props> = ({survivor, onPress}) => {
     : undefined;
   const ongoingLabel = ongoingElement
     ? isSurvivor(ongoingElement)
-      ? 'S'
-      : 'G'
+      ? 'healing...'
+      : 'repairing...'
     : '';
   const ongoingProgress = ongoingElement ? ongoingElement.progress : null;
   return (
@@ -60,7 +60,10 @@ export const SurvivorItem: React.FC<Props> = ({survivor, onPress}) => {
       <View style={{width: '33%'}}>
         {ongoingElement && (
           <>
-            <Text>{ongoingLabel}</Text>
+            <Text
+              style={{color: 'white', fontWeight: 'bold', textAlign: 'center'}}>
+              {ongoingLabel}
+            </Text>
             <Progress.Bar
               progress={ongoingProgress ? ongoingProgress * 0.01 : 0}
             />
