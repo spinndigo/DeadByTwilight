@@ -42,7 +42,11 @@ export const ActionModal: React.FC<Props & ModalBaseProps> = ({
     return <></>;
   }
 
-  const invalidMessage = getInvalidInteractionMessage(player, gameElement);
+  const invalidMessage = getInvalidInteractionMessage(
+    player,
+    gameElement,
+    game,
+  );
   const elIsSurvivor = isSurvivor(gameElement);
 
   return (
