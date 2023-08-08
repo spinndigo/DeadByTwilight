@@ -29,6 +29,25 @@ export const GameScreen: React.FC<
     GameElement | undefined
   >(undefined);
 
+  const clearOngoingAction = async () => {
+    await gameChannel?.trigger({
+      channelName: gameChannel.channelName,
+      eventName: `client-survivor-ongoing-updated`,
+      data: JSON.stringify({
+        subjectId: gameChannel?.me?.userId || '',
+        targetId: null,
+      }),
+    });
+    if (dispatch)
+      dispatch({
+        type: Action.UPDATE_SURVIVOR_ONGOING_ACTION,
+        payload: {
+          subjectId: gameChannel?.me?.userId || '',
+          targetId: null,
+        },
+      });
+  };
+
   if (!game) {
     throw new Error('No game state found');
   }
@@ -40,25 +59,8 @@ export const GameScreen: React.FC<
   }, [game.status, navigate]);
 
   useEffect(() => {
-    const updateOngoingAction = async () => {
-      await gameChannel?.trigger({
-        channelName: gameChannel.channelName,
-        eventName: `client-survivor-ongoing-updated`,
-        data: JSON.stringify({
-          subjectId: gameChannel?.me?.userId || '',
-          targetId: null,
-        }),
-      });
-      if (dispatch)
-        dispatch({
-          type: Action.UPDATE_SURVIVOR_ONGOING_ACTION,
-          payload: {
-            subjectId: gameChannel?.me?.userId || '',
-            targetId: null,
-          },
-        });
-    };
-    if (!isKiller) updateOngoingAction();
+    const clearOngoing = async () => await clearOngoingAction();
+    if (!isKiller) clearOngoing();
   }, []);
 
   if (!game || !gameChannel || !dispatch) {
@@ -118,6 +120,7 @@ export const GameScreen: React.FC<
       </View>
       <ActionModal
         visible={!!selectedElement}
+        onDismiss={clearOngoingAction}
         onPressX={() => setSelectedElement(undefined)}
         gameElement={selectedElement}
         action={action}

@@ -2,7 +2,7 @@
 import React, {useContext} from 'react';
 import {
   Modal,
-  ModalBaseProps,
+  ModalProps,
   Text,
   TouchableWithoutFeedback,
   View,
@@ -21,7 +21,7 @@ interface Props {
   action: React.ReactNode;
 }
 
-export const ActionModal: React.FC<Props & ModalBaseProps> = ({
+export const ActionModal: React.FC<Props & ModalProps> = ({
   gameElement,
   onPressX,
   action,
