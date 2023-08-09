@@ -2,7 +2,7 @@
 import React, {useContext} from 'react';
 import {
   Modal,
-  ModalBaseProps,
+  ModalProps,
   Text,
   TouchableWithoutFeedback,
   View,
@@ -21,7 +21,7 @@ interface Props {
   action: React.ReactNode;
 }
 
-export const ActionModal: React.FC<Props & ModalBaseProps> = ({
+export const ActionModal: React.FC<Props & ModalProps> = ({
   gameElement,
   onPressX,
   action,
@@ -42,7 +42,11 @@ export const ActionModal: React.FC<Props & ModalBaseProps> = ({
     return <></>;
   }
 
-  const invalidMessage = getInvalidInteractionMessage(player, gameElement);
+  const invalidMessage = getInvalidInteractionMessage(
+    player,
+    gameElement,
+    game,
+  );
   const elIsSurvivor = isSurvivor(gameElement);
 
   return (

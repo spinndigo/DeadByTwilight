@@ -15,6 +15,7 @@ import {
 import {GameElement} from '../utils/types';
 import {getGensRemaining} from '../utils/helpers';
 import {GEN_BACKGROUND_COLOR, SURVIVOR_BACKGROUND_COLOR} from '../styles';
+import {Action} from '../gamestateReducer';
 
 export const GameScreen: React.FC<
   NativeStackScreenProps<GameStackParamList, 'Game'>
@@ -28,6 +29,25 @@ export const GameScreen: React.FC<
     GameElement | undefined
   >(undefined);
 
+  const clearOngoingAction = async () => {
+    await gameChannel?.trigger({
+      channelName: gameChannel.channelName,
+      eventName: `client-survivor-ongoing-updated`,
+      data: JSON.stringify({
+        subjectId: gameChannel?.me?.userId || '',
+        targetId: null,
+      }),
+    });
+    if (dispatch)
+      dispatch({
+        type: Action.UPDATE_SURVIVOR_ONGOING_ACTION,
+        payload: {
+          subjectId: gameChannel?.me?.userId || '',
+          targetId: null,
+        },
+      });
+  };
+
   if (!game) {
     throw new Error('No game state found');
   }
@@ -37,6 +57,11 @@ export const GameScreen: React.FC<
       navigate('PostGame');
     }
   }, [game.status, navigate]);
+
+  useEffect(() => {
+    const clearOngoing = async () => await clearOngoingAction();
+    if (!isKiller) clearOngoing();
+  }, []);
 
   if (!game || !gameChannel || !dispatch) {
     return <Text> {'Something went wrong'} </Text>;
@@ -60,7 +85,7 @@ export const GameScreen: React.FC<
           }}>
           {/* <Text style={{alignSelf: 'center'}}> {'Survivors'} </Text> */}
           {game.survivors.map(s => (
-            <View key={`id-${s.id}`} style={{...styles.items}}>
+            <View key={`id-${s.id}`} style={{...styles.survivorItems}}>
               <SurvivorItem
                 survivor={s}
                 onPress={() => setSelectedElement(s)}
@@ -87,7 +112,7 @@ export const GameScreen: React.FC<
             </View>
           )}
           {game.generators.map(g => (
-            <View key={`id-${g.id}`} style={{...styles.items}}>
+            <View key={`id-${g.id}`} style={{...styles.genItems}}>
               <GenItem gen={g} onPress={() => setSelectedElement(g)} />
             </View>
           ))}
@@ -95,6 +120,7 @@ export const GameScreen: React.FC<
       </View>
       <ActionModal
         visible={!!selectedElement}
+        onDismiss={clearOngoingAction}
         onPressX={() => setSelectedElement(undefined)}
         gameElement={selectedElement}
         action={action}
@@ -108,8 +134,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     flexWrap: 'wrap',
     width: '50%',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignContent: 'center',
+    gap: 20,
   },
   row: {
     flexDirection: 'row',
@@ -118,9 +145,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'center',
   },
-  items: {
+  genItems: {
     height: '25%',
     width: '25%',
     margin: 10,
+  },
+  survivorItems: {
+    height: '25%',
+    width: '100%',
+    alignContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
   },
 });

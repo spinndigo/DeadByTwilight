@@ -2,12 +2,15 @@ export type Health = 'HEALTHY' | 'INJURED' | 'DYING' | 'DEAD';
 export type HealthChange = 'HEALED' | 'HURT';
 export type GameStatus = 'UNBEGUN' | 'ONGOING' | 'FINISHED';
 
+type CurrentSurvivorAction = {id: string};
+
 export interface Survivor {
   id: string;
   name: string;
   health: Health;
   progress: number; // heal measurement
   numHealers: number;
+  ongoingAction: CurrentSurvivorAction | null;
   kind: 'SURVIVOR';
 }
 

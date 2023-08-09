@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import * as Progress from 'react-native-progress';
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {GameElement} from '../utils/types';
 import {useProgression} from '../hooks/useProgression';
@@ -23,6 +23,7 @@ export const SurvivorActionBar: React.FC<Props> = ({element}) => {
   const game = useContext(GameContext);
   const dispatch = useContext(GameDispatchContext);
   const [lastCheck, setLastCheck] = useState<CheckResult | ''>('');
+
   const elIsSurvivor = isSurvivor(element);
   const title = elIsSurvivor ? 'HEAL' : 'REPAIR';
   const elementLabel = elIsSurvivor ? element.name : element.id;
@@ -62,6 +63,28 @@ export const SurvivorActionBar: React.FC<Props> = ({element}) => {
   };
 
   useProgression(element);
+
+  useEffect(() => {
+    const updateOngoingAction = async () => {
+      await gameChannel?.trigger({
+        channelName: gameChannel.channelName,
+        eventName: `client-survivor-ongoing-updated`,
+        data: JSON.stringify({
+          subjectId: gameChannel?.me?.userId || '',
+          targetId: element.id,
+        }),
+      });
+      if (dispatch)
+        dispatch({
+          type: Action.UPDATE_SURVIVOR_ONGOING_ACTION,
+          payload: {
+            subjectId: gameChannel?.me?.userId || '',
+            targetId: element.id,
+          },
+        });
+    };
+    updateOngoingAction();
+  }, []);
 
   if (progress === undefined) return null;
   const isComplete = progress >= 100;

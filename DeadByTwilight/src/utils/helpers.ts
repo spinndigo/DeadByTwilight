@@ -149,13 +149,24 @@ export const isGameReady = (game: GameState) => {
   );
 };
 
+export const isBeingHealed = (
+  subject: Survivor,
+  survivors: Array<Survivor>,
+) => {
+  const {id} = subject;
+  return survivors.some(s => s.ongoingAction?.id === id);
+};
+
 export const getInvalidInteractionMessage = (
   actor: Player,
   subject: GameElement,
+  game: GameState,
 ) => {
   const actorIsSurvivor = playerIsSurvivor(actor);
   const subjectIsSurvivor = isSurvivor(subject);
   if (actor.id === subject.id) return 'You cannot heal yourself';
+  if (actorIsSurvivor && isBeingHealed(actor, game.survivors))
+    return 'You cannot act while being healed';
   if (actorIsSurvivor && actor.health === 'DYING')
     return 'Cannot act while dying';
   if (actorIsSurvivor && actor.health === 'DEAD') return 'You are dead';
