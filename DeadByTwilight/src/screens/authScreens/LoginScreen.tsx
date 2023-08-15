@@ -4,6 +4,7 @@ import {Formik} from 'formik';
 import {auth} from '../../firebase/config';
 import {signInWithEmailAndPassword} from 'firebase/auth';
 import {useState} from 'react';
+import {FormSchema} from './helpers';
 
 export const LoginScreen: React.FC<{}> = () => {
   const [loginError, setLoginError] = useState('');
@@ -23,7 +24,8 @@ export const LoginScreen: React.FC<{}> = () => {
     <View style={{...global.screenWrapper, justifyContent: 'center'}}>
       <Formik
         initialValues={{email: '', password: ''}}
-        onSubmit={values => handleLogin(values.email, values.password)}>
+        onSubmit={values => handleLogin(values.email, values.password)}
+        validationSchema={FormSchema}>
         {({handleChange, handleBlur, handleSubmit, values}) => (
           <View>
             <TextInput
