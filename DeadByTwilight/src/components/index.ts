@@ -1,5 +1,6 @@
 export * from './PlayerCard';
 export * from './PusherWrapper';
+export * from './CurrentUserWrapper';
 export * from './JoinRoomDialog';
 export * from './CreateRoomDialog';
 export * from './SurvivorItem';

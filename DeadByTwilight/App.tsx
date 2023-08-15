@@ -11,7 +11,7 @@ import 'react-native-devsettings';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {DefaultStack} from './src/navigators';
 import {NavigationContainer} from '@react-navigation/native';
-import {PusherWrapper} from './src/components';
+import {CurrentUserWrapper, PusherWrapper} from './src/components';
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -21,15 +21,17 @@ function App(): JSX.Element {
   };
 
   return (
-    <PusherWrapper>
-      <NavigationContainer>
-        <StatusBar
-          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-          backgroundColor={backgroundStyle.backgroundColor}
-        />
-        <DefaultStack />
-      </NavigationContainer>
-    </PusherWrapper>
+    <CurrentUserWrapper>
+      <PusherWrapper>
+        <NavigationContainer>
+          <StatusBar
+            barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+            backgroundColor={backgroundStyle.backgroundColor}
+          />
+          <DefaultStack />
+        </NavigationContainer>
+      </PusherWrapper>
+    </CurrentUserWrapper>
   );
 }
 
