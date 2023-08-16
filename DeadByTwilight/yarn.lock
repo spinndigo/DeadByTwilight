@@ -2956,6 +2956,13 @@
   dependencies:
     merge-options "^3.0.4"
 
+"@react-native-async-storage/async-storage@^1.19.2":
+  version "1.19.2"
+  resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.19.2.tgz#44f0af5927a04436b3f67aae67f028b888ff452c"
+  integrity sha512-7jTQKbT3BdhFHQMnfElsLeeyVqNICv72lPKbeNHnNgLP9eH3+Yk1GFMWWb7A8qRMYianSmwmx1cYofNe9H9hLQ==
+  dependencies:
+    merge-options "^3.0.4"
+
 "@react-native-community/cli-clean@^10.1.1":
   version "10.1.1"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-clean/-/cli-clean-10.1.1.tgz#4c73ce93a63a24d70c0089d4025daac8184ff504"

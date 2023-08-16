@@ -1,10 +1,11 @@
-import {Button, Text, TextInput, View} from 'react-native';
+import {Text, TouchableWithoutFeedback, View} from 'react-native';
 import {global} from '../../styles';
 import {Formik} from 'formik';
 import {auth} from '../../firebase/config';
 import {signInWithEmailAndPassword} from 'firebase/auth';
 import {useState} from 'react';
 import {FormSchema} from './helpers';
+import {StyledTextInput} from './elements';
 
 export const LoginScreen: React.FC<{}> = () => {
   const [loginError, setLoginError] = useState('');
@@ -21,24 +22,58 @@ export const LoginScreen: React.FC<{}> = () => {
   };
 
   return (
-    <View style={{...global.screenWrapper, justifyContent: 'center'}}>
+    <View
+      style={{
+        ...global.screenWrapper,
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+      }}>
       <Formik
         initialValues={{email: '', password: ''}}
         onSubmit={values => handleLogin(values.email, values.password)}
         validationSchema={FormSchema}>
         {({handleChange, handleBlur, handleSubmit, values}) => (
-          <View>
-            <TextInput
+          <View
+            style={{
+              height: '50%',
+              width: '80%',
+              justifyContent: 'center',
+              alignContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#002266',
+            }}>
+            <View style={{marginBottom: 20}}>
+              <Text style={{fontSize: 40, fontWeight: 'bold', color: 'white'}}>
+                {'Login'}
+              </Text>
+            </View>
+            <StyledTextInput
+              placeholder="Email"
               onChangeText={handleChange('email')}
               onBlur={handleBlur('email')}
               value={values.email}
             />
-            <TextInput
+            <StyledTextInput
+              placeholder="Password"
               onChangeText={handleChange('password')}
               onBlur={handleBlur('password')}
               value={values.password}
             />
-            <Button onPress={() => handleSubmit()} title="Submit" />
+            <TouchableWithoutFeedback onPress={() => handleSubmit()}>
+              <View
+                style={{backgroundColor: 'white', padding: 20, width: '50%'}}>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    fontWeight: 'bold',
+                    fontSize: 20,
+                  }}>
+                  {'Submit'}
+                </Text>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
         )}
       </Formik>
