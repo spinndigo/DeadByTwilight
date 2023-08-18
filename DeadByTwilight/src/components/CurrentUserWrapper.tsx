@@ -17,7 +17,7 @@ export const CurrentUserWrapper: React.FC<PropsWithChildren> = ({children}) => {
   }, []);
 
   return (
-    <CurrentUserContext.Provider value={currentUser}>
+    <CurrentUserContext.Provider value={{currentUser, setCurrentUser}}>
       {children}
     </CurrentUserContext.Provider>
   );

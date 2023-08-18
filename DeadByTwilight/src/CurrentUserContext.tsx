@@ -1,4 +1,15 @@
+import React from 'react';
 import {User} from 'firebase/auth';
 import {createContext} from 'react';
 
-export const CurrentUserContext = createContext<User | undefined>(undefined);
+interface UserContextValues {
+  currentUser: User | undefined;
+  setCurrentUser:
+    | React.Dispatch<React.SetStateAction<User | undefined>>
+    | undefined;
+}
+
+export const CurrentUserContext = createContext<UserContextValues>({
+  currentUser: undefined,
+  setCurrentUser: undefined,
+});

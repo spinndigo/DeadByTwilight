@@ -3,27 +3,38 @@ import {global} from '../../styles';
 import {ErrorMessage, Formik} from 'formik';
 import {auth} from '../../firebase/config';
 import {signInWithEmailAndPassword} from 'firebase/auth';
-import {useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {loginSchema} from './helpers';
 import {ErrorLabel, StyledTextInput} from './elements';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../navigators';
+import {CurrentUserContext} from '../../CurrentUserContext';
 
 export const LoginScreen: React.FC<
   NativeStackScreenProps<AuthStackParamList, 'Login'>
 > = ({navigation}) => {
+  const {navigate} = navigation;
+  const {currentUser, setCurrentUser} = useContext(CurrentUserContext);
   const [loginError, setLoginError] = useState('');
   const handleLogin = (email: string, password: string) => {
     signInWithEmailAndPassword(auth, email, password)
       .then(userCredential => {
-        // Signed in
         console.log(`logged in as ${userCredential.user.email}`);
-        // ...
       })
       .catch(error => {
         setLoginError(error);
       });
   };
+
+  useEffect(() => {
+    if (currentUser) navigate('GameStack');
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (auth.currentUser && auth.currentUser.emailVerified) {
+      if (!currentUser && setCurrentUser) setCurrentUser(auth.currentUser);
+    }
+  }, [auth.currentUser, auth.currentUser?.email]);
 
   return (
     <View

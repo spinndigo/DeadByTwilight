@@ -2,23 +2,30 @@ import {Text, TouchableWithoutFeedback, View} from 'react-native';
 import {global} from '../../styles';
 import {ErrorMessage, Formik} from 'formik';
 import {auth} from '../../firebase/config';
-import {createUserWithEmailAndPassword} from 'firebase/auth';
-import {useState} from 'react';
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from 'firebase/auth';
+import {useContext, useEffect, useState} from 'react';
 import {registerSchema} from './helpers';
 import {ErrorLabel, StyledRegisterInput, StyledTextInput} from './elements';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../navigators';
+import {CurrentUserContext} from '../../CurrentUserContext';
 
 export const RegisterScreen: React.FC<
   NativeStackScreenProps<AuthStackParamList, 'Register'>
 > = ({navigation}) => {
+  const {navigate} = navigation;
+  const {currentUser, setCurrentUser} = useContext(CurrentUserContext);
   const [RegisterError, setRegisterError] = useState('');
   const handleRegister = (email: string, password: string) => {
     createUserWithEmailAndPassword(auth, email, password)
-      .then(userCredential => {
+      .then(async userCredential => {
         // Signed in
         const user = userCredential.user;
-        // ...
+        await sendEmailVerification(user);
+        console.log('verification email sent');
       })
       .catch(error => {
         const errorMessage = error.message;
@@ -26,6 +33,16 @@ export const RegisterScreen: React.FC<
         console.log(errorMessage);
       });
   };
+
+  useEffect(() => {
+    if (currentUser) navigate('GameStack');
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (auth.currentUser && auth.currentUser.emailVerified) {
+      if (!currentUser && setCurrentUser) setCurrentUser(auth.currentUser);
+    }
+  }, [auth.currentUser, auth.currentUser?.email]);
 
   return (
     <View
@@ -117,8 +134,7 @@ export const RegisterScreen: React.FC<
       <View style={{marginTop: 20}}>
         <Text style={{color: 'white'}}>
           {'Already have an account? '}
-          <TouchableWithoutFeedback
-            onPress={() => navigation.navigate('Login')}>
+          <TouchableWithoutFeedback onPress={() => navigate('Login')}>
             <Text style={{color: 'orange'}}>{'Click Here'}</Text>
           </TouchableWithoutFeedback>
         </Text>
