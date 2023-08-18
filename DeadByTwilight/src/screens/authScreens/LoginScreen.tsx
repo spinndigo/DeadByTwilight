@@ -1,13 +1,17 @@
 import {Text, TouchableWithoutFeedback, View} from 'react-native';
 import {global} from '../../styles';
-import {Formik} from 'formik';
+import {ErrorMessage, Formik} from 'formik';
 import {auth} from '../../firebase/config';
 import {signInWithEmailAndPassword} from 'firebase/auth';
 import {useState} from 'react';
-import {FormSchema} from './helpers';
-import {StyledTextInput} from './elements';
+import {loginSchema} from './helpers';
+import {ErrorLabel, StyledTextInput} from './elements';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {AuthStackParamList} from '../../navigators';
 
-export const LoginScreen: React.FC<{}> = () => {
+export const LoginScreen: React.FC<
+  NativeStackScreenProps<AuthStackParamList, 'Login'>
+> = ({navigation}) => {
   const [loginError, setLoginError] = useState('');
   const handleLogin = (email: string, password: string) => {
     signInWithEmailAndPassword(auth, email, password)
@@ -33,8 +37,15 @@ export const LoginScreen: React.FC<{}> = () => {
       <Formik
         initialValues={{email: '', password: ''}}
         onSubmit={values => handleLogin(values.email, values.password)}
-        validationSchema={FormSchema}>
-        {({handleChange, handleBlur, handleSubmit, values}) => (
+        validationSchema={loginSchema}>
+        {({
+          isSubmitting,
+          isValid,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          values,
+        }) => (
           <View
             style={{
               height: '50%',
@@ -55,17 +66,26 @@ export const LoginScreen: React.FC<{}> = () => {
               onBlur={handleBlur('email')}
               value={values.email}
             />
+            <ErrorLabel>
+              <ErrorMessage name="email" />
+            </ErrorLabel>
             <StyledTextInput
               placeholder="Password"
               onChangeText={handleChange('password')}
               onBlur={handleBlur('password')}
               value={values.password}
             />
-            <TouchableWithoutFeedback onPress={() => handleSubmit()}>
+            <ErrorLabel>
+              <ErrorMessage name="password" />
+            </ErrorLabel>
+            <TouchableWithoutFeedback
+              disabled={isSubmitting || !isValid}
+              onPress={() => handleSubmit()}>
               <View
                 style={{backgroundColor: 'white', padding: 20, width: '50%'}}>
                 <Text
                   style={{
+                    color: isSubmitting || !isValid ? 'grey' : 'black',
                     textAlign: 'center',
                     fontWeight: 'bold',
                     fontSize: 20,
@@ -77,6 +97,15 @@ export const LoginScreen: React.FC<{}> = () => {
           </View>
         )}
       </Formik>
+      <View style={{marginTop: 20}}>
+        <Text style={{color: 'white'}}>
+          {"Don't have an account? "}
+          <TouchableWithoutFeedback
+            onPress={() => navigation.navigate('Register')}>
+            <Text style={{color: 'orange'}}>{'Click Here'}</Text>
+          </TouchableWithoutFeedback>
+        </Text>
+      </View>
       {loginError && (
         <Text style={{color: 'red'}}> {`Error: ${loginError}`} </Text>
       )}

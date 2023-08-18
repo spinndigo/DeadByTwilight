@@ -1,9 +1,20 @@
-import {object, string, number, date, InferType} from 'yup';
+import {object, string, ref, number, date, InferType} from 'yup';
 
-export const FormSchema = object({
+export const loginSchema = object({
   email: string().email('Invalid email').required('Must Enter Email'),
   password: string()
-    .min(6, 'Password Too Short')
+    .min(6, 'password too short')
     .max(20, 'password too long')
-    .required('Must Enter Password'),
+    .required('must enter password'),
+});
+
+export const registerSchema = object({
+  email: string().email('Invalid email').required('Must Enter Email'),
+  password: string()
+    .min(6, 'password too short')
+    .max(20, 'password too long')
+    .required('must enter password'),
+  confirm: string()
+    .oneOf([ref('password')], "passwords don't match")
+    .required('confirm password is required'),
 });
