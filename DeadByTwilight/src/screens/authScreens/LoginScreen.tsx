@@ -72,6 +72,10 @@ export const LoginScreen: React.FC<
               </Text>
             </View>
             <StyledTextInput
+              textContentType="emailAddress"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
               placeholder="Email"
               onChangeText={handleChange('email')}
               onBlur={handleBlur('email')}
@@ -82,6 +86,8 @@ export const LoginScreen: React.FC<
             </ErrorLabel>
             <StyledTextInput
               placeholder="Password"
+              textContentType="password"
+              secureTextEntry={true}
               onChangeText={handleChange('password')}
               onBlur={handleBlur('password')}
               value={values.password}

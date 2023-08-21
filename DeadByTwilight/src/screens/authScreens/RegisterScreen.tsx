@@ -88,6 +88,8 @@ export const RegisterScreen: React.FC<
               </Text>
             </View>
             <StyledRegisterInput
+              textContentType="emailAddress"
+              keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
               placeholder="Email"
@@ -112,6 +114,8 @@ export const RegisterScreen: React.FC<
             </ErrorLabel>
 
             <StyledRegisterInput
+              textContentType="password"
+              secureTextEntry={true}
               autoCapitalize="none"
               autoCorrect={false}
               placeholder="Password"
@@ -123,6 +127,8 @@ export const RegisterScreen: React.FC<
               <ErrorMessage name="password" />
             </ErrorLabel>
             <StyledRegisterInput
+              textContentType="password"
+              secureTextEntry={true}
               autoCapitalize="none"
               autoCorrect={false}
               placeholder="Confirm Password"
