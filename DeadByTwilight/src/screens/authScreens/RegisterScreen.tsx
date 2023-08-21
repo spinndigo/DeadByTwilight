@@ -5,6 +5,7 @@ import {auth} from '../../firebase/config';
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  updateProfile,
 } from 'firebase/auth';
 import {useContext, useEffect, useState} from 'react';
 import {registerSchema} from './helpers';
@@ -19,13 +20,18 @@ export const RegisterScreen: React.FC<
   const {navigate} = navigation;
   const {currentUser, setCurrentUser} = useContext(CurrentUserContext);
   const [RegisterError, setRegisterError] = useState('');
-  const handleRegister = (email: string, password: string) => {
+  const handleRegister = (
+    email: string,
+    password: string,
+    displayName: string,
+  ) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(async userCredential => {
         // Signed in
         const user = userCredential.user;
+
         await sendEmailVerification(user);
-        console.log('verification email sent');
+        await updateProfile(user, {displayName}).catch(err => console.log(err));
       })
       .catch(error => {
         const errorMessage = error.message;
@@ -54,8 +60,10 @@ export const RegisterScreen: React.FC<
         height: '100%',
       }}>
       <Formik
-        initialValues={{email: '', password: '', confirm: ''}}
-        onSubmit={values => handleRegister(values.email, values.password)}
+        initialValues={{email: '', password: '', confirm: '', displayName: ''}}
+        onSubmit={values =>
+          handleRegister(values.email, values.password, values.displayName)
+        }
         validationSchema={registerSchema}>
         {({
           isSubmitting,
@@ -90,6 +98,19 @@ export const RegisterScreen: React.FC<
             <ErrorLabel>
               <ErrorMessage name="email" />
             </ErrorLabel>
+
+            <StyledRegisterInput
+              autoCapitalize="none"
+              autoCorrect={false}
+              placeholder="DisplayName"
+              onChangeText={handleChange('displayName')}
+              onBlur={handleBlur('displayName')}
+              value={values.displayName}
+            />
+            <ErrorLabel>
+              <ErrorMessage name="displayName" />
+            </ErrorLabel>
+
             <StyledRegisterInput
               autoCapitalize="none"
               autoCorrect={false}

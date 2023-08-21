@@ -23,8 +23,8 @@ export const CreateOrJoinScreen: React.FC<
   const [id, setId] = useState<string | undefined>(
     shortid.generate().replace('I', 'i').replace('l', 'L'),
   );
-  const [name, setName] = useState('');
   const {currentUser} = useCurrentUser();
+  const name = currentUser?.displayName || 'Anon';
   useGameChannel(id);
   const [showJoinAlert, setShowJoinAlert] = useState(false);
   const [showCreateRoom, setShowCreateRoom] = useState(false);
@@ -70,12 +70,6 @@ export const CreateOrJoinScreen: React.FC<
             alignItems: 'center',
           }}>
           <View style={{...styles.formWrapper}}>
-            <TextInput
-              onChangeText={typed => setName(typed)}
-              placeholder="Enter your name"
-              style={styles.input}
-            />
-
             <View style={{...styles.button}}>
               <Button
                 disabled={!name}
@@ -125,7 +119,7 @@ const styles = StyleSheet.create({
   formWrapper: {
     width: '100%',
     backgroundColor: '#002266',
-    padding: 20,
+    padding: 40,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
