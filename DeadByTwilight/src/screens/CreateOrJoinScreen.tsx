@@ -29,7 +29,7 @@ export const CreateOrJoinScreen: React.FC<
   const [showJoinAlert, setShowJoinAlert] = useState(false);
   const [showCreateRoom, setShowCreateRoom] = useState(false);
 
-  // if(!currentUser) navigation.navigate('')
+  if (!currentUser) navigation.navigate('AuthStack');
 
   const onPressCreate = () => {
     setId(shortid.generate());
