@@ -489,6 +489,7 @@
 				DEVELOPMENT_TEAM = H8827XNBB9;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = DeadByTwilight/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.simulation-games";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -516,6 +517,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = H8827XNBB9;
 				INFOPLIST_FILE = DeadByTwilight/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.simulation-games";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
