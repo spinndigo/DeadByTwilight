@@ -75,7 +75,7 @@ export const RegisterScreen: React.FC<
         }) => (
           <View
             style={{
-              height: '60%',
+              height: '70%',
               width: '80%',
               justifyContent: 'center',
               alignContent: 'center',
@@ -104,7 +104,7 @@ export const RegisterScreen: React.FC<
             <StyledRegisterInput
               autoCapitalize="none"
               autoCorrect={false}
-              placeholder="DisplayName"
+              placeholder="Display Name"
               onChangeText={handleChange('displayName')}
               onBlur={handleBlur('displayName')}
               value={values.displayName}
