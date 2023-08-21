@@ -1,13 +1,21 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
-import {View, StyleSheet, Button, TextInput} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Button,
+  TextInput,
+  Text,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {GameStackParamList} from '../navigators';
 import {CreateRoomDialog, JoinRoomDialog} from '../components';
 import shortid from 'shortid';
-import {useGameChannel} from '../hooks';
+import {useCurrentUser, useGameChannel} from '../hooks';
 import {global} from '../styles/global';
 import {ColumnWrapper} from '../components/elements';
+import {auth} from '../firebase/config';
 
 export const CreateOrJoinScreen: React.FC<
   NativeStackScreenProps<GameStackParamList, 'CreateOrJoin'>
@@ -16,9 +24,12 @@ export const CreateOrJoinScreen: React.FC<
     shortid.generate().replace('I', 'i').replace('l', 'L'),
   );
   const [name, setName] = useState('');
+  const {currentUser} = useCurrentUser();
   useGameChannel(id);
   const [showJoinAlert, setShowJoinAlert] = useState(false);
   const [showCreateRoom, setShowCreateRoom] = useState(false);
+
+  // if(!currentUser) navigation.navigate('')
 
   const onPressCreate = () => {
     setId(shortid.generate());
@@ -43,6 +54,14 @@ export const CreateOrJoinScreen: React.FC<
   return (
     <>
       <View style={{...styles.wrapper, ...global.screenWrapper}}>
+        <View style={{top: 100}}>
+          <Text style={{...styles.text, textAlign: 'center', color: 'white'}}>
+            {'Welcome back, '}
+          </Text>
+          <Text style={{...styles.text, textAlign: 'center', color: 'white'}}>
+            {currentUser?.displayName || 'Entity Fodder'}!
+          </Text>
+        </View>
         <ColumnWrapper
           style={{
             height: '80%',
@@ -75,6 +94,11 @@ export const CreateOrJoinScreen: React.FC<
             </View>
           </View>
         </ColumnWrapper>
+        <View>
+          <TouchableWithoutFeedback onPress={() => auth.signOut()}>
+            <Text style={{color: 'orange'}}>{'Sign Out'}</Text>
+          </TouchableWithoutFeedback>
+        </View>
       </View>
       <CreateRoomDialog
         id={id || ''}
