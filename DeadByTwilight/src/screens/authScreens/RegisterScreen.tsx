@@ -20,7 +20,7 @@ export const RegisterScreen: React.FC<
   const {navigate} = navigation;
   const {currentUser, setCurrentUser} = useContext(CurrentUserContext);
   const [RegisterError, setRegisterError] = useState('');
-  const handleRegister = (
+  const handleRegister = async (
     email: string,
     password: string,
     displayName: string,
