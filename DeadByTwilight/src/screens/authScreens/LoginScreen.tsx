@@ -14,7 +14,7 @@ export const LoginScreen: React.FC<
   NativeStackScreenProps<AuthStackParamList, 'Login'>
 > = ({navigation}) => {
   const {navigate} = navigation;
-  const {currentUser, setCurrentUser} = useContext(CurrentUserContext);
+  const {currentUser} = useContext(CurrentUserContext);
   const [loginError, setLoginError] = useState('');
   const handleLogin = async (email: string, password: string) => {
     signInWithEmailAndPassword(auth, email, password)
@@ -29,12 +29,6 @@ export const LoginScreen: React.FC<
   useEffect(() => {
     if (currentUser) navigate('GameStack');
   }, [currentUser]);
-
-  useEffect(() => {
-    if (auth.currentUser && auth.currentUser.emailVerified) {
-      if (!currentUser && setCurrentUser) setCurrentUser(auth.currentUser);
-    }
-  }, [auth.currentUser, auth.currentUser?.email]);
 
   return (
     <View

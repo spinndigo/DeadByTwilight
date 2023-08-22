@@ -5,19 +5,19 @@ import {User} from 'firebase/auth';
 
 export const CurrentUserWrapper: React.FC<PropsWithChildren> = ({children}) => {
   const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
+  console.log('rendering user wrapper');
 
-  useEffect(() => {
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        setCurrentUser(user);
-      } else {
-        setCurrentUser(undefined);
-      }
-    });
-  }, []);
+  auth.onAuthStateChanged(user => {
+    console.log('running user change observer');
+    if (user) {
+      setCurrentUser(user);
+    } else {
+      setCurrentUser(undefined);
+    }
+  });
 
   return (
-    <CurrentUserContext.Provider value={{currentUser, setCurrentUser}}>
+    <CurrentUserContext.Provider value={{currentUser}}>
       {children}
     </CurrentUserContext.Provider>
   );

@@ -18,7 +18,7 @@ export const RegisterScreen: React.FC<
   NativeStackScreenProps<AuthStackParamList, 'Register'>
 > = ({navigation}) => {
   const {navigate} = navigation;
-  const {currentUser, setCurrentUser} = useContext(CurrentUserContext);
+  const {currentUser} = useContext(CurrentUserContext);
   const [RegisterError, setRegisterError] = useState('');
   const handleRegister = async (
     email: string,
@@ -27,9 +27,7 @@ export const RegisterScreen: React.FC<
   ) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(async userCredential => {
-        // Signed in
         const user = userCredential.user;
-
         await sendEmailVerification(user);
         await updateProfile(user, {displayName}).catch(err => console.log(err));
       })
@@ -43,12 +41,6 @@ export const RegisterScreen: React.FC<
   useEffect(() => {
     if (currentUser) navigate('GameStack');
   }, [currentUser]);
-
-  useEffect(() => {
-    if (auth.currentUser && auth.currentUser.emailVerified) {
-      if (!currentUser && setCurrentUser) setCurrentUser(auth.currentUser);
-    }
-  }, [auth.currentUser, auth.currentUser?.email]);
 
   return (
     <View
