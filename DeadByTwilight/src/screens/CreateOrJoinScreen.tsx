@@ -4,7 +4,6 @@ import {
   View,
   StyleSheet,
   Button,
-  TextInput,
   Text,
   TouchableWithoutFeedback,
 } from 'react-native';
@@ -59,7 +58,7 @@ export const CreateOrJoinScreen: React.FC<
             {'Welcome, '}
           </Text>
           <Text style={{...styles.text, textAlign: 'center', color: 'white'}}>
-            {currentUser?.displayName || 'Entity Fodder'}!
+            {name}!
           </Text>
         </View>
         <ColumnWrapper
