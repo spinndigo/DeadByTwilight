@@ -2,9 +2,9 @@ import {User} from 'firebase/auth';
 import {createContext} from 'react';
 
 interface UserContextValue {
-  currentUser: User | undefined;
+  currentUser: User | null;
 }
 
 export const CurrentUserContext = createContext<UserContextValue>({
-  currentUser: undefined,
+  currentUser: null,
 });

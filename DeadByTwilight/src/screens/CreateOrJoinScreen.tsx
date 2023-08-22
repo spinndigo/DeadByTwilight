@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -24,11 +24,15 @@ export const CreateOrJoinScreen: React.FC<
   );
   const {currentUser} = useCurrentUser();
   const name = currentUser?.displayName || 'Anon';
+
   useGameChannel(id);
+
   const [showJoinAlert, setShowJoinAlert] = useState(false);
   const [showCreateRoom, setShowCreateRoom] = useState(false);
 
-  if (!currentUser) navigation.navigate('AuthStack');
+  useEffect(() => {
+    if (!currentUser) navigation.navigate('AuthStack');
+  }, [currentUser]);
 
   const onPressCreate = () => {
     setId(shortid.generate());
@@ -97,7 +101,7 @@ export const CreateOrJoinScreen: React.FC<
           </View>
         </ColumnWrapper>
         <View>
-          <TouchableWithoutFeedback onPress={() => auth.signOut()}>
+          <TouchableWithoutFeedback onPress={async () => await auth.signOut()}>
             <Text style={{color: 'orange'}}>{'Sign Out'}</Text>
           </TouchableWithoutFeedback>
         </View>
