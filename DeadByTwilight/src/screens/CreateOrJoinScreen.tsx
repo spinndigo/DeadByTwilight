@@ -56,7 +56,7 @@ export const CreateOrJoinScreen: React.FC<
       <View style={{...styles.wrapper, ...global.screenWrapper}}>
         <View style={{top: 100}}>
           <Text style={{...styles.text, textAlign: 'center', color: 'white'}}>
-            {'Welcome back, '}
+            {'Welcome, '}
           </Text>
           <Text style={{...styles.text, textAlign: 'center', color: 'white'}}>
             {currentUser?.displayName || 'Entity Fodder'}!
@@ -70,6 +70,15 @@ export const CreateOrJoinScreen: React.FC<
             alignItems: 'center',
           }}>
           <View style={{...styles.formWrapper}}>
+            <Text
+              style={{
+                ...styles.text,
+                textAlign: 'center',
+                color: 'white',
+                marginBottom: 20,
+              }}>
+              {'Menu'}
+            </Text>
             <View style={{...styles.button}}>
               <Button
                 disabled={!name}
