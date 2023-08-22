@@ -16,7 +16,7 @@ export const LoginScreen: React.FC<
   const {navigate} = navigation;
   const {currentUser, setCurrentUser} = useContext(CurrentUserContext);
   const [loginError, setLoginError] = useState('');
-  const handleLogin = (email: string, password: string) => {
+  const handleLogin = async (email: string, password: string) => {
     signInWithEmailAndPassword(auth, email, password)
       .then(userCredential => {
         console.log(`logged in as ${userCredential.user.email}`);
