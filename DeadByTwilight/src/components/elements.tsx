@@ -1,4 +1,4 @@
-import {View} from 'react-native';
+import {Text, TextInput, View} from 'react-native';
 import {styled} from 'styled-components';
 
 export const GameItemWrapper = styled(View)`
@@ -37,4 +37,23 @@ export const Circle = styled(View)<CircleProps>`
   width: ${(props: CircleProps) => `${props.size}px`};
   border-radius: ${(props: CircleProps) => `${props.size * 0.5}px`};
   border: 3px;
+`;
+
+export const StyledTextInput = styled(TextInput)`
+  padding: 10px;
+  background-color: white;
+  margin: 10px;
+  color: black;
+  height: 50px;
+  width: 80%;
+  border-width: 2px;
+  margin-bottom: 40px;
+`;
+
+export const StyledRegisterInput = styled(StyledTextInput)`
+  margin-bottom: 20px;
+`;
+
+export const ErrorLabel = styled(Text)`
+  color: red;
 `;

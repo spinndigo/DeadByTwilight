@@ -10,3 +10,5 @@ export * from './ActionModal';
 export * from './SurvivorActionBar';
 export * from './KillerActionButton';
 export * from './SkillCheck';
+export * from './ForgotPasswordModal';
+export * from './elements';

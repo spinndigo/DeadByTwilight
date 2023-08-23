@@ -14,7 +14,7 @@ import {
 } from 'firebase/auth';
 import {useContext, useEffect, useState} from 'react';
 import {registerSchema} from './helpers';
-import {ErrorLabel, StyledRegisterInput, StyledTextInput} from './elements';
+import {ErrorLabel, StyledRegisterInput} from '../../components';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../navigators';
 import {CurrentUserContext} from '../../CurrentUserContext';
