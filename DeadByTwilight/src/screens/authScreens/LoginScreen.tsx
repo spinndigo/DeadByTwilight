@@ -1,4 +1,9 @@
-import {Text, TouchableWithoutFeedback, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import {global} from '../../styles';
 import {ErrorMessage, Formik} from 'formik';
 import {auth} from '../../firebase/config';
@@ -60,51 +65,62 @@ export const LoginScreen: React.FC<
               alignItems: 'center',
               backgroundColor: '#002266',
             }}>
-            <View style={{marginBottom: 20}}>
-              <Text style={{fontSize: 40, fontWeight: 'bold', color: 'white'}}>
-                {'Login'}
-              </Text>
-            </View>
-            <StyledTextInput
-              textContentType="emailAddress"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-              placeholder="Email"
-              onChangeText={handleChange('email')}
-              onBlur={handleBlur('email')}
-              value={values.email}
-            />
-            <ErrorLabel>
-              <ErrorMessage name="email" />
-            </ErrorLabel>
-            <StyledTextInput
-              placeholder="Password"
-              textContentType="password"
-              secureTextEntry={true}
-              onChangeText={handleChange('password')}
-              onBlur={handleBlur('password')}
-              value={values.password}
-            />
-            <ErrorLabel>
-              <ErrorMessage name="password" />
-            </ErrorLabel>
-            <TouchableWithoutFeedback
-              disabled={isSubmitting || !isValid}
-              onPress={() => handleSubmit()}>
-              <View
-                style={{backgroundColor: 'white', padding: 20, width: '50%'}}>
-                <Text
-                  style={{
-                    color: isSubmitting || !isValid ? 'grey' : 'black',
-                    textAlign: 'center',
-                    fontWeight: 'bold',
-                    fontSize: 20,
-                  }}>
-                  {'Submit'}
-                </Text>
-              </View>
-            </TouchableWithoutFeedback>
+            {isSubmitting ? (
+              <ActivityIndicator size="large" color="white" />
+            ) : (
+              <>
+                <View style={{marginBottom: 20}}>
+                  <Text
+                    style={{fontSize: 40, fontWeight: 'bold', color: 'white'}}>
+                    {'Login'}
+                  </Text>
+                </View>
+                <StyledTextInput
+                  textContentType="emailAddress"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  placeholder="Email"
+                  onChangeText={handleChange('email')}
+                  onBlur={handleBlur('email')}
+                  value={values.email}
+                />
+                <ErrorLabel>
+                  <ErrorMessage name="email" />
+                </ErrorLabel>
+                <StyledTextInput
+                  placeholder="Password"
+                  textContentType="password"
+                  secureTextEntry={true}
+                  onChangeText={handleChange('password')}
+                  onBlur={handleBlur('password')}
+                  value={values.password}
+                />
+                <ErrorLabel>
+                  <ErrorMessage name="password" />
+                </ErrorLabel>
+                <TouchableWithoutFeedback
+                  disabled={isSubmitting || !isValid}
+                  onPress={() => handleSubmit()}>
+                  <View
+                    style={{
+                      backgroundColor: 'white',
+                      padding: 20,
+                      width: '50%',
+                    }}>
+                    <Text
+                      style={{
+                        color: isSubmitting || !isValid ? 'grey' : 'black',
+                        textAlign: 'center',
+                        fontWeight: 'bold',
+                        fontSize: 20,
+                      }}>
+                      {'Submit'}
+                    </Text>
+                  </View>
+                </TouchableWithoutFeedback>
+              </>
+            )}
           </View>
         )}
       </Formik>

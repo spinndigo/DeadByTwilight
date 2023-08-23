@@ -1,4 +1,9 @@
-import {Text, TouchableWithoutFeedback, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import {global} from '../../styles';
 import {ErrorMessage, Formik} from 'formik';
 import {auth} from '../../firebase/config';
@@ -74,79 +79,90 @@ export const RegisterScreen: React.FC<
               alignItems: 'center',
               backgroundColor: '#002266',
             }}>
-            <View style={{marginBottom: 20}}>
-              <Text style={{fontSize: 40, fontWeight: 'bold', color: 'white'}}>
-                {'Register'}
-              </Text>
-            </View>
-            <StyledRegisterInput
-              textContentType="emailAddress"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-              placeholder="Email"
-              onChangeText={handleChange('email')}
-              onBlur={handleBlur('email')}
-              value={values.email}
-            />
-            <ErrorLabel>
-              <ErrorMessage name="email" />
-            </ErrorLabel>
+            {isSubmitting ? (
+              <ActivityIndicator size="large" color="white" />
+            ) : (
+              <>
+                <View style={{marginBottom: 20}}>
+                  <Text
+                    style={{fontSize: 40, fontWeight: 'bold', color: 'white'}}>
+                    {'Register'}
+                  </Text>
+                </View>
+                <StyledRegisterInput
+                  textContentType="emailAddress"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  placeholder="Email"
+                  onChangeText={handleChange('email')}
+                  onBlur={handleBlur('email')}
+                  value={values.email}
+                />
+                <ErrorLabel>
+                  <ErrorMessage name="email" />
+                </ErrorLabel>
 
-            <StyledRegisterInput
-              autoCapitalize="none"
-              autoCorrect={false}
-              placeholder="Display Name"
-              onChangeText={handleChange('displayName')}
-              onBlur={handleBlur('displayName')}
-              value={values.displayName}
-            />
-            <ErrorLabel>
-              <ErrorMessage name="displayName" />
-            </ErrorLabel>
+                <StyledRegisterInput
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  placeholder="Display Name"
+                  onChangeText={handleChange('displayName')}
+                  onBlur={handleBlur('displayName')}
+                  value={values.displayName}
+                />
+                <ErrorLabel>
+                  <ErrorMessage name="displayName" />
+                </ErrorLabel>
 
-            <StyledRegisterInput
-              textContentType="password"
-              secureTextEntry={true}
-              autoCapitalize="none"
-              autoCorrect={false}
-              placeholder="Password"
-              onChangeText={handleChange('password')}
-              onBlur={handleBlur('password')}
-              value={values.password}
-            />
-            <ErrorLabel>
-              <ErrorMessage name="password" />
-            </ErrorLabel>
-            <StyledRegisterInput
-              textContentType="password"
-              secureTextEntry={true}
-              autoCapitalize="none"
-              autoCorrect={false}
-              placeholder="Confirm Password"
-              onChangeText={handleChange('confirm')}
-              onBlur={handleBlur('confirm')}
-              value={values.confirm}
-            />
-            <ErrorLabel>
-              <ErrorMessage name="confirm" />
-            </ErrorLabel>
-            <TouchableWithoutFeedback
-              disabled={isSubmitting || !isValid}
-              onPress={() => handleSubmit()}>
-              <View
-                style={{backgroundColor: 'white', padding: 20, width: '50%'}}>
-                <Text
-                  style={{
-                    color: isSubmitting || !isValid ? 'grey' : 'black',
-                    textAlign: 'center',
-                    fontWeight: 'bold',
-                    fontSize: 20,
-                  }}>
-                  {'Submit'}
-                </Text>
-              </View>
-            </TouchableWithoutFeedback>
+                <StyledRegisterInput
+                  textContentType="password"
+                  secureTextEntry={true}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  placeholder="Password"
+                  onChangeText={handleChange('password')}
+                  onBlur={handleBlur('password')}
+                  value={values.password}
+                />
+                <ErrorLabel>
+                  <ErrorMessage name="password" />
+                </ErrorLabel>
+                <StyledRegisterInput
+                  textContentType="password"
+                  secureTextEntry={true}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  placeholder="Confirm Password"
+                  onChangeText={handleChange('confirm')}
+                  onBlur={handleBlur('confirm')}
+                  value={values.confirm}
+                />
+                <ErrorLabel>
+                  <ErrorMessage name="confirm" />
+                </ErrorLabel>
+                <TouchableWithoutFeedback
+                  disabled={isSubmitting || !isValid}
+                  onPress={() => handleSubmit()}>
+                  <View
+                    style={{
+                      backgroundColor: 'white',
+                      padding: 20,
+                      width: '50%',
+                    }}>
+                    <Text
+                      style={{
+                        color: isSubmitting || !isValid ? 'grey' : 'black',
+                        textAlign: 'center',
+                        fontWeight: 'bold',
+                        fontSize: 20,
+                      }}>
+                      {'Submit'}
+                    </Text>
+                  </View>
+                </TouchableWithoutFeedback>
+              </>
+            )}
           </View>
         )}
       </Formik>
