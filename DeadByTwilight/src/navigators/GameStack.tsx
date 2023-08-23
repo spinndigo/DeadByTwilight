@@ -15,7 +15,7 @@ import {AuthStack} from './AuthStack';
 export type GameStackParamList = {
   AuthStack: undefined;
   CreateOrJoin: undefined;
-  Lobby: {didCreateRoom: boolean; name: string};
+  Lobby: {didCreateRoom: boolean};
   Game: undefined;
   PostGame: undefined;
 };
