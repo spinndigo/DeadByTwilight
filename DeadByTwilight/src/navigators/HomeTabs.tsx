@@ -5,7 +5,7 @@ import {GameStackParamList} from './GameStack';
 
 export type TabParamList = {
   CreateOrJoin: NavigatorScreenParams<GameStackParamList>;
-  Account: {userId: string};
+  Account: undefined;
 };
 
 const Tab = createBottomTabNavigator<TabParamList>();

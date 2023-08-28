@@ -23,6 +23,7 @@ export const CreateOrJoinScreen: React.FC<NestedTabProps> = ({navigation}) => {
     shortid.generate().replace('I', 'i').replace('l', 'L'),
   );
   const {currentUser} = useCurrentUser();
+  const {navigate, jumpTo} = navigation;
   const name = currentUser?.displayName || 'Anon';
 
   useGameChannel(id);
@@ -31,7 +32,7 @@ export const CreateOrJoinScreen: React.FC<NestedTabProps> = ({navigation}) => {
   const [showCreateRoom, setShowCreateRoom] = useState(false);
 
   useEffect(() => {
-    if (!currentUser) navigation.navigate('AuthStack');
+    if (!currentUser) navigate('AuthStack');
   }, [currentUser]);
 
   const onPressCreate = () => {
@@ -45,19 +46,19 @@ export const CreateOrJoinScreen: React.FC<NestedTabProps> = ({navigation}) => {
 
   const onPressCreateSubmit = () => {
     setShowCreateRoom(false);
-    navigation.navigate('Lobby', {didCreateRoom: true});
+    navigate('Lobby', {didCreateRoom: true});
   };
 
   const onPressJoinSubmit = (joinId: string) => {
     setShowJoinAlert(false);
     setId(joinId);
-    navigation.navigate('Lobby', {didCreateRoom: false});
+    navigate('Lobby', {didCreateRoom: false});
   };
 
   return (
     <>
       <View style={{...styles.wrapper, ...global.screenWrapper}}>
-        <View style={{top: 100}}>
+        <View style={{top: 60}}>
           <Text style={{...styles.text, textAlign: 'center', color: 'white'}}>
             {'Welcome, '}
           </Text>
@@ -96,6 +97,13 @@ export const CreateOrJoinScreen: React.FC<NestedTabProps> = ({navigation}) => {
                 onPress={onPressJoin}
                 color="white"
                 title="Join Game"
+              />
+            </View>
+            <View style={{...styles.button}}>
+              <Button
+                onPress={() => jumpTo('Account')}
+                color="white"
+                title="Account"
               />
             </View>
             <View style={{...styles.button}}>
