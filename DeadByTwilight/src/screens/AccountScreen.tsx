@@ -2,7 +2,14 @@ import React from 'react';
 import {View, Text, StyleSheet, Button} from 'react-native';
 import {global} from '../styles/global';
 import {ColumnWrapper} from '../components/elements';
+import {auth} from '../firebase/config';
+import {useCurrentUser} from '../hooks';
+import {sendEmailVerification} from 'firebase/auth';
 export const AccountScreen: React.FC<{}> = () => {
+  const {currentUser} = useCurrentUser();
+
+  if (!currentUser) return null;
+
   return (
     <View style={{...styles.wrapper, ...global.screenWrapper}}>
       <ColumnWrapper>
@@ -18,7 +25,8 @@ export const AccountScreen: React.FC<{}> = () => {
           </Text>
           <View style={{...styles.button}}>
             <Button
-              onPress={() => undefined}
+              disabled={auth.currentUser?.emailVerified}
+              onPress={() => sendEmailVerification(currentUser)}
               color="white"
               title="Send verification email"
             />

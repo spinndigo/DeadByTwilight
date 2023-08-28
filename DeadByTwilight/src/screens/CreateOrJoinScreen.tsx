@@ -85,7 +85,7 @@ export const CreateOrJoinScreen: React.FC<NestedTabProps> = ({navigation}) => {
             </Text>
             <View style={{...styles.button}}>
               <Button
-                disabled={!name}
+                disabled={!name || !currentUser?.emailVerified}
                 onPress={onPressCreate}
                 color="white"
                 title="Create Game"
@@ -93,7 +93,7 @@ export const CreateOrJoinScreen: React.FC<NestedTabProps> = ({navigation}) => {
             </View>
             <View style={{...styles.button}}>
               <Button
-                disabled={!name}
+                disabled={!name || !currentUser?.emailVerified}
                 onPress={onPressJoin}
                 color="white"
                 title="Join Game"
@@ -114,6 +114,11 @@ export const CreateOrJoinScreen: React.FC<NestedTabProps> = ({navigation}) => {
                 title="Sign Out"
               />
             </View>
+            <Text style={{textAlign: 'center', color: 'white'}}>
+              {currentUser?.emailVerified
+                ? 'Email Verified'
+                : 'You must verify your email before you can play'}
+            </Text>
           </View>
         </ColumnWrapper>
       </View>
