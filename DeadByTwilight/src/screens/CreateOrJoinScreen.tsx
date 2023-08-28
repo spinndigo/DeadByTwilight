@@ -1,12 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  Button,
-  Text,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import {View, StyleSheet, Button, Text} from 'react-native';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {GameStackParamList} from '../navigators';
 import {CreateRoomDialog, JoinRoomDialog} from '../components';
@@ -15,10 +9,16 @@ import {useCurrentUser, useGameChannel} from '../hooks';
 import {global} from '../styles/global';
 import {ColumnWrapper} from '../components/elements';
 import {auth} from '../firebase/config';
+import {CompositeScreenProps} from '@react-navigation/native';
+import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import {TabParamList} from '../navigators/HomeTabs';
 
-export const CreateOrJoinScreen: React.FC<
-  NativeStackScreenProps<GameStackParamList, 'CreateOrJoin'>
-> = ({navigation}) => {
+type NestedTabProps = CompositeScreenProps<
+  BottomTabScreenProps<TabParamList, 'CreateOrJoin'>,
+  NativeStackScreenProps<GameStackParamList>
+>;
+
+export const CreateOrJoinScreen: React.FC<NestedTabProps> = ({navigation}) => {
   const [id, setId] = useState<string | undefined>(
     shortid.generate().replace('I', 'i').replace('l', 'L'),
   );
@@ -98,13 +98,16 @@ export const CreateOrJoinScreen: React.FC<
                 title="Join Game"
               />
             </View>
+            <View style={{...styles.button}}>
+              <Button
+                disabled={!name}
+                onPress={async () => await auth.signOut()}
+                color="white"
+                title="Sign Out"
+              />
+            </View>
           </View>
         </ColumnWrapper>
-        <View>
-          <TouchableWithoutFeedback onPress={async () => await auth.signOut()}>
-            <Text style={{color: 'orange'}}>{'Sign Out'}</Text>
-          </TouchableWithoutFeedback>
-        </View>
       </View>
       <CreateRoomDialog
         id={id || ''}
