@@ -3,6 +3,7 @@ export * from './PusherWrapper';
 export * from './CurrentUserWrapper';
 export * from './JoinRoomDialog';
 export * from './CreateRoomDialog';
+export * from './DeleteAccountDialog';
 export * from './SurvivorItem';
 export * from './GenItem';
 export * from './GenCountSlider';

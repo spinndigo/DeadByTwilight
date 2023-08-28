@@ -1,46 +1,51 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet, Button} from 'react-native';
 import {global} from '../styles/global';
 import {ColumnWrapper} from '../components/elements';
 import {auth} from '../firebase/config';
 import {useCurrentUser} from '../hooks';
 import {sendEmailVerification} from 'firebase/auth';
+import {DeleteAccountDialog} from '../components';
 export const AccountScreen: React.FC<{}> = () => {
   const {currentUser} = useCurrentUser();
+  const [show, setShow] = useState(false);
 
   if (!currentUser) return null;
 
   return (
-    <View style={{...styles.wrapper, ...global.screenWrapper}}>
-      <ColumnWrapper>
-        <View style={{...styles.formWrapper}}>
-          <Text
-            style={{
-              textAlign: 'center',
-              color: 'white',
-              marginBottom: 20,
-              ...styles.text,
-            }}>
-            {'Account'}
-          </Text>
-          <View style={{...styles.button}}>
-            <Button
-              disabled={auth.currentUser?.emailVerified}
-              onPress={() => sendEmailVerification(currentUser)}
-              color="white"
-              title="Send verification email"
-            />
+    <>
+      <View style={{...styles.wrapper, ...global.screenWrapper}}>
+        <ColumnWrapper>
+          <View style={{...styles.formWrapper}}>
+            <Text
+              style={{
+                textAlign: 'center',
+                color: 'white',
+                marginBottom: 20,
+                ...styles.text,
+              }}>
+              {'Account'}
+            </Text>
+            <View style={{...styles.button}}>
+              <Button
+                disabled={auth.currentUser?.emailVerified}
+                onPress={() => sendEmailVerification(currentUser)}
+                color="white"
+                title="Send verification email"
+              />
+            </View>
+            <View style={{...styles.button, backgroundColor: '#cc0000'}}>
+              <Button
+                onPress={() => setShow(true)}
+                color="white"
+                title="Delete Account"
+              />
+            </View>
           </View>
-          <View style={{...styles.button}}>
-            <Button
-              onPress={() => undefined}
-              color="white"
-              title="Delete Account"
-            />
-          </View>
-        </View>
-      </ColumnWrapper>
-    </View>
+        </ColumnWrapper>
+      </View>
+      <DeleteAccountDialog show={show} setShow={setShow} />
+    </>
   );
 };
 
