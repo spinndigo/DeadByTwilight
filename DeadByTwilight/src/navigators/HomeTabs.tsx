@@ -2,7 +2,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {AccountScreen, CreateOrJoinScreen} from '../screens';
 import {NavigatorScreenParams} from '@react-navigation/native';
 import {GameStackParamList} from './GameStack';
-import {deepOrange, navyBlue} from '../styles';
+import {tabBarPurple} from '../styles';
 
 export type TabParamList = {
   CreateOrJoin: NavigatorScreenParams<GameStackParamList>;
@@ -16,12 +16,16 @@ export const HomeTabs: React.FC<{}> = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: {backgroundColor: navyBlue},
-        tabBarLabelStyle: {color: 'white', fontSize: 12},
+        tabBarStyle: {backgroundColor: tabBarPurple},
+        tabBarLabelStyle: {color: 'white', fontSize: 14, fontWeight: '500'},
       }}
       initialRouteName="CreateOrJoin"
       backBehavior="none">
-      <Tab.Screen name="CreateOrJoin" component={CreateOrJoinScreen} />
+      <Tab.Screen
+        options={{tabBarLabel: 'Play'}}
+        name="CreateOrJoin"
+        component={CreateOrJoinScreen}
+      />
       <Tab.Screen name="Account" component={AccountScreen} />
     </Tab.Navigator>
   );
