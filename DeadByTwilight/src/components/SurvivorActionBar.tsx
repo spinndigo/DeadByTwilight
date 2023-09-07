@@ -3,7 +3,7 @@ import * as Progress from 'react-native-progress';
 import React, {useContext, useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {GameElement} from '../utils/types';
-import {useProgression} from '../hooks/useProgression';
+import {useProgression} from '../hooks';
 import {isSurvivor} from '../utils/helpers';
 import {Text} from 'react-native';
 import {ColumnWrapper, RowWrapper} from './elements';

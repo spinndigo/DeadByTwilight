@@ -10,10 +10,13 @@ import {
 import {GameContext, GameDispatchContext} from '../GameContext';
 import {gamestateReducer, initialState} from '../gamestateReducer';
 import {GameChannelProvider} from '../hooks';
+import {AuthStack} from './AuthStack';
+import {HomeTabs} from './HomeTabs';
 
 export type GameStackParamList = {
-  CreateOrJoin: undefined;
-  Lobby: {didCreateRoom: boolean; name: string};
+  AuthStack: undefined;
+  HomeTabs: undefined;
+  Lobby: {didCreateRoom: boolean};
   Game: undefined;
   PostGame: undefined;
 };
@@ -31,8 +34,9 @@ export const GameStack = () => {
             screenOptions={{
               headerShown: false,
             }}
-            initialRouteName="CreateOrJoin">
-            <Stack.Screen name="CreateOrJoin" component={CreateOrJoinScreen} />
+            initialRouteName="HomeTabs">
+            <Stack.Screen name="AuthStack" component={AuthStack} />
+            <Stack.Screen name="HomeTabs" component={HomeTabs} />
             <Stack.Screen
               name="Lobby"
               component={LobbyScreen}

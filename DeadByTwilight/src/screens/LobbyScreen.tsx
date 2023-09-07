@@ -4,7 +4,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Button} from 'react-native';
 import {GameStackParamList} from '../navigators';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {useGameChannel} from '../hooks';
+import {useCurrentUser, useGameChannel} from '../hooks';
 import {GenCountSlider, PlayerCard} from '../components';
 import {GameContext, GameDispatchContext} from '../GameContext';
 import {Action} from '../gamestateReducer';
@@ -17,11 +17,13 @@ export type Role = 'SURVIVOR' | 'KILLER' | undefined;
 export const LobbyScreen: React.FC<
   NativeStackScreenProps<GameStackParamList, 'Lobby'>
 > = ({navigation, route}) => {
-  const {didCreateRoom, name} = route.params;
+  const {didCreateRoom} = route.params;
   const game = useContext(GameContext);
   const dispatch = useContext(GameDispatchContext);
   const [selectedRole, setSelectedRole] = useState<Role>(undefined);
   const {gameChannel} = useGameChannel();
+  const {currentUser} = useCurrentUser();
+  const name = currentUser?.displayName;
 
   const {navigate} = navigation;
 

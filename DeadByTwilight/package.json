@@ -16,10 +16,14 @@
   },
   "dependencies": {
     "@pusher/pusher-websocket-react-native": "^1.2.1",
+    "@react-native-async-storage/async-storage": "^1.19.2",
     "@react-native-community/slider": "^4.4.2",
+    "@react-navigation/bottom-tabs": "^6.5.8",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
     "axios": "^1.4.0",
+    "firebase": "^10.1.0",
+    "formik": "^2.4.3",
     "react": "18.2.0",
     "react-native": "0.71.6",
     "react-native-dialog": "^9.3.0",
@@ -30,7 +34,8 @@
     "react-native-svg": "^13.9.0",
     "react-native-user-avatar": "^1.0.8",
     "shortid": "^2.2.16",
-    "styled-components": "^6.0.0-rc.5"
+    "styled-components": "^6.0.0-rc.5",
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

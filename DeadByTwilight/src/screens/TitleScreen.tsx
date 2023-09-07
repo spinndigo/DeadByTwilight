@@ -4,10 +4,12 @@ import {View, Button, Text, StyleSheet, Animated} from 'react-native';
 import {DefaultStackParamList} from '../navigators';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {global} from '../styles/global';
+import {useCurrentUser} from '../hooks';
 
 export const TitleScreen: React.FC<
   NativeStackScreenProps<DefaultStackParamList, 'Title'>
 > = ({navigation}) => {
+  const {isLoggedIn} = useCurrentUser();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const fadeIn = () => {
     Animated.timing(fadeAnim, {
@@ -21,6 +23,8 @@ export const TitleScreen: React.FC<
     fadeIn();
   }, []);
 
+  const nextStack = isLoggedIn ? 'GameStack' : 'AuthStack';
+
   return (
     <>
       <View style={{...styles.wrapper, ...global.screenWrapper}}>
@@ -32,7 +36,7 @@ export const TitleScreen: React.FC<
         </View>
         <View style={{backgroundColor: '#841584', width: '50%'}}>
           <Button
-            onPress={() => navigation.navigate('GameStack')}
+            onPress={() => navigation.navigate(nextStack)}
             color="#fff"
             title="get started"
           />

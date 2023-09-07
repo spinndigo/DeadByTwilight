@@ -1,24 +1,39 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
-import {View, StyleSheet, Button, TextInput} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, StyleSheet, Button, Text} from 'react-native';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {GameStackParamList} from '../navigators';
 import {CreateRoomDialog, JoinRoomDialog} from '../components';
 import shortid from 'shortid';
-import {useGameChannel} from '../hooks';
+import {useCurrentUser, useGameChannel} from '../hooks';
 import {global} from '../styles/global';
 import {ColumnWrapper} from '../components/elements';
+import {auth} from '../firebase/config';
+import {CompositeScreenProps} from '@react-navigation/native';
+import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import {TabParamList} from '../navigators/HomeTabs';
 
-export const CreateOrJoinScreen: React.FC<
-  NativeStackScreenProps<GameStackParamList, 'CreateOrJoin'>
-> = ({navigation}) => {
+type NestedTabProps = CompositeScreenProps<
+  BottomTabScreenProps<TabParamList, 'CreateOrJoin'>,
+  NativeStackScreenProps<GameStackParamList>
+>;
+
+export const CreateOrJoinScreen: React.FC<NestedTabProps> = ({navigation}) => {
   const [id, setId] = useState<string | undefined>(
     shortid.generate().replace('I', 'i').replace('l', 'L'),
   );
-  const [name, setName] = useState('');
+  const {currentUser} = useCurrentUser();
+  const {navigate, jumpTo} = navigation;
+  const name = currentUser?.displayName || 'Anon';
+
   useGameChannel(id);
+
   const [showJoinAlert, setShowJoinAlert] = useState(false);
   const [showCreateRoom, setShowCreateRoom] = useState(false);
+
+  useEffect(() => {
+    if (!currentUser) navigate('AuthStack');
+  }, [currentUser]);
 
   const onPressCreate = () => {
     setId(shortid.generate());
@@ -31,18 +46,26 @@ export const CreateOrJoinScreen: React.FC<
 
   const onPressCreateSubmit = () => {
     setShowCreateRoom(false);
-    navigation.navigate('Lobby', {didCreateRoom: true, name});
+    navigate('Lobby', {didCreateRoom: true});
   };
 
   const onPressJoinSubmit = (joinId: string) => {
     setShowJoinAlert(false);
     setId(joinId);
-    navigation.navigate('Lobby', {didCreateRoom: false, name});
+    navigate('Lobby', {didCreateRoom: false});
   };
 
   return (
     <>
       <View style={{...styles.wrapper, ...global.screenWrapper}}>
+        <View style={{top: 60}}>
+          <Text style={{...styles.text, textAlign: 'center', color: 'white'}}>
+            {'Welcome, '}
+          </Text>
+          <Text style={{...styles.text, textAlign: 'center', color: 'white'}}>
+            {name}!
+          </Text>
+        </View>
         <ColumnWrapper
           style={{
             height: '80%',
@@ -51,15 +74,18 @@ export const CreateOrJoinScreen: React.FC<
             alignItems: 'center',
           }}>
           <View style={{...styles.formWrapper}}>
-            <TextInput
-              onChangeText={typed => setName(typed)}
-              placeholder="Enter your name"
-              style={styles.input}
-            />
-
+            <Text
+              style={{
+                ...styles.text,
+                textAlign: 'center',
+                color: 'white',
+                marginBottom: 20,
+              }}>
+              {'Menu'}
+            </Text>
             <View style={{...styles.button}}>
               <Button
-                disabled={!name}
+                disabled={!name || !currentUser?.emailVerified}
                 onPress={onPressCreate}
                 color="white"
                 title="Create Game"
@@ -67,12 +93,32 @@ export const CreateOrJoinScreen: React.FC<
             </View>
             <View style={{...styles.button}}>
               <Button
-                disabled={!name}
+                disabled={!name || !currentUser?.emailVerified}
                 onPress={onPressJoin}
                 color="white"
                 title="Join Game"
               />
             </View>
+            <View style={{...styles.button}}>
+              <Button
+                onPress={() => jumpTo('Account')}
+                color="white"
+                title="Account"
+              />
+            </View>
+            <View style={{...styles.button}}>
+              <Button
+                disabled={!name}
+                onPress={async () => await auth.signOut()}
+                color="white"
+                title="Sign Out"
+              />
+            </View>
+            <Text style={{textAlign: 'center', color: 'white'}}>
+              {currentUser?.emailVerified
+                ? 'Email Verified'
+                : 'You must verify your email before you can play'}
+            </Text>
           </View>
         </ColumnWrapper>
       </View>
@@ -101,7 +147,7 @@ const styles = StyleSheet.create({
   formWrapper: {
     width: '100%',
     backgroundColor: '#002266',
-    padding: 20,
+    padding: 40,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,

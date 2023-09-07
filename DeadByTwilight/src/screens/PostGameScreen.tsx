@@ -34,7 +34,7 @@ export const PostGameScreen: React.FC<
       });
 
     await gameChannel?.unsubscribe();
-    navigate('CreateOrJoin');
+    navigate('HomeTabs');
   };
 
   return (
