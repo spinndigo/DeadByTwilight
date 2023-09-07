@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet, Button, Text} from 'react-native';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {GameStackParamList} from '../navigators';
@@ -30,10 +30,6 @@ export const CreateOrJoinScreen: React.FC<NestedTabProps> = ({navigation}) => {
 
   const [showJoinAlert, setShowJoinAlert] = useState(false);
   const [showCreateRoom, setShowCreateRoom] = useState(false);
-
-  useEffect(() => {
-    if (!currentUser) navigate('AuthStack');
-  }, [currentUser]);
 
   const onPressCreate = () => {
     setId(shortid.generate());

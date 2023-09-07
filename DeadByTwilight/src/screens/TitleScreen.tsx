@@ -23,8 +23,6 @@ export const TitleScreen: React.FC<
     fadeIn();
   }, []);
 
-  const nextStack = isLoggedIn ? 'GameStack' : 'AuthStack';
-
   return (
     <>
       <View style={{...styles.wrapper, ...global.screenWrapper}}>
@@ -36,7 +34,7 @@ export const TitleScreen: React.FC<
         </View>
         <View style={{backgroundColor: '#841584', width: '50%'}}>
           <Button
-            onPress={() => navigation.navigate(nextStack)}
+            onPress={() => navigation.navigate('App')}
             color="#fff"
             title="get started"
           />
