@@ -24,7 +24,9 @@ export const CreateOrJoinScreen: React.FC<NestedTabProps> = ({navigation}) => {
   );
   const {currentUser} = useCurrentUser();
   const {navigate, jumpTo} = navigation;
-  const name = currentUser?.displayName || 'Anon';
+  const welcomeLabel = currentUser?.displayName
+    ? `Welcome back, ${currentUser.displayName}!`
+    : 'Welcome to DBT';
 
   useGameChannel(id);
 
@@ -56,10 +58,7 @@ export const CreateOrJoinScreen: React.FC<NestedTabProps> = ({navigation}) => {
       <View style={{...styles.wrapper, ...global.screenWrapper}}>
         <View style={{top: 60}}>
           <Text style={{...styles.text, textAlign: 'center', color: 'white'}}>
-            {'Welcome, '}
-          </Text>
-          <Text style={{...styles.text, textAlign: 'center', color: 'white'}}>
-            {name}!
+            {welcomeLabel}
           </Text>
         </View>
         <ColumnWrapper
@@ -81,7 +80,7 @@ export const CreateOrJoinScreen: React.FC<NestedTabProps> = ({navigation}) => {
             </Text>
             <View style={{...styles.button}}>
               <Button
-                disabled={!name || !currentUser?.emailVerified}
+                disabled={!currentUser?.emailVerified}
                 onPress={onPressCreate}
                 color="white"
                 title="Create Game"
@@ -89,7 +88,7 @@ export const CreateOrJoinScreen: React.FC<NestedTabProps> = ({navigation}) => {
             </View>
             <View style={{...styles.button}}>
               <Button
-                disabled={!name || !currentUser?.emailVerified}
+                disabled={!currentUser?.emailVerified}
                 onPress={onPressJoin}
                 color="white"
                 title="Join Game"
@@ -104,7 +103,6 @@ export const CreateOrJoinScreen: React.FC<NestedTabProps> = ({navigation}) => {
             </View>
             <View style={{...styles.button}}>
               <Button
-                disabled={!name}
                 onPress={async () => await auth.signOut()}
                 color="white"
                 title="Sign Out"

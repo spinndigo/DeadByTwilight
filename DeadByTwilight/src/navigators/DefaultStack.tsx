@@ -15,12 +15,11 @@ const Stack = createNativeStackNavigator<DefaultStackParamList>();
 
 export const DefaultStack = () => {
   const {currentUser} = useCurrentUser();
-  const AppStack =
-    currentUser && currentUser.displayName ? (
-      <Stack.Screen name="App" component={GameStack} />
-    ) : (
-      <Stack.Screen name="App" component={AuthStack} />
-    );
+  const AppStack = !!currentUser ? (
+    <Stack.Screen name="App" component={GameStack} />
+  ) : (
+    <Stack.Screen name="App" component={AuthStack} />
+  );
   return (
     <Stack.Navigator
       screenOptions={{
