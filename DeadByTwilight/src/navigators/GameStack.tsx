@@ -1,20 +1,13 @@
 import * as React from 'react';
 
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {
-  CreateOrJoinScreen,
-  GameScreen,
-  LobbyScreen,
-  PostGameScreen,
-} from '../screens';
+import {GameScreen, LobbyScreen, PostGameScreen} from '../screens';
 import {GameContext, GameDispatchContext} from '../GameContext';
 import {gamestateReducer, initialState} from '../gamestateReducer';
 import {GameChannelProvider} from '../hooks';
-import {AuthStack} from './AuthStack';
 import {HomeTabs} from './HomeTabs';
 
 export type GameStackParamList = {
-  AuthStack: undefined;
   HomeTabs: undefined;
   Lobby: {didCreateRoom: boolean};
   Game: undefined;
@@ -35,7 +28,6 @@ export const GameStack = () => {
               headerShown: false,
             }}
             initialRouteName="HomeTabs">
-            <Stack.Screen name="AuthStack" component={AuthStack} />
             <Stack.Screen name="HomeTabs" component={HomeTabs} />
             <Stack.Screen
               name="Lobby"

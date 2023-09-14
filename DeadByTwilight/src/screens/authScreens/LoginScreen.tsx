@@ -8,7 +8,7 @@ import {global} from '../../styles';
 import {ErrorMessage, Formik} from 'formik';
 import {auth} from '../../firebase/config';
 import {signInWithEmailAndPassword} from 'firebase/auth';
-import {useContext, useEffect, useState} from 'react';
+import {useState} from 'react';
 import {loginSchema} from './helpers';
 import {
   ErrorLabel,
@@ -17,13 +17,10 @@ import {
 } from '../../components';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../navigators';
-import {CurrentUserContext} from '../../CurrentUserContext';
 
 export const LoginScreen: React.FC<
   NativeStackScreenProps<AuthStackParamList, 'Login'>
 > = ({navigation}) => {
-  const {navigate} = navigation;
-  const {currentUser} = useContext(CurrentUserContext);
   const [loginError, setLoginError] = useState('');
   const [showForgot, setShowForgot] = useState(false);
   const handleLogin = async (email: string, password: string) => {
@@ -35,10 +32,6 @@ export const LoginScreen: React.FC<
         setLoginError(error);
       });
   };
-
-  useEffect(() => {
-    if (currentUser) navigate('GameStack');
-  }, [currentUser]);
 
   return (
     <>

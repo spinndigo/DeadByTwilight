@@ -12,7 +12,7 @@ import {
   sendEmailVerification,
   updateProfile,
 } from 'firebase/auth';
-import {useContext, useEffect, useState} from 'react';
+import {useContext, useState} from 'react';
 import {registerSchema} from './helpers';
 import {ErrorLabel, StyledRegisterInput} from '../../components';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -42,10 +42,6 @@ export const RegisterScreen: React.FC<
         console.log(errorMessage);
       });
   };
-
-  useEffect(() => {
-    if (currentUser) navigate('GameStack');
-  }, [currentUser]);
 
   return (
     <View
